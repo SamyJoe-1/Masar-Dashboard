@@ -530,7 +530,7 @@
                     <h3>لوحة المسح الذكي</h3>
                     <span>🚀</span>
                 </div>
-                <div class="upload-zone">
+                <div class="upload-zone" onclick="window.location.href = '{{ config('app.match_cv_url') }}'">
                     <div class="upload-icon">📄</div>
                     <h4>اسحب وأفلت السير الذاتية هنا</h4>
                     <p>أو انقر للتصفح (PDF, DOC, DOCX)</p>
