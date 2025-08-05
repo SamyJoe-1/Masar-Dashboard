@@ -10,7 +10,7 @@ class FileUploadController extends Controller
 {
     public function showUploadForm()
     {
-        return view('test.upload'); // Create upload.blade.php view
+        return view('upload'); // Create upload.blade.php view
     }
 
     public function uploadFiles(Request $request)
