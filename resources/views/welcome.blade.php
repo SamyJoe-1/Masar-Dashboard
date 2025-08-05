@@ -521,7 +521,7 @@
                 <h1 class="hero-title">فحص ذكي للسير الذاتية بتقنية الذكاء الاصطناعي</h1>
                 <p class="hero-subtitle">ارفع مئات السير الذاتية واحصل على تقرير شامل بالمرشحين المقبولين والمرفوضين مع تحليل مفصل لكل ملف</p>
                 <div class="cta-buttons">
-                    <a href="#" class="btn btn-primary">ابدأ المسح المجاني</a>
+                    <a href="{{ config('app.match_cv_url') }}" class="btn btn-primary">ابدأ المسح المجاني</a>
                     <a href="#" class="btn btn-secondary">شاهد العرض التوضيحي</a>
                 </div>
             </div>
