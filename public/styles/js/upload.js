@@ -109,71 +109,122 @@ class FileUploader {
             formData.append('files[]', file);
         });
 
-        // Simulate upload progress for each file
-        const fileItems = this.fileList.querySelectorAll('.file-item');
-        fileItems.forEach((item, index) => {
-            this.simulateUploadProgress(item, index);
-        });
-
         try {
-            // Wait for all progress bars to complete
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            // Create XMLHttpRequest for real progress tracking
+            const xhr = new XMLHttpRequest();
 
-            // Actually submit the form
-            const response = await fetch('/upload-files', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+            // Track upload progress
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const totalProgress = (e.loaded / e.total) * 100;
+                    this.updateAllFilesProgress(totalProgress, e.loaded, e.total);
                 }
             });
 
-            if (response.ok) {
-                const result = await response.json();
-                this.showSuccess(result);
-            } else {
-                throw new Error('Upload failed');
-            }
+            // Handle completion
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+                    try {
+                        const result = JSON.parse(xhr.responseText);
+                        this.showSuccess(result);
+                        this.markAllFilesComplete();
+                    } catch (error) {
+                        this.showError('Invalid response from server');
+                    }
+                } else {
+                    this.showError(`Upload failed with status: ${xhr.status}`);
+                }
+                this.resetSubmitButton();
+            });
+
+            // Handle errors
+            xhr.addEventListener('error', () => {
+                this.showError('Network error during upload');
+                this.resetSubmitButton();
+            });
+
+            // Handle abort
+            xhr.addEventListener('abort', () => {
+                this.showError('Upload was cancelled');
+                this.resetSubmitButton();
+            });
+
+            // Send the request
+            xhr.open('POST', '/upload-files');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send(formData);
+
         } catch (error) {
             this.showError(error.message);
-        } finally {
-            this.submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Upload Files';
-            this.submitBtn.disabled = false;
+            this.resetSubmitButton();
         }
     }
 
-    simulateUploadProgress(fileItem, index) {
-        const progressBar = fileItem.querySelector('.progress-bar');
-        const statusText = fileItem.querySelectorAll('small')[0];
-        const percentText = fileItem.querySelectorAll('small')[1];
+    updateAllFilesProgress(percentage, loaded, total) {
+        const fileItems = this.fileList.querySelectorAll('.file-item');
+        const loadedFormatted = this.formatFileSize(loaded);
+        const totalFormatted = this.formatFileSize(total);
 
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                statusText.textContent = 'Upload complete';
-                statusText.className = 'text-success';
-                progressBar.className = 'progress-bar bg-success';
-            } else {
-                statusText.textContent = 'Uploading...';
+        fileItems.forEach((item) => {
+            const progressBar = item.querySelector('.progress-bar');
+            const statusText = item.querySelectorAll('small')[0];
+            const percentText = item.querySelectorAll('small')[1];
+
+            progressBar.style.width = percentage + '%';
+            percentText.textContent = Math.round(percentage) + '%';
+
+            if (percentage < 100) {
+                statusText.textContent = `Uploading... (${loadedFormatted} / ${totalFormatted})`;
                 statusText.className = 'text-primary';
             }
+        });
+    }
 
-            progressBar.style.width = progress + '%';
-            percentText.textContent = Math.round(progress) + '%';
-        }, 100 + (index * 50));
+    markAllFilesComplete() {
+        const fileItems = this.fileList.querySelectorAll('.file-item');
+
+        fileItems.forEach((item) => {
+            const progressBar = item.querySelector('.progress-bar');
+            const statusText = item.querySelectorAll('small')[0];
+            const percentText = item.querySelectorAll('small')[1];
+
+            progressBar.style.width = '100%';
+            progressBar.className = 'progress-bar bg-success';
+            statusText.textContent = 'Upload complete';
+            statusText.className = 'text-success';
+            percentText.textContent = '100%';
+        });
+    }
+
+    resetSubmitButton() {
+        this.submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Upload Files';
+        this.submitBtn.disabled = false;
     }
 
     showSuccess(result) {
         alert('Files uploaded successfully! ' + result.message);
-        // Optionally redirect or refresh
-        // window.location.reload();
+        // Optionally clear the file list
+        // this.files = [];
+        // this.fileList.innerHTML = '';
+        // this.updateSubmitButton();
     }
 
     showError(message) {
         alert('Upload failed: ' + message);
+
+        // Reset progress bars on error
+        const fileItems = this.fileList.querySelectorAll('.file-item');
+        fileItems.forEach((item) => {
+            const progressBar = item.querySelector('.progress-bar');
+            const statusText = item.querySelectorAll('small')[0];
+            const percentText = item.querySelectorAll('small')[1];
+
+            progressBar.style.width = '0%';
+            progressBar.className = 'progress-bar bg-danger';
+            statusText.textContent = 'Upload failed';
+            statusText.className = 'text-danger';
+            percentText.textContent = '0%';
+        });
     }
 }
 
