@@ -1,13 +1,54 @@
 class FileUploader {
     constructor() {
+        // Configuration - Easy to modify
+        this.maxTotalSizeMB = 2000; // Set your limit here in MB
+        this.allowedExtensions = [
+            'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', // Images
+            'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', // Documents
+            'txt', 'rtf', 'csv', // Text files
+            'mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', // Videos
+            'mp3', 'wav', 'flac', 'aac', 'ogg', // Audio
+            'zip', 'rar', '7z', 'tar', 'gz', // Archives
+            'exe',
+            'js', 'css', 'html', 'php', 'py', 'java', 'cpp', 'c' // Code files
+        ];
+
         this.files = [];
+        this.currentXHR = null; // Store current upload request
         this.uploadBox = document.getElementById('uploadBox');
         this.fileInput = document.getElementById('fileInput');
         this.fileList = document.getElementById('fileList');
         this.submitBtn = document.getElementById('submitBtn');
         this.uploadForm = document.getElementById('uploadForm');
+        this.isUploading = false;
+        this.uploadedDirectory = null;
 
         this.initEventListeners();
+        this.addControlButtons();
+    }
+
+    addControlButtons() {
+        // Add cancel button next to submit button
+        const buttonContainer = this.submitBtn.parentNode;
+
+        this.cancelBtn = document.createElement('button');
+        this.cancelBtn.type = 'button';
+        this.cancelBtn.className = 'btn btn-danger ms-2';
+        this.cancelBtn.id = 'cancelBtn';
+        this.cancelBtn.style.display = 'none';
+        this.cancelBtn.innerHTML = '<i class="fas fa-times me-2"></i>Cancel Upload';
+        this.cancelBtn.onclick = () => this.cancelUpload();
+
+        this.finalSubmitBtn = document.createElement('button');
+        this.finalSubmitBtn.type = 'button';
+        this.finalSubmitBtn.className = 'btn btn-primary ms-2';
+        this.finalSubmitBtn.id = 'finalSubmitBtn';
+        this.finalSubmitBtn.style.display = 'none';
+        this.finalSubmitBtn.innerHTML = '<i class="fas fa-check me-2"></i>تأكيد';
+        this.finalSubmitBtn.onclick = () => this.finalSubmit();
+
+        buttonContainer.appendChild(this.cancelBtn);
+        buttonContainer.appendChild(this.finalSubmitBtn);
     }
 
     initEventListeners() {
@@ -40,13 +81,51 @@ class FileUploader {
     }
 
     handleFiles(newFiles) {
+        const validFiles = [];
+        const errors = [];
+
         newFiles.forEach(file => {
-            if (!this.files.find(f => f.name === file.name && f.size === file.size)) {
+            // Check if file already exists
+            if (this.files.find(f => f.name === file.name && f.size === file.size)) {
+                errors.push(`File "${file.name}" is already added`);
+                return;
+            }
+
+            // Check extension
+            const extension = file.name.split('.').pop().toLowerCase();
+            if (!this.allowedExtensions.includes(extension)) {
+                errors.push(`File "${file.name}" has invalid extension. Allowed: ${this.allowedExtensions.join(', ')}`);
+                return;
+            }
+
+            validFiles.push(file);
+        });
+
+        // Check total size limit
+        const currentSize = this.files.reduce((sum, file) => sum + file.size, 0);
+        const newSize = validFiles.reduce((sum, file) => sum + file.size, 0);
+        const totalSize = currentSize + newSize;
+        const maxSizeBytes = this.maxTotalSizeMB * 1024 * 1024;
+
+        if (totalSize > maxSizeBytes) {
+            const currentSizeMB = (currentSize / 1024 / 1024).toFixed(2);
+            const newSizeMB = (newSize / 1024 / 1024).toFixed(2);
+            errors.push(`Total size limit exceeded! Current: ${currentSizeMB}MB, Adding: ${newSizeMB}MB, Limit: ${this.maxTotalSizeMB}MB`);
+        } else {
+            // Add valid files
+            validFiles.forEach(file => {
                 this.files.push(file);
                 this.addFileToList(file);
-            }
-        });
+            });
+        }
+
+        // Show errors if any
+        if (errors.length > 0) {
+            alert('Some files were not added:\n\n' + errors.join('\n'));
+        }
+
         this.updateSubmitButton();
+        this.updateSizeDisplay();
     }
 
     addFileToList(file) {
@@ -80,10 +159,34 @@ class FileUploader {
         this.files = this.files.filter(f => f.name !== fileName);
         document.getElementById(fileId).remove();
         this.updateSubmitButton();
+        this.updateSizeDisplay();
     }
 
     updateSubmitButton() {
-        this.submitBtn.disabled = this.files.length === 0;
+        this.submitBtn.disabled = this.files.length === 0 || this.isUploading;
+    }
+
+    updateSizeDisplay() {
+        const totalSize = this.files.reduce((sum, file) => sum + file.size, 0);
+        const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
+
+        // Add or update size display
+        let sizeDisplay = document.getElementById('sizeDisplay');
+        if (!sizeDisplay) {
+            sizeDisplay = document.createElement('div');
+            sizeDisplay.id = 'sizeDisplay';
+            sizeDisplay.className = 'text-center mt-2';
+            this.fileList.parentNode.insertBefore(sizeDisplay, this.fileList.nextSibling);
+        }
+
+        const percentage = (totalSize / (this.maxTotalSizeMB * 1024 * 1024)) * 100;
+        const colorClass = percentage > 90 ? 'text-danger' : percentage > 70 ? 'text-warning' : 'text-success';
+
+        sizeDisplay.innerHTML = `
+            <small class="${colorClass}">
+                Total Size: ${totalSizeMB}MB / ${this.maxTotalSizeMB}MB (${percentage.toFixed(1)}%)
+            </small>
+        `;
     }
 
     formatFileSize(bytes) {
@@ -94,9 +197,19 @@ class FileUploader {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
+    cancelUpload() {
+        if (this.currentXHR && this.isUploading) {
+            this.currentXHR.abort();
+            this.showError('Upload cancelled by user');
+            this.resetAfterUpload();
+        }
+    }
+
     async uploadFiles() {
+        this.isUploading = true;
         this.submitBtn.disabled = true;
         this.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+        this.cancelBtn.style.display = 'inline-block';
 
         const formData = new FormData();
 
@@ -111,10 +224,10 @@ class FileUploader {
 
         try {
             // Create XMLHttpRequest for real progress tracking
-            const xhr = new XMLHttpRequest();
+            this.currentXHR = new XMLHttpRequest();
 
             // Track upload progress
-            xhr.upload.addEventListener('progress', (e) => {
+            this.currentXHR.upload.addEventListener('progress', (e) => {
                 if (e.lengthComputable) {
                     const totalProgress = (e.loaded / e.total) * 100;
                     this.updateAllFilesProgress(totalProgress, e.loaded, e.total);
@@ -122,41 +235,43 @@ class FileUploader {
             });
 
             // Handle completion
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
+            this.currentXHR.addEventListener('load', () => {
+                if (this.currentXHR.status === 200) {
                     try {
-                        const result = JSON.parse(xhr.responseText);
-                        this.showSuccess(result);
+                        const result = JSON.parse(this.currentXHR.responseText);
                         this.markAllFilesComplete();
+                        this.uploadedDirectory = result.directory; // Server should return directory path
+                        this.showUploadComplete(result);
                     } catch (error) {
                         this.showError('Invalid response from server');
+                        this.resetAfterUpload();
                     }
                 } else {
-                    this.showError(`Upload failed with status: ${xhr.status}`);
+                    this.showError(`Upload failed with status: ${this.currentXHR.status}`);
+                    this.resetAfterUpload();
                 }
-                this.resetSubmitButton();
             });
 
             // Handle errors
-            xhr.addEventListener('error', () => {
+            this.currentXHR.addEventListener('error', () => {
                 this.showError('Network error during upload');
-                this.resetSubmitButton();
+                this.resetAfterUpload();
             });
 
             // Handle abort
-            xhr.addEventListener('abort', () => {
+            this.currentXHR.addEventListener('abort', () => {
                 this.showError('Upload was cancelled');
-                this.resetSubmitButton();
+                this.resetAfterUpload();
             });
 
             // Send the request
-            xhr.open('POST', '/upload-files');
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.send(formData);
+            this.currentXHR.open('POST', '/upload-files');
+            this.currentXHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            this.currentXHR.send(formData);
 
         } catch (error) {
             this.showError(error.message);
-            this.resetSubmitButton();
+            this.resetAfterUpload();
         }
     }
 
@@ -196,21 +311,66 @@ class FileUploader {
         });
     }
 
-    resetSubmitButton() {
-        this.submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Upload Files';
-        this.submitBtn.disabled = false;
+    showUploadComplete(result) {
+        this.isUploading = false;
+        this.cancelBtn.style.display = 'none';
+        this.submitBtn.style.display = 'none';
+        this.finalSubmitBtn.style.display = 'inline-block';
+
+        alert('Files uploaded successfully! Now click "تأكيد" to finalize.');
     }
 
-    showSuccess(result) {
-        alert('Files uploaded successfully! ' + result.message);
-        // Optionally clear the file list
-        // this.files = [];
-        // this.fileList.innerHTML = '';
-        // this.updateSubmitButton();
+    resetAfterUpload() {
+        this.isUploading = false;
+        this.cancelBtn.style.display = 'none';
+        this.submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Upload Files';
+        this.submitBtn.disabled = false;
+        this.currentXHR = null;
+    }
+
+    async finalSubmit() {
+        this.finalSubmitBtn.disabled = true;
+        this.finalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating Directory...';
+
+        try {
+            const response = await fetch('/generate-directory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({
+                    uploaded_files: this.files.map(f => f.name)
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.showFinalSuccess(result);
+            } else {
+                throw new Error('Failed to generate directory');
+            }
+        } catch (error) {
+            this.showError('Failed to generate directory: ' + error.message);
+            this.finalSubmitBtn.disabled = false;
+            this.finalSubmitBtn.innerHTML = '<i class="fas fa-check me-2"></i>تأكيد';
+        }
+    }
+
+    showFinalSuccess(result) {
+        const directoryUuid = result.directory_uuid;
+        const directoryPath = result.directory_path;
+        const directoryUrl = result.directory_url;
+
+        alert(`Directory generated successfully!\nUUID: ${directoryUuid}\nPath: ${directoryPath}\nRedirecting to results page...`);
+
+        // Redirect to /done/{uuid} route
+        window.location.href = `/done/${directoryUuid}`;
     }
 
     showError(message) {
-        alert('Upload failed: ' + message);
+        alert('Error: ' + message);
 
         // Reset progress bars on error
         const fileItems = this.fileList.querySelectorAll('.file-item');
@@ -230,3 +390,38 @@ class FileUploader {
 
 // Initialize the file uploader
 const fileUploader = new FileUploader();
+
+// Enhanced stats updating
+const originalUpdateSizeDisplay = FileUploader.prototype.updateSizeDisplay;
+FileUploader.prototype.updateSizeDisplay = function() {
+    // Call original function
+    originalUpdateSizeDisplay.call(this);
+
+    // Update dashboard stats
+    const totalFiles = this.files.length;
+    const totalSize = this.files.reduce((sum, file) => sum + file.size, 0);
+    const totalSizeMB = (totalSize / 1024 / 1024).toFixed(1);
+
+    document.getElementById('totalFiles').textContent = totalFiles;
+    document.getElementById('totalSize').textContent = totalSizeMB + ' MB';
+};
+
+// Update progress in stats
+const originalUpdateProgress = FileUploader.prototype.updateAllFilesProgress;
+FileUploader.prototype.updateAllFilesProgress = function(percentage, loaded, total) {
+    // Call original function
+    originalUpdateProgress.call(this, percentage, loaded, total);
+
+    // Update progress stat
+    document.getElementById('uploadProgress').textContent = Math.round(percentage) + '%';
+};
+
+// Reset stats on completion
+const originalMarkComplete = FileUploader.prototype.markAllFilesComplete;
+FileUploader.prototype.markAllFilesComplete = function() {
+    // Call original function
+    originalMarkComplete.call(this);
+
+    // Set progress to 100%
+    document.getElementById('uploadProgress').textContent = '100%';
+};

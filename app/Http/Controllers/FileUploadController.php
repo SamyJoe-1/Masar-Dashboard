@@ -10,7 +10,7 @@ class FileUploadController extends Controller
 {
     public function showUploadForm()
     {
-        return view('test.upload'); // Create upload.blade.php view
+        return view('test.upload');
     }
 
     public function uploadFiles(Request $request)
@@ -22,38 +22,50 @@ class FileUploadController extends Controller
         ]);
 
         $uploadedFiles = [];
-        $uploadPath = 'uploads/' . date('Y/m/d'); // Organize by date
+        $tempUploadPath = 'temp_uploads/' . session()->getId(); // Temporary location
 
         try {
+            // Create temp directory if it doesn't exist
+            if (!Storage::disk('public')->exists($tempUploadPath)) {
+                Storage::disk('public')->makeDirectory($tempUploadPath);
+            }
+
             foreach ($request->file('files') as $file) {
                 // Generate unique filename
                 $originalName = $file->getClientOriginalName();
                 $extension = $file->getClientOriginalExtension();
                 $filename = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '_' . time() . '_' . Str::random(6) . '.' . $extension;
 
-                // Store the file
-                $filePath = $file->storeAs($uploadPath, $filename, 'public');
+                // Store the file in temp location
+                $filePath = $file->storeAs($tempUploadPath, $filename, 'public');
 
                 // Collect file information
                 $uploadedFiles[] = [
                     'original_name' => $originalName,
                     'stored_name' => $filename,
-                    'path' => $filePath,
+                    'temp_path' => $filePath,
                     'size' => $file->getSize(),
                     'mime_type' => $file->getMimeType(),
-                    'url' => Storage::url($filePath)
                 ];
             }
 
-            // Save to database if needed
-            // $this->saveFileRecords($uploadedFiles);
+            // Store uploaded files info in session for the next step
+            session(['temp_uploaded_files' => $uploadedFiles]);
+
+            // IMPORTANT: Force session save to ensure data persists
+            session()->save();
+
+            \Log::info('Files uploaded to temp. Session ID: ' . session()->getId());
+            \Log::info('Temp uploaded files stored in session:', $uploadedFiles);
 
             // Return success response
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => count($uploadedFiles) . ' files uploaded successfully!',
-                    'files' => $uploadedFiles
+                    'message' => count($uploadedFiles) . ' files uploaded successfully to temporary location!',
+                    'files' => $uploadedFiles,
+                    'session_id' => session()->getId(), // For debugging
+                    'temp_path' => $tempUploadPath
                 ]);
             }
 
@@ -63,6 +75,8 @@ class FileUploadController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Upload error: ' . $e->getMessage());
+
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -74,56 +88,268 @@ class FileUploadController extends Controller
         }
     }
 
-    public function showUploadedFiles(Request $request)
+    public function generateDirectory(Request $request)
     {
-        // Get uploaded files from session or database
-        $uploadedFiles = session('uploaded_files', []);
+        try {
+            // Debug session info
+            \Log::info('Generate Directory - Session ID: ' . session()->getId());
+            \Log::info('Generate Directory - All session data:', session()->all());
 
-        return view('uploaded-files', compact('uploadedFiles'));
+            // Get uploaded files from session
+            $tempUploadedFiles = session('temp_uploaded_files', []);
+
+            if (empty($tempUploadedFiles)) {
+                // Try to get files from temp directory directly as fallback
+                $tempPath = 'temp_uploads/' . session()->getId();
+                \Log::info('No session data found. Checking temp directory: ' . $tempPath);
+
+                if (Storage::disk('public')->exists($tempPath)) {
+                    $tempFiles = Storage::disk('public')->files($tempPath);
+                    \Log::info('Found temp files:', $tempFiles);
+
+                    if (!empty($tempFiles)) {
+                        // Reconstruct file info from temp directory
+                        $tempUploadedFiles = [];
+                        foreach ($tempFiles as $file) {
+                            $filename = basename($file);
+                            $tempUploadedFiles[] = [
+                                'original_name' => $filename, // We'll use stored name as original for now
+                                'stored_name' => $filename,
+                                'temp_path' => $file,
+                                'size' => Storage::disk('public')->size($file),
+                                'mime_type' => Storage::disk('public')->mimeType($file),
+                            ];
+                        }
+                        \Log::info('Reconstructed file info from temp directory:', $tempUploadedFiles);
+                    }
+                }
+
+                if (empty($tempUploadedFiles)) {
+                    throw new \Exception('No files found to process. Session might have expired or files were not uploaded properly.');
+                }
+            }
+
+            // Generate UUID-like directory name
+            $directoryUuid = $this->generateUUID();
+            $finalPath = 'uploads/' . $directoryUuid;
+
+            // Create the final directory
+            if (!Storage::disk('public')->makeDirectory($finalPath)) {
+                throw new \Exception('Failed to create final directory: ' . $finalPath);
+            }
+
+            \Log::info('Created final directory: ' . $finalPath);
+
+            // Move files from temp to final location
+            $finalFiles = [];
+            $tempPath = 'temp_uploads/' . session()->getId();
+
+            \Log::info('Moving files from temp path: ' . $tempPath);
+            \Log::info('Moving files to final path: ' . $finalPath);
+            \Log::info('Files to move:', $tempUploadedFiles);
+
+            foreach ($tempUploadedFiles as $fileInfo) {
+                $tempFilePath = $fileInfo['temp_path'];
+                $finalFilePath = $finalPath . '/' . $fileInfo['stored_name'];
+
+                \Log::info('Moving from: ' . $tempFilePath . ' to: ' . $finalFilePath);
+
+                // Check if temp file exists
+                if (!Storage::disk('public')->exists($tempFilePath)) {
+                    \Log::error('Temp file does not exist: ' . $tempFilePath);
+                    // List all files in temp directory for debugging
+                    $allTempFiles = Storage::disk('public')->allFiles($tempPath);
+                    \Log::error('All files in temp directory:', $allTempFiles);
+                    throw new \Exception('Temp file not found: ' . $tempFilePath);
+                }
+
+                // Move file to final location
+                if (!Storage::disk('public')->move($tempFilePath, $finalFilePath)) {
+                    throw new \Exception('Failed to move file: ' . $tempFilePath . ' to ' . $finalFilePath);
+                }
+
+                $finalFiles[] = [
+                    'original_name' => $fileInfo['original_name'],
+                    'stored_name' => $fileInfo['stored_name'],
+                    'final_path' => $finalFilePath,
+                    'size' => $fileInfo['size'],
+                    'mime_type' => $fileInfo['mime_type'],
+                    'url' => Storage::url($finalFilePath)
+                ];
+
+                \Log::info('Successfully moved file: ' . $finalFilePath);
+            }
+
+            // Clean up temp directory
+            if (Storage::disk('public')->exists($tempPath)) {
+                Storage::disk('public')->deleteDirectory($tempPath);
+                \Log::info('Cleaned up temp directory: ' . $tempPath);
+            }
+
+            // Save directory info to database if needed
+            $this->saveDirectoryRecord($directoryUuid, $finalFiles);
+
+            // Clear temp files session
+            session()->forget('temp_uploaded_files');
+
+            \Log::info('Directory generation completed successfully: ' . $directoryUuid);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Directory generated successfully!',
+                    'directory_uuid' => $directoryUuid,
+                    'directory_path' => $finalPath,
+                    'directory_url' => Storage::url($finalPath),
+                    'files' => $finalFiles,
+                    'redirect_url' => '/done/' . $directoryUuid
+                ]);
+            }
+
+            return redirect('/done/' . $directoryUuid)->with('success', 'Directory generated successfully!');
+
+        } catch (\Exception $e) {
+            \Log::error('Generate directory error: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'debug' => [
+                        'session_id' => session()->getId(),
+                        'session_data' => session()->all()
+                    ]
+                ], 500);
+            }
+
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
-    // Optional: Save file records to database
-    private function saveFileRecords($files)
+    public function viewDirectory($directoryUuid)
     {
-        // Example if you have a File model
+        $directoryPath = 'uploads/' . $directoryUuid;
+
+        if (!Storage::disk('public')->exists($directoryPath)) {
+            abort(404, 'Directory not found');
+        }
+
+        // Get all files in the directory
+        $files = Storage::disk('public')->files($directoryPath);
+        $fileDetails = [];
+
+        foreach ($files as $file) {
+            $fileDetails[] = [
+                'name' => basename($file),
+                'size' => Storage::disk('public')->size($file),
+                'url' => Storage::url($file),
+                'modified' => Storage::disk('public')->lastModified($file)
+            ];
+        }
+
+        return view('directory-view', [
+            'directory_uuid' => $directoryUuid,
+            'directory_path' => $directoryPath,
+            'files' => $fileDetails
+        ]);
+    }
+
+    private function generateUUID()
+    {
+        // Generate a UUID-like string: 8-4-4-4-12 format
+        return sprintf(
+            '%08x-%04x-%04x-%04x-%012x',
+            mt_rand(0, 0xffffffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffffffffffff)
+        );
+    }
+
+    private function saveDirectoryRecord($directoryUuid, $files)
+    {
+        // Optional: Save directory record to database
         /*
+        \App\Models\UploadDirectory::create([
+            'uuid' => $directoryUuid,
+            'path' => 'uploads/' . $directoryUuid,
+            'file_count' => count($files),
+            'total_size' => collect($files)->sum('size'),
+            'created_by' => auth()->id() ?? null,
+        ]);
+
+        // Save individual file records
         foreach ($files as $file) {
             \App\Models\File::create([
+                'directory_uuid' => $directoryUuid,
                 'original_name' => $file['original_name'],
                 'stored_name' => $file['stored_name'],
-                'path' => $file['path'],
+                'path' => $file['final_path'],
                 'size' => $file['size'],
                 'mime_type' => $file['mime_type'],
-                'uploaded_by' => auth()->id() ?? null,
             ]);
         }
         */
     }
 
-    public function deleteFile(Request $request, $filename)
+    public function showDone($directoryUuid)
+    {
+        $directoryPath = 'uploads/' . $directoryUuid;
+
+        // Check if directory exists
+        if (!Storage::disk('public')->exists($directoryPath)) {
+            return redirect('/')->withErrors(['error' => 'Directory not found. Please upload files first.']);
+        }
+
+        $directoryUrl = Storage::url($directoryPath);
+
+        // Get all files in the directory
+        $files = Storage::disk('public')->files($directoryPath);
+        $fileDetails = [];
+
+        foreach ($files as $file) {
+            $fileDetails[] = [
+                'name' => basename($file),
+                'original_name' => basename($file), // You might want to store this differently
+                'size' => $this->formatFileSize(Storage::disk('public')->size($file)),
+                'url' => Storage::url($file),
+                'modified' => date('Y-m-d H:i:s', Storage::disk('public')->lastModified($file))
+            ];
+        }
+
+        return view('test.done', [
+            'directory_uuid' => $directoryUuid,
+            'directory_path' => $directoryPath,
+            'directory_url' => $directoryUrl,
+            'files' => $fileDetails
+        ]);
+    }
+
+    private function formatFileSize($bytes)
+    {
+        if ($bytes === 0) return '0 Bytes';
+        $k = 1024;
+        $sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        $i = floor(log($bytes) / log($k));
+        return round(($bytes / pow($k, $i)), 2) . ' ' . $sizes[$i];
+    }
+
+    public function deleteDirectory($directoryUuid)
     {
         try {
-            // Find and delete the file
-            $filePath = 'uploads/' . date('Y/m/d') . '/' . $filename;
+            $directoryPath = 'uploads/' . $directoryUuid;
 
-            if (Storage::disk('public')->exists($filePath)) {
-                Storage::disk('public')->delete($filePath);
-
-                if ($request->ajax()) {
-                    return response()->json(['success' => true, 'message' => 'File deleted successfully']);
-                }
-
-                return redirect()->back()->with('success', 'File deleted successfully');
+            if (Storage::disk('public')->exists($directoryPath)) {
+                Storage::disk('public')->deleteDirectory($directoryPath);
+                return response()->json(['success' => true, 'message' => 'Directory deleted successfully']);
             }
 
-            throw new \Exception('File not found');
+            throw new \Exception('Directory not found');
 
         } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => $e->getMessage()], 404);
-            }
-
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 404);
         }
     }
 }
