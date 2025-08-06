@@ -117,7 +117,8 @@
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #333;
+    color: #413b3b;
+    text-shadow: 3px 2px 5px #3e74ae;
 }
 
 .upload-box p {
@@ -199,7 +200,9 @@
 }
 
 .progress-bar {
-    border-radius: 8px;
+    height: 100%;
+    background: linear-gradient(-5deg, #4b7cb9, #54b1ff) !important;
+    border-radius: 10px;
     transition: width 0.3s ease;
 }
 

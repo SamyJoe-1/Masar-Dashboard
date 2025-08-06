@@ -8,7 +8,7 @@
                     <h1 class="hero-title">فحص ذكي للسير الذاتية بتقنية الذكاء الاصطناعي</h1>
                     <p class="hero-subtitle">ارفع مئات السير الذاتية واحصل على تقرير شامل بالمرشحين المقبولين والمرفوضين مع تحليل مفصل لكل ملف</p>
                     <div class="cta-buttons">
-                        <a href="{{ config('app.match_cv_url') }}" class="btn btn-primary">ابدأ المسح المجاني</a>
+                        <a href="{{ route('upload.form') }}" class="btn btn-primary">ابدأ المسح المجاني</a>
                         <a href="#" class="btn btn-secondary">شاهد العرض التوضيحي</a>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                         <h3>لوحة المسح الذكي</h3>
                         <span>🚀</span>
                     </div>
-                    <div class="upload-zone" onclick="window.location.href = '{{ config('app.match_cv_url') }}'">
+                    <div class="upload-zone" onclick="window.location.href = '{{ route('upload.form') }}'">
                         <div class="upload-icon">📄</div>
                         <h4>اسحب وأفلت السير الذاتية هنا</h4>
                         <p>أو انقر للتصفح (PDF, DOC, DOCX)</p>

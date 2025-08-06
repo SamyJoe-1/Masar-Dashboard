@@ -100,6 +100,7 @@ nav {
 
 .lang-switch {
     background: var(--accent);
+    background:  var(--primary);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -396,6 +397,7 @@ nav {
     font-size: 2rem;
     font-weight: 800;
     color: white;
+    background: linear-gradient(45deg, #30529b, #447baf);;
     margin: 0 auto 2rem;
     box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
 }

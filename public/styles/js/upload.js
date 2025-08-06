@@ -285,6 +285,8 @@ class FileUploader {
             const statusText = item.querySelectorAll('small')[0];
             const percentText = item.querySelectorAll('small')[1];
 
+            console.log(percentage)
+
             progressBar.style.width = percentage + '%';
             percentText.textContent = Math.round(percentage) + '%';
 
