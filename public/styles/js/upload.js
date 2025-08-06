@@ -33,7 +33,7 @@ class FileUploader {
 
         this.cancelBtn = document.createElement('button');
         this.cancelBtn.type = 'button';
-        this.cancelBtn.className = 'btn btn-danger ms-2';
+        this.cancelBtn.className = 'btn btn-success submit-btn mt-4';
         this.cancelBtn.id = 'cancelBtn';
         this.cancelBtn.style.display = 'none';
         this.cancelBtn.innerHTML = '<i class="fas fa-times me-2"></i>Cancel Upload';
