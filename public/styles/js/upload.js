@@ -121,7 +121,12 @@ class FileUploader {
 
         // Show errors if any
         if (errors.length > 0) {
-            alert('Some files were not added:\n\n' + errors.join('\n'));
+            Swal.fire({
+                title: 'Some files were not added',
+                text: `Error: ${errors}\n`,
+                icon: 'error',
+            });
+            // alert('Some files were not added:\n\n' + errors.join('\n'));
         }
 
         this.updateSubmitButton();
@@ -319,7 +324,11 @@ class FileUploader {
         this.submitBtn.style.display = 'none';
         this.finalSubmitBtn.style.display = 'inline-block';
 
-        alert('Files uploaded successfully! Now click "تأكيد" to finalize.');
+        Swal.fire({
+            title: 'Files uploaded successfully!',
+            icon: 'success',
+        });
+        // alert('Files uploaded successfully! Now click "تأكيد" to finalize.');
     }
 
     resetAfterUpload() {
@@ -396,7 +405,7 @@ class FileUploader {
                 window.location.href = '/'; // Change this to your fallback page
             }
         });
-        alert('Error: ' + message);
+        // alert('Error: ' + message);
 
         // Reset progress bars on error
         const fileItems = this.fileList.querySelectorAll('.file-item');
