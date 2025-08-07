@@ -6,13 +6,21 @@
                 <p>منصة ذكية لفحص وتحليل السير الذاتية باستخدام أحدث تقنيات الذكاء الاصطناعي</p>
             </div>
             <div class="footer-section">
-                <h3>روابط سريعة</h3>
-                <a href="#">المميزات</a>
-                <a href="#">الأسعار</a>
-                <a href="#">المساعدة</a>
+                <h3>من نحن</h3>
+                <a href="{{ route('about') }}">المزيد عنا</a>
+                <a href="{{ route('contact') }}">تواصل معنا</a>
+                <a href="{{ route('terms') }}">البنود</a>
             </div>
+
             <div class="footer-section">
-                <h3>تواصل معنا</h3>
+                <h3>خدماتنا</h3>
+                <a href="{{ route('services') }}">الخدمات</a>
+                <a href="{{ route('privacy') }}">الحماية والخصوصية</a>
+                <a href="{{ route('faq') }}">الأسئلة الشائعة</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>معلومات التواصل</h3>
                 <a href="#">info@xxxxx.xxx</a>
                 <a href="#">+xxx xx xxx xxxx</a>
             </div>

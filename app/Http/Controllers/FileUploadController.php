@@ -10,7 +10,7 @@ class FileUploadController extends Controller
 {
     public function showUploadForm()
     {
-        return view('test.upload');
+        return view('cv_handling.upload');
     }
 
     public function uploadFiles(Request $request)
@@ -202,11 +202,11 @@ class FileUploadController extends Controller
                     'directory_path' => $finalPath,
                     'directory_url' => Storage::url($finalPath),
                     'files' => $finalFiles,
-                    'redirect_url' => '/done/' . $directoryUuid
+                    'redirect_url' => '/result/preview/' . $directoryUuid
                 ]);
             }
 
-            return redirect('/done/' . $directoryUuid)->with('success', 'Directory generated successfully!');
+            return redirect('/result/preview/' . $directoryUuid)->with('success', 'Directory generated successfully!');
 
         } catch (\Exception $e) {
             \Log::error('Generate directory error: ' . $e->getMessage());
@@ -319,7 +319,7 @@ class FileUploadController extends Controller
             ];
         }
 
-        return view('test.done', [
+        return view('cv_handling.preview', [
             'directory_uuid' => $directoryUuid,
             'directory_path' => $directoryPath,
             'directory_url' => $directoryUrl,

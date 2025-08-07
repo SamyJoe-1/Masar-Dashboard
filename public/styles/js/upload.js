@@ -365,13 +365,37 @@ class FileUploader {
         const directoryPath = result.directory_path;
         const directoryUrl = result.directory_url;
 
-        alert(`Directory generated successfully!\nUUID: ${directoryUuid}\nPath: ${directoryPath}\nRedirecting to results page...`);
-
-        // Redirect to /done/{uuid} route
-        window.location.href = `/done/${directoryUuid}`;
+        Swal.fire({
+            title: 'Your CV has been sent successfully!',
+            text: `If you'd like to explore the CV page`,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: 'View',
+            cancelButtonText: 'Skip',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/result/preview/${directoryUuid}`; // Change this to your "view" page
+            } else {
+                window.location.href = '/'; // Change this to your fallback page
+            }
+        });
     }
 
     showError(message) {
+        Swal.fire({
+            title: 'The process failed!',
+            text: `Share the issue with us`,
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonText: 'View',
+            cancelButtonText: 'Skip',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/contact`; // Change this to your "view" page
+            } else {
+                window.location.href = '/'; // Change this to your fallback page
+            }
+        });
         alert('Error: ' + message);
 
         // Reset progress bars on error

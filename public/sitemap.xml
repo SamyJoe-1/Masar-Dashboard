@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://dashboard.massar.biz/</loc>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://dashboard.massar.biz/about</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dashboard.massar.biz/contact</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dashboard.massar.biz/terms</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://dashboard.massar.biz/privacy</loc>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://dashboard.massar.biz/faq</loc>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://dashboard.massar.biz/services</loc>
+        <priority>0.6</priority>
+    </url>
+</urlset>
