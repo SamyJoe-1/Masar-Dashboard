@@ -215,7 +215,7 @@
         </div>
     </section>
 
-    <section class="pricing-preview">
+    <section class="pricing-preview" id="pricing-preview">
         <div class="container">
             <h2 class="section-title">باقات الأسعار</h2>
             <div class="pricing-cards">
