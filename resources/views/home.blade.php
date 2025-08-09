@@ -9,7 +9,7 @@
                     <p class="hero-subtitle">ارفع مئات السير الذاتية واحصل على تقرير شامل بالمرشحين المقبولين والمرفوضين مع تحليل مفصل لكل ملف</p>
                     <div class="cta-buttons">
                         <a href="{{ route('upload.form') }}" class="btn btn-primary">ابدأ المسح المجاني</a>
-                        <a href="#" class="btn btn-secondary">شاهد العرض التوضيحي</a>
+                        <a href="{{ route('register') }}" class="btn btn-secondary">انضم الينا</a>
                     </div>
                 </div>
                 <div class="hero-dashboard">

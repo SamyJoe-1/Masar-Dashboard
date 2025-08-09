@@ -10,4 +10,18 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function home()
+    {
+        if (auth()->check()) {
+            return redirect()->route('dashboard.home');
+        }else{
+            return redirect('/');
+        }
+    }
+
+    public function dashboard()
+    {
+        return view('dashboard.home');
+    }
 }

@@ -3,23 +3,25 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileUploadController;
 
-// Upload form
-Route::get('/upload', [FileUploadController::class, 'showUploadForm'])->name('upload.form');
+Route::group(['controller' => FileUploadController::class, 'middleware' => ['auth']], function () {
+    // Upload form
+    Route::get('/upload', 'showUploadForm')->name('upload.form');
 
-// File upload handling
-Route::post('/upload-files', [FileUploadController::class, 'uploadFiles'])->name('upload.files');
+    // File upload handling
+    Route::post('/upload-files', 'uploadFiles')->name('upload.files');
 
-// Generate directory
-Route::post('/generate-directory', [FileUploadController::class, 'generateDirectory'])->name('generate.directory');
+    // Generate directory
+    Route::post('/generate-directory', 'generateDirectory')->name('generate.directory');
 
-// Show completion page with UUID
-Route::get('/result/preview/{directoryUuid}', [FileUploadController::class, 'showDone'])->name('upload.done');
+    // Show completion page with UUID
+    Route::post('/result/preview/{directoryUuid}', 'showDone')->name('upload.done');
 
-// View directory contents (optional - for direct file access)
-Route::get('/directory/{directoryUuid}', [FileUploadController::class, 'viewDirectory'])->name('view.directory');
+    // View directory contents
+    Route::get('/directory/{directoryUuid}', 'viewDirectory')->name('view.directory');
 
-// Delete directory
-Route::delete('/directory/{directoryUuid}', [FileUploadController::class, 'deleteDirectory'])->name('delete.directory');
+    // Delete directory
+    Route::delete('/directory/{directoryUuid}', 'deleteDirectory')->name('delete.directory');
+});
 
 // Optional: Debug session route (if you want to keep sessions alive)
 Route::get('/debug-session', function () {

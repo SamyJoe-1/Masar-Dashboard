@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Applicant;
+use App\Models\File;
+use App\Models\JobApp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -294,7 +297,7 @@ class FileUploadController extends Controller
         */
     }
 
-    public function showDone($directoryUuid)
+    public function showDone($directoryUuid, Request $request)
     {
         $directoryPath = 'uploads/' . $directoryUuid;
 
@@ -312,6 +315,7 @@ class FileUploadController extends Controller
         foreach ($files as $file) {
             $fileDetails[] = [
                 'name' => basename($file),
+                'type' => Storage::disk('public')->mimeType($file),
                 'original_name' => basename($file), // You might want to store this differently
                 'size' => $this->formatFileSize(Storage::disk('public')->size($file)),
                 'url' => Storage::url($file),
@@ -319,12 +323,28 @@ class FileUploadController extends Controller
             ];
         }
 
-        return view('cv_handling.preview', [
-            'directory_uuid' => $directoryUuid,
-            'directory_path' => $directoryPath,
-            'directory_url' => $directoryUrl,
-            'files' => $fileDetails
+        $files = [];
+        foreach ($fileDetails as $fileDetail) {
+            $files[] = File::create([
+                'name' => $fileDetail['name'],
+                'path' => $directoryPath,
+                'fullpath' => $fileDetail['url'],
+                'type' => $fileDetail['type'],
+                'size' => (float) $fileDetail['size'],
+            ]);
+        }
+        $application = JobApp::create([
+            'user_id' => auth()->id(),
+            'description' => $request->description,
         ]);
+        foreach ($files as $file) {
+            Applicant::create([
+                'job_id' => $application->id,
+                'file_id' => $file->id,
+            ]);
+        }
+
+        return response()->json([]);
     }
 
     private function formatFileSize($bytes)

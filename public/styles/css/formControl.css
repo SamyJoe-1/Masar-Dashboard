@@ -1,0 +1,43 @@
+.quiet-textarea-wrapper {
+    font-family: 'Tajawal', 'Inter', sans-serif !important;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.quiet-textarea {
+    flex: 1;
+    resize: none;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.quiet-textarea:focus {
+    border-color: #aaa;
+    background-color: #fff;
+}
+
+.quiet-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.quiet-btn:hover {
+    background-color: #43a047;
+}
+
+.quiet-btn:active {
+    transform: scale(0.97);
+}

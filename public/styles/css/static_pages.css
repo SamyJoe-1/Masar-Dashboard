@@ -4,7 +4,7 @@
 .static-hero {
     background: linear-gradient(135deg, #667eea 0%, #3a7a9d 100%);
     padding: 8rem 0 4rem;
-    margin-top: 80px;
+    /*margin-top: 80px;*/
     color: white;
     text-align: center;
 }

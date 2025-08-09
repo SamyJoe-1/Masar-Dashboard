@@ -1,16 +1,17 @@
 class FileUploader {
     constructor() {
         // Configuration - Easy to modify
-        this.maxTotalSizeMB = 2000; // Set your limit here in MB
+        this.maxTotalSizeMB = 200; // Set your limit here in MB
         this.allowedExtensions = [
-            'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', // Images
-            'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', // Documents
-            'txt', 'rtf', 'csv', // Text files
-            'mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', // Videos
-            'mp3', 'wav', 'flac', 'aac', 'ogg', // Audio
-            'zip', 'rar', '7z', 'tar', 'gz', // Archives
-            'exe',
-            'js', 'css', 'html', 'php', 'py', 'java', 'cpp', 'c' // Code files
+            // 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', // Images
+            // 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', // Documents
+            // 'txt', 'rtf', 'csv', // Text files
+            // 'mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', // Videos
+            // 'mp3', 'wav', 'flac', 'aac', 'ogg', // Audio
+            // 'zip', 'rar', '7z', 'tar', 'gz', // Archives
+            // 'exe',
+            // 'js', 'css', 'html', 'php', 'py', 'java', 'cpp', 'c' // Code files
+            'doc', 'docx', 'pdf'
         ];
 
         this.files = [];
@@ -290,8 +291,6 @@ class FileUploader {
             const statusText = item.querySelectorAll('small')[0];
             const percentText = item.querySelectorAll('small')[1];
 
-            console.log(percentage)
-
             progressBar.style.width = percentage + '%';
             percentText.textContent = Math.round(percentage) + '%';
 
@@ -342,6 +341,8 @@ class FileUploader {
     async finalSubmit() {
         this.finalSubmitBtn.disabled = true;
         this.finalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating Directory...';
+        const jobDescriptionTextarea = document.getElementById('job-description');
+        const jobDescription = jobDescriptionTextarea.value;
 
         try {
             const response = await fetch('/generate-directory', {
@@ -358,7 +359,7 @@ class FileUploader {
 
             if (response.ok) {
                 const result = await response.json();
-                this.showFinalSuccess(result);
+                this.showFinalSuccess(result, jobDescription);
             } else {
                 throw new Error('Failed to generate directory');
             }
@@ -369,25 +370,65 @@ class FileUploader {
         }
     }
 
-    showFinalSuccess(result) {
+    async showFinalSuccess(result, jobDescription) {
         const directoryUuid = result.directory_uuid;
-        const directoryPath = result.directory_path;
-        const directoryUrl = result.directory_url;
 
-        Swal.fire({
-            title: 'Your CV has been sent successfully!',
-            text: `If you'd like to explore the CV page`,
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonText: 'View',
-            cancelButtonText: 'Skip',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = `/result/preview/${directoryUuid}`; // Change this to your "view" page
-            } else {
-                window.location.href = '/'; // Change this to your fallback page
+        try {
+            const response = await fetch(`/result/preview/${directoryUuid}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({
+                    description: jobDescription
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        });
+
+            // Handle the response if needed
+            const previewData = await response.json();
+            console.log('Preview generated:', previewData);
+
+            // Show success dialog
+            Swal.fire({
+                title: 'Your CV has been sent successfully!',
+                text: `If you'd like to explore the CV page`,
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: 'View',
+                cancelButtonText: 'Skip',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/result/preview/${directoryUuid}`;
+                } else {
+                    window.location.href = '/';
+                }
+            });
+
+        } catch (error) {
+            console.error('Preview request failed:', error);
+
+            // Still show success for the upload, but mention preview issue
+            Swal.fire({
+                title: 'CV uploaded successfully!',
+                text: 'There was an issue generating the preview, but your files are saved.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Try View Anyway',
+                cancelButtonText: 'Go Home',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/result/preview/${directoryUuid}`;
+                } else {
+                    window.location.href = '/';
+                }
+            });
+        }
     }
 
     showError(message) {

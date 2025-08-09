@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('styles/css/app_dashboard.css') }}" rel="stylesheet">
+    @yield('header')
+</head>
+<body>
+<x-layout.dashboard.sidebar></x-layout.dashboard.sidebar>
+
+<!-- Top Navbar -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="navbar-right">
+        @if(app()->getLocale() == 'ar')
+            <button class="quiet-btn" aria-label="Submit">
+                <img src="{{ asset('assets/images/flags/usa.svg') }}" width="35">
+                English
+            </button>
+        @else
+            <button class="quiet-btn" aria-label="Submit">
+                <img src="{{ asset('assets/images/flags/oman.svg') }}" width="35">
+                العربية
+            </button>
+        @endif
+        <x-layout.dashboard.dropdownAvatar></x-layout.dashboard.dropdownAvatar>
+    </div>
+</nav>
+
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="content-wrapper">
+        @yield('content')
+    </div>
+</div>
+
+<script src="{{ asset('styles/js/app_dashboard.js') }}"></script>
+@yield('scripts')
+</body>
+</html>
