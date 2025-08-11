@@ -324,7 +324,7 @@ class FileUploadController extends Controller
             ];
         }
 
-        $obj = new MatchingCVsService($request->description ?? "front");
+        $obj = new MatchingCVsService($request->description ?? "-");
         $fetchJobTitle = $obj->getJobTitle()->getData(true); // This actually exists on JsonResponse
         if ($fetchJobTitle['success']){
             @$title = $fetchJobTitle['data']['job_title'];

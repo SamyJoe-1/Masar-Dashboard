@@ -5,6 +5,7 @@
     <link href="{{ asset('styles/css/formControl.css') }}" rel="stylesheet">
     <link href="{{ asset('styles/css/pagination.css') }}" rel="stylesheet">
     <link href="{{ asset('styles/css/filterBar.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
 @endsection
 

@@ -5,35 +5,35 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1 class="hero-title">فحص ذكي للسير الذاتية بتقنية الذكاء الاصطناعي</h1>
-                    <p class="hero-subtitle">ارفع مئات السير الذاتية واحصل على تقرير شامل بالمرشحين المقبولين والمرفوضين مع تحليل مفصل لكل ملف</p>
+                    <h1 class="hero-title">{{ __('words.smart_resume_screening_ai') }}</h1>
+                    <p class="hero-subtitle">{{ __('words.upload_hundreds_resumes_comprehensive_report') }}</p>
                     <div class="cta-buttons">
-                        <a href="{{ route('upload.form') }}" class="btn btn-primary">ابدأ المسح المجاني</a>
-                        <a href="{{ route('register') }}" class="btn btn-secondary">انضم الينا</a>
+                        <a href="{{ route('upload.form') }}" class="btn btn-primary">{{ __('words.start_free_scan') }}</a>
+                        <a href="{{ route('register') }}" class="btn btn-secondary">{{ __('words.join_us') }}</a>
                     </div>
                 </div>
                 <div class="hero-dashboard">
                     <div class="dashboard-header">
-                        <h3>لوحة المسح الذكي</h3>
+                        <h3>{{ __('words.smart_scan_dashboard') }}</h3>
                         <span>🚀</span>
                     </div>
                     <div class="upload-zone" onclick="window.location.href = '{{ route('upload.form') }}'">
                         <div class="upload-icon">📄</div>
-                        <h4>اسحب وأفلت السير الذاتية هنا</h4>
-                        <p>أو انقر للتصفح (PDF, DOC, DOCX)</p>
+                        <h4>{{ __('words.drag_drop_resumes_here') }}</h4>
+                        <p>{{ __('words.or_click_browse_pdf_doc') }}</p>
                     </div>
                     <div class="stats-grid">
                         <div class="stat-card">
                             <span class="stat-number">156</span>
-                            <span class="stat-label">تم المسح</span>
+                            <span class="stat-label">{{ __('words.scanned') }}</span>
                         </div>
                         <div class="stat-card">
                             <span class="stat-number">89</span>
-                            <span class="stat-label">مقبول</span>
+                            <span class="stat-label">{{ __('words.accepted') }}</span>
                         </div>
                         <div class="stat-card">
                             <span class="stat-number">67</span>
-                            <span class="stat-label">مرفوض</span>
+                            <span class="stat-label">{{ __('words.rejected') }}</span>
                         </div>
                     </div>
                 </div>
@@ -43,39 +43,39 @@
 
     <section class="features" id="features">
         <div class="container">
-            <h2 class="section-title">مميزات استثنائية</h2>
-            <p class="section-subtitle">تقنيات متطورة لفحص وتحليل السير الذاتية بدقة عالية</p>
+            <h2 class="section-title">{{ __('words.exceptional_features') }}</h2>
+            <p class="section-subtitle">{{ __('words.advanced_techniques_resume_analysis') }}</p>
 
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
-                    <h3 class="feature-title">ذكاء اصطناعي متقدم</h3>
-                    <p class="feature-description">خوارزميات تعلم آلة متطورة تحلل السير الذاتية بدقة تصل إلى 95% مع فهم السياق والمهارات المطلوبة</p>
+                    <h3 class="feature-title">{{ __('words.advanced_ai') }}</h3>
+                    <p class="feature-description">{{ __('words.advanced_ml_algorithms_95_accuracy') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">معالجة سريعة</h3>
-                    <p class="feature-description">فحص مئات السير الذاتية في دقائق معدودة مع تقارير مفصلة فورية وترتيب تلقائي للمرشحين</p>
+                    <h3 class="feature-title">{{ __('words.fast_processing') }}</h3>
+                    <p class="feature-description">{{ __('words.scan_hundreds_resumes_minutes') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📊</div>
-                    <h3 class="feature-title">تقارير شاملة</h3>
-                    <p class="feature-description">تحليلات عميقة تشمل نقاط القوة والضعف، مطابقة المهارات، والتوصيات المخصصة لكل مرشح</p>
+                    <h3 class="feature-title">{{ __('words.comprehensive_reports') }}</h3>
+                    <p class="feature-description">{{ __('words.deep_analysis_strengths_weaknesses') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🌐</div>
-                    <h3 class="feature-title">دعم متعدد اللغات</h3>
-                    <p class="feature-description">يتعامل مع السير الذاتية باللغة العربية والإنجليزية بنفس الدقة مع فهم المصطلحات المحلية</p>
+                    <h3 class="feature-title">{{ __('words.multilingual_support') }}</h3>
+                    <p class="feature-description">{{ __('words.handles_arabic_english_resumes') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title">أمان وخصوصية</h3>
-                    <p class="feature-description">تشفير متقدم لحماية بيانات المرشحين مع ضمان الخصوصية التامة وعدم تخزين المعلومات الحساسة</p>
+                    <h3 class="feature-title">{{ __('words.security_privacy') }}</h3>
+                    <p class="feature-description">{{ __('words.advanced_encryption_data_protection') }}</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">مطابقة دقيقة</h3>
-                    <p class="feature-description">مطابقة ذكية للمهارات والخبرات مع متطلبات الوظيفة وترشيح أفضل المرشحين تلقائياً</p>
+                    <h3 class="feature-title">{{ __('words.precise_matching') }}</h3>
+                    <p class="feature-description">{{ __('words.smart_skills_experience_matching') }}</p>
                 </div>
             </div>
         </div>
@@ -83,24 +83,24 @@
 
     <section class="process" id="process">
         <div class="container">
-            <h2 class="section-title">كيف يعمل النظام؟</h2>
-            <p class="section-subtitle">ثلاث خطوات بسيطة للحصول على أفضل المرشحين</p>
+            <h2 class="section-title">{{ __('words.how_system_works') }}</h2>
+            <p class="section-subtitle">{{ __('words.three_simple_steps_best_candidates') }}</p>
 
             <div class="process-steps">
                 <div class="process-step">
                     <div class="step-number">1</div>
-                    <h3 class="step-title">ارفع السير الذاتية</h3>
-                    <p class="step-description">قم برفع مجموعة السير الذاتية بصيغ PDF أو Word، يمكن رفع مئات الملفات دفعة واحدة</p>
+                    <h3 class="step-title">{{ __('words.upload_resumes') }}</h3>
+                    <p class="step-description">{{ __('words.upload_pdf_word_hundreds_files') }}</p>
                 </div>
                 <div class="process-step">
                     <div class="step-number">2</div>
-                    <h3 class="step-title">المعالجة الذكية</h3>
-                    <p class="step-description">النظام يحلل كل سيرة ذاتية باستخدام الذكاء الاصطناعي ويقارنها بمعايير الوظيفة المحددة</p>
+                    <h3 class="step-title">{{ __('words.smart_processing') }}</h3>
+                    <p class="step-description">{{ __('words.ai_analyzes_compares_job_criteria') }}</p>
                 </div>
                 <div class="process-step">
                     <div class="step-number">3</div>
-                    <h3 class="step-title">احصل على التقرير</h3>
-                    <p class="step-description">تقرير شامل بالمرشحين مرتبين حسب الأولوية مع تحليل مفصل لكل مرشح ونقاط القوة والضعف</p>
+                    <h3 class="step-title">{{ __('words.get_report') }}</h3>
+                    <p class="step-description">{{ __('words.comprehensive_report_prioritized_candidates') }}</p>
                 </div>
             </div>
         </div>

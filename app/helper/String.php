@@ -18,3 +18,18 @@ function getInitials(string $name=null): string
     // If only one word, take the first two letters
     return strtoupper(substr($parts[0], 0, 2));
 }
+
+function showLess($text, $length){
+    if ($text == null){
+        return "-";
+    }
+    if (strlen($text) <= $length){
+        return trim($text);
+    }else{
+        $get = substr(trim($text), 0, $length);
+        $get_arr = explode(' ', $get);
+        $array_words = array_slice($get_arr, 0, (count($get_arr) - 1));
+        $result = implode(' ',$array_words);
+        return "$result...";
+    }
+}

@@ -1,3 +1,3 @@
 @if(in_array($column, $columns))
-    <td>{{ @$slot }}</td>
+    <td style="text-wrap: nowrap">{{ @$slot }}</td>
 @endif

@@ -1,5 +1,5 @@
 .container {
-    max-width: 1200px;
+    max-width: 1800px;
     margin: 0 auto;
     background: white;
     border-radius: 20px;
@@ -132,7 +132,7 @@ tbody tr:hover {
 }
 
 td {
-    padding: 18px 20px;
+    padding: 5px 12px;
     border-bottom: 1px solid #e2e8f0;
     font-size: 14px;
     color: #374151;
