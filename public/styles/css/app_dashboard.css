@@ -96,7 +96,7 @@ body {
     right: 280px;
     height: 70px;
     background: white;
-    border-bottom: 1px solid #e2e8f0;
+    /*border-bottom: 1px solid #e2e8f0;*/
     display: flex;
     align-items: center;
     justify-content: space-between;
