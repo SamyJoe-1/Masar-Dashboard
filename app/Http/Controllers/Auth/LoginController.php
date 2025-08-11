@@ -27,6 +27,12 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+    public function showLoginForm()
+    {
+        session(['path' => 'login']);
+        return view('auth.AIO');
+    }
+
     /**
      * Create a new controller instance.
      *

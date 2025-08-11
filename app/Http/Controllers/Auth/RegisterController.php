@@ -50,6 +50,12 @@ class RegisterController extends Controller
         throw ValidationException::withMessages($validator->errors()->toArray());
     }
 
+    public function showRegistrationForm()
+    {
+        session(['path' => 'register']);
+        return view('auth.AIO');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *

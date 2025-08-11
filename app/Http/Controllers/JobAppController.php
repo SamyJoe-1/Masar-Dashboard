@@ -12,7 +12,7 @@ class JobAppController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.hr.jobs.index');
     }
 
     /**

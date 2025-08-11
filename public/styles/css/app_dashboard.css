@@ -1,4 +1,5 @@
 * {
+    font-family: 'Tajawal', 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -17,7 +18,7 @@ body {
     right: 0;
     width: 280px;
     height: 100vh;
-    background: linear-gradient(180deg, #3c7ba0 0%, #2c5f7f 100%);
+    background: #3464b0;
     z-index: 1000;
     overflow-y: auto;
     transition: transform 0.3s ease;

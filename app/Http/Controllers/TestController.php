@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobApp;
+use App\Services\MatchingCVsService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -38,41 +40,21 @@ class TestController extends Controller
     public function test_2(Request $request)
     {
         try {
-            // Job description
             $jobDescription = "I need a full-stack";
-
-            $disk = Storage::disk('public');
-            $files = $disk->files('uploads/c4e0458d-645b-57e9-ccdb-6c1f3274cf6c');
-
-// Start the HTTP request
-            $http = Http::timeout(60)->acceptJson();
-
-// Attach each file (this is exactly how Postman does it)
-            foreach ($files as $file) {
-                $fileName = basename($file);
-                $fileContent = $disk->get($file);
-
-                // This creates multipart/form-data just like Postman
-                $http->attach("files[]", $fileContent, $fileName);
-            }
-
-// Send the request with form data
-            $response = $http->post('http://127.0.0.1:8000/process-resumes', [
+            $http = Http::timeout(1200)->acceptJson();
+            $response = $http->post(config('app.match_cv_url') . '/match-cvs-from-urls', [
                 'job_description' => $jobDescription,
-//                'files' => array_values($files)
+                'urls' => [
+                    "https://dashboard.massar.biz/storage/uploads/6f0fd62b-9d57-795c-7d29-47cbeae22346/mariam-ahmed_1754489229_L10uiE.pdf"
+                ],
+                'output_format' => 'json',
+                "debug" => 'true'
             ]);
-
-//            $response = Http::timeout(60)
-//                ->asForm()  // This sets proper form content type
-//                ->post('http://127.0.0.1:8000/process-resumes', $data);
-
-
-
             if ($response->successful()) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Files sent successfully',
-                    'data' => $response->json()
+                    'data' => $response->json()['results']
                 ]);
             } else {
                 return response()->json([
@@ -90,5 +72,27 @@ class TestController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function test_3()
+    {
+        $jobs = JobApp::with('user')->get();
+        $job = $jobs->first();
+        return $job->user;
+    }
+
+    public function test_4()
+    {
+        $obj = new MatchingCVsService('fullstack');
+        $fetchJobTitle = $obj->getJobTitle()->getData(true); // This actually exists on JsonResponse
+        if ($fetchJobTitle['success']){
+            $description = $fetchJobTitle['data']['job_title'];
+        }else{
+            $description = '';
+        }
+        return [
+            $description,
+
+        ];
     }
 }

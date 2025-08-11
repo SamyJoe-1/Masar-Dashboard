@@ -10,7 +10,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">لوحة التحكم</div>
-        <a href="#" class="sidebar-item {{ request()->routeIs('dashboard.home') ? "active":"" }}">
+        <a href="#" class="sidebar-item {{ request()->routeIs('dashboard.hr.home') ? "active":"" }}">
             <i class="fas fa-users"></i>
             الإحصائيات
         </a>
@@ -18,7 +18,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">الوظائف</div>
-        <a href="#" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.jobs.index') }}" class="sidebar-item">
             <i class="fas fa-briefcase"></i>
             جميع الوظائف
         </a>
@@ -54,7 +54,7 @@
             <i class="fa-solid fa-building"></i>
             المزيد عنا
         </a>
-        <a href="#" class="sidebar-item" style="color: #ff3c3c;font-weight: bolder">
+        <a href="#" class="sidebar-item" style="color: #ff6060;text-shadow: 0 0 6px;font-weight: bolder;">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             تسجيل الخروج
         </a>

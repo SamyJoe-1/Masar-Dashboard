@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use App\Models\File;
 use App\Models\JobApp;
+use App\Services\MatchingCVsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -323,6 +324,14 @@ class FileUploadController extends Controller
             ];
         }
 
+        $obj = new MatchingCVsService($request->description ?? "front");
+        $fetchJobTitle = $obj->getJobTitle()->getData(true); // This actually exists on JsonResponse
+        if ($fetchJobTitle['success']){
+            @$title = $fetchJobTitle['data']['job_title'];
+        }else{
+            $title = '';
+        }
+
         $files = [];
         foreach ($fileDetails as $fileDetail) {
             $files[] = File::create([
@@ -335,6 +344,7 @@ class FileUploadController extends Controller
         }
         $application = JobApp::create([
             'user_id' => auth()->id(),
+            'title' => $title,
             'description' => $request->description,
         ]);
         foreach ($files as $file) {
@@ -344,7 +354,10 @@ class FileUploadController extends Controller
             ]);
         }
 
-        return response()->json([]);
+        return response()->json([
+            'title' => $title,
+            'description' => $request->description
+        ]);
     }
 
     private function formatFileSize($bytes)

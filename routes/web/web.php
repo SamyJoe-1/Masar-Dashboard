@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\StaticPagesController;
+use App\Http\Controllers\JobAppController;
 use App\Http\Controllers\TestController;
 
 Auth::routes();
@@ -15,9 +16,12 @@ Route::group(['controller' => HomeController::class], function () {
     Route::get('/home', 'home')->name('home');
 });
 
-Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+Route::group(['prefix' => 'dashboard/hr', 'as' => 'dashboard.hr.'], function () {
 
+//    HomeController
     Route::get('/', [HomeController::class, 'dashboard'])->name('home');
+
+    Route::resource('jobs', JobAppController::class);
 
 });
 
@@ -38,4 +42,6 @@ Route::group(['controller' => StaticPagesController::class], function () {
 Route::group(['controller' => TestController::class, 'prefix' => 'test'], function () {
     Route::get('1', 'test_1');
     Route::get('2', 'test_2');
+    Route::get('3', 'test_3');
+    Route::get('4', 'test_4');
 });

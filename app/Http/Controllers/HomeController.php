@@ -14,7 +14,7 @@ class HomeController extends Controller
     public function home()
     {
         if (auth()->check()) {
-            return redirect()->route('dashboard.home');
+            return redirect()->route('dashboard.hr.home');
         }else{
             return redirect('/');
         }
@@ -22,6 +22,6 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        return view('dashboard.home');
+        return view('dashboard.hr.home');
     }
 }
