@@ -200,6 +200,9 @@ body {
 .text-danger{
     color: #c40d1b;
 }
+.text-secondary{
+    color: #888888;
+}
 .text-success{
     color: #41b072;
 }
