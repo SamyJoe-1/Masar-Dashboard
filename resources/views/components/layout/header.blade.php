@@ -10,6 +10,10 @@
             <li><a href="{{ route('contact') }}">تواصل معنا</a></li>
             <li><a href="{{ route('about') }}">المزيد عنا</a></li>
         </ul>
-        <button class="lang-switch" onclick="toggleLanguage()">English</button>
+        @if(app()->getLocale() == 'ar')
+            <a href="?locale=en" class="lang-switch text-decoration-none">English</a>
+        @else
+            <a href="?locale=ar" class="lang-switch text-decoration-none">العربية</a>
+        @endif
     </nav>
 </header>

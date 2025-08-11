@@ -12,7 +12,7 @@
 @section('content')
     <div class="container">
         <div class="header">
-            <h1>جميع الوظائف</h1>
+            <h1>{{ __("words.All Jobs") }}</h1>
         </div>
 
         @livewireStyles

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() == 'ar' ? "ar":"en" }}" dir="{{ app()->getLocale() == 'ar' ? "rtl":"ltr" }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
     <link href="{{ asset('styles/css/app_dashboard.css') }}" rel="stylesheet">
     @yield('header')
 </head>
-<body>
+<body class="{{ app()->getLocale() }}">
 <x-layout.dashboard.sidebar></x-layout.dashboard.sidebar>
 
 <!-- Top Navbar -->
@@ -22,15 +22,15 @@
 
     <div class="navbar-right">
         @if(app()->getLocale() == 'ar')
-            <button class="quiet-btn" aria-label="Submit">
+            <a class="quiet-btn text-decoration-none" href="?locale=en">
                 <img src="{{ asset('assets/images/flags/usa.svg') }}" width="35">
                 English
-            </button>
+            </a>
         @else
-            <button class="quiet-btn" aria-label="Submit">
+            <a class="quiet-btn text-decoration-none" href="?locale=ar">
                 <img src="{{ asset('assets/images/flags/oman.svg') }}" width="35">
                 العربية
-            </button>
+            </a>
         @endif
         <x-layout.dashboard.dropdownAvatar></x-layout.dashboard.dropdownAvatar>
     </div>

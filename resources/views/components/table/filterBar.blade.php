@@ -8,7 +8,7 @@
                             <span class="input-group-text p-1 rounded-start-pill">
                                 <i class="bx bx-search-alt-2"></i>
                             </span>
-                            <input wire:model.live.debounce.300ms="search" type="text" class="form-control rounded-end-pill" placeholder="Searching...">
+                            <input wire:model.live.debounce.300ms="search" type="text" class="form-control rounded-end-pill" placeholder="{{ __('words.searching') }}">
                         </div>
                     </div>
                 @endif

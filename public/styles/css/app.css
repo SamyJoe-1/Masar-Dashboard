@@ -55,6 +55,10 @@ nav {
     padding: 1rem 0;
 }
 
+.text-decoration-none{
+    text-decoration: none !important;
+}
+
 .logo {
     font-size: 1.8rem;
     font-weight: 800;

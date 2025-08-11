@@ -1,19 +1,19 @@
 <div>
-    <div class="d-flex justify-content-between mb-3" wire:ignore>
+    <div class="d-flex justify-content-between" wire:ignore>
         <div class="flex-fill">
             <x-table.filterBar search="1"></x-table.filterBar>
         </div>
     </div>
     <x-table.bulkActions :selected="$selected">
-        <option value="">اختر الحدث</option>
-        <option value="delete">حذف</option>
+        <option value="">{{ __("words.select action") }}</option>
+        <option value="delete">{{ __("words.delete") }}</option>
     </x-table.bulkActions>
     <div class="d-flex justify-content-between align-items-center">
         <x-table.perPage :per-page-options="$perPageOptions"></x-table.perPage>
         <div>
             <button class="btn btn-primary rounded-5 p-1 px-3" data-bs-toggle="collapse" data-bs-target="#filterBarContent" style="margin: 10px">
                 <i class="bx bx-filter-alt"></i>
-                فرز
+                {{ __("words.Filter") }}
             </button>
         </div>
     </div>
@@ -27,7 +27,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($jobs as $job)
+        @forelse($jobs as $job)
             <tr>
                 <x-table.tdCheckbox :value="$job->id"></x-table.tdCheckbox>
                 <x-table.td :columns="$selectedColumns" column="id">{{ $job->id }}</x-table.td>
@@ -64,7 +64,9 @@
                     </div>
                 </x-table.td>
             </tr>
-        @endforeach
+        @empty
+            <h1>{{ __("words.No records found.") }}</h1>
+        @endforelse
         </tbody>
     </x-table.default>
     {{ $jobs->links() }}

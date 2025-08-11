@@ -3,60 +3,60 @@
     <div class="sidebar-header">
         <div class="sidebar-logo">
             <a href="/home">
-                <img src="{{ asset('assets/images/logo.png') }}" width="100%">
+                <img src="{{ asset('assets/images/logo.png') }}" width="170">
             </a>
         </div>
     </div>
 
     <div class="sidebar-section">
-        <div class="sidebar-title">لوحة التحكم</div>
+        <div class="sidebar-title">{{ __('words.control_panel') }}</div>
         <a href="#" class="sidebar-item {{ request()->routeIs('dashboard.hr.home') ? "active":"" }}">
             <i class="fas fa-users"></i>
-            الإحصائيات
+            {{ __('words.statistics') }}
         </a>
     </div>
 
     <div class="sidebar-section">
-        <div class="sidebar-title">الوظائف</div>
+        <div class="sidebar-title">{{ __('words.jobs') }}</div>
         <a href="{{ route('dashboard.hr.jobs.index') }}" class="sidebar-item">
             <i class="fas fa-briefcase"></i>
-            جميع الوظائف
+            {{ __('words.all_jobs') }}
         </a>
         <a href="{{ route('upload.form') }}" class="sidebar-item {{ request()->routeIs('upload.form') ? "active":"" }}">
             <i class="fas fa-plus-circle"></i>
-            إنشاء وظيفة
+            {{ __('words.create_job') }}
         </a>
     </div>
 
     <div class="sidebar-section">
-        <div class="sidebar-title">المتقدمين</div>
+        <div class="sidebar-title">{{ __('words.applicants') }}</div>
         <a href="#" class="sidebar-item">
             <i class="fas fa-user-tie"></i>
-            جميع المتقدمين
+            {{ __('words.all_applicants') }}
         </a>
         <a href="#" class="sidebar-item">
             <i class="fa-solid fa-circle-check"></i>
-            المقبولين
+            {{ __('words.accepted_applicants') }}
         </a>
         <a href="#" class="sidebar-item">
             <i class="fa-solid fa-circle-xmark"></i>
-            المرفوضين
+            {{ __('words.rejected_applicants') }}
         </a>
     </div>
 
     <div class="sidebar-section">
-        <div class="sidebar-title">النظام</div>
+        <div class="sidebar-title">{{ __('words.system') }}</div>
         <a href="#" class="sidebar-item">
             <i class="fa-solid fa-address-card"></i>
-            الملف الشخصي
+            {{ __('words.profile') }}
         </a>
         <a href="#" class="sidebar-item">
             <i class="fa-solid fa-building"></i>
-            المزيد عنا
+            {{ __('words.about_us') }}
         </a>
         <a href="#" class="sidebar-item" style="color: #ff6060;text-shadow: 0 0 6px;font-weight: bolder;">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            تسجيل الخروج
+            {{ __('words.logout') }}
         </a>
     </div>
 </div>

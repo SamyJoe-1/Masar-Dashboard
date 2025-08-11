@@ -1,11 +1,11 @@
 <div class="controls">
     <div class="entries-control">
-        <span>عرض</span>
+        <span>{{ __('words.show') }}</span>
         <select id="entriesSelect" wire:model.live="perPage">
             @foreach($perPageOptions as $option)
                 <option>{{ $option }}</option>
             @endforeach
         </select>
-        <span>إدخال</span>
+        <span>{{ __('words.entries') }}</span>
     </div>
 </div>
