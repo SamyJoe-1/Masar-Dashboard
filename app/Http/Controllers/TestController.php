@@ -101,7 +101,8 @@ class TestController extends Controller
     public function test_5()
     {
         try {
-            $applicant = Applicant::find(26);
+            @$id = $_GET['id'];
+            $applicant = Applicant::find($id);
             $jobDescription = $applicant->job_app->description ?? '-';
             $urls = [
                 asset($applicant->file->fullpath)
@@ -109,11 +110,7 @@ class TestController extends Controller
             $http = Http::timeout(1200)->acceptJson();
             $response = $http->post(config('app.match_cv_url') . '/match-cvs-from-urls', [
                 'job_description' => $jobDescription,
-//                'urls' => $urls,
-                'urls' => [
-                    "https://dashboard.massar.biz/storage/uploads/6f0fd62b-9d57-795c-7d29-47cbeae22346/mariam-ahmed_1754489229_L10uiE.pdf",
-                    "https://dashboard.massar.biz/storage/uploads/6f0fd62b-9d57-795c-7d29-47cbeae22346/mahmoud-el-nahal-compressed_1754489229_Pdx3cf.pdf"
-                ],
+                'urls' => $urls,
                 'output_format' => 'json',
                 "debug" => 'true'
             ]);
