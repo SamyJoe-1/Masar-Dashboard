@@ -339,10 +339,20 @@ class FileUploader {
     }
 
     async finalSubmit() {
-        this.finalSubmitBtn.disabled = true;
-        this.finalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating Directory...';
         const jobDescriptionTextarea = document.getElementById('job-description');
         const jobDescription = jobDescriptionTextarea.value;
+
+        if (!jobDescription){
+            Swal.fire({
+                title: 'Validation Error',
+                text: `The Description Field is required`,
+                icon: 'warning',
+            });
+            throw new Error('Validation Error');
+        }
+
+        this.finalSubmitBtn.disabled = true;
+        this.finalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating Directory...';
 
         try {
             const response = await fetch('/generate-directory', {
@@ -392,7 +402,7 @@ class FileUploader {
 
             // Handle the response if needed
             const previewData = await response.json();
-            console.log('Preview generated:', previewData);
+            // console.log('Preview generated:', previewData);
 
             // Show success dialog
             Swal.fire({
@@ -404,9 +414,9 @@ class FileUploader {
                 cancelButtonText: 'Skip',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `/result/preview/${directoryUuid}`;
+                    window.location.href = `/dashboard/hr/jobs/${previewData['application']}`;
                 } else {
-                    window.location.href = '/';
+                    window.location.href = '/dashboard/hr/jobs';
                 }
             });
 

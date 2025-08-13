@@ -120,7 +120,7 @@ body {
     background: none;
     border: none;
     font-size: 1.2rem;
-    color: #64748b;
+    color: #3464b0;
     cursor: pointer;
     padding: 0.5rem;
 }
@@ -134,7 +134,7 @@ body {
 .lang-switch {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    color: #64748b;
+    color: #3464b0;
     padding: 0.5rem 1rem;
     border-radius: 8px;
     cursor: pointer;
@@ -143,9 +143,9 @@ body {
 }
 
 .lang-switch:hover {
-    background: #3c7ba0;
+    background: #3464b0;
     color: white;
-    border-color: #3c7ba0;
+    border-color: #3464b0;
 }
 
 .user-dropdown {
@@ -165,21 +165,21 @@ body {
 }
 
 .user-info:hover {
-    background: #3c7ba0;
+    background: #3464b0;
     color: white;
-    border-color: #3c7ba0;
+    border-color: #3464b0;
 }
 
 .user-info:hover .user-avatar {
     background: white;
-    color: #3c7ba0;
+    color: #3464b0;
 }
 
 .user-avatar {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #3c7ba0 0%, #2c5f7f 100%);
+    background: #3464b0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -296,7 +296,7 @@ body {
 
 .dropdown-item:hover {
     background: #f8fafc;
-    color: #3c7ba0;
+    color: #3464b0;
 }
 
 .dropdown-item i {
@@ -348,7 +348,7 @@ body {
 }
 
 .page-subtitle {
-    color: #64748b;
+    color: #3464b0;
     font-size: 1rem;
     line-height: 1.5;
 }
@@ -378,7 +378,7 @@ body {
     right: 0;
     left: 0;
     height: 4px;
-    background: linear-gradient(90deg, #3c7ba0 0%, #2c5f7f 100%);
+    background: #3464b0;
 }
 
 .dashboard-card:hover {
@@ -396,7 +396,7 @@ body {
 .card-icon {
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg, #3c7ba0 0%, #2c5f7f 100%);
+    background: #3464b0;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -407,7 +407,7 @@ body {
 
 .card-title {
     font-size: 0.875rem;
-    color: #64748b;
+    color: #3464b0;
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
@@ -636,7 +636,7 @@ body.ar .dropdown-menu {
     --bg: #f6f7f8;       /* subtle background */
     --fg: #1f2937;       /* primary text */
     --muted: #98a0ab;    /* muted text on hover */
-    --accent: #3b82f6;   /* soft accent for focus ring */
+    --accent: #3464b0;   /* soft accent for focus ring */
     --radius: 10px;
     --pad: 10px 16px;
     --shadow: 0 1px 0 rgba(0,0,0,0.02);

@@ -8,11 +8,11 @@
 @section('content')
     <div class="container">
         <div class="header">
-            <h1>{{ __("words.All Jobs") }}</h1>
+            <h1>{{ __("words.All Applicants") }}</h1>
         </div>
 
         @livewireStyles
-        @livewire('jobs.index')
+        @livewire('applicants.index')
         @stack('scripts')
         @livewireScripts
     </div>

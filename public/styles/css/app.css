@@ -5,7 +5,7 @@
 }
 
 :root {
-    --primary: linear-gradient(135deg, #667eea 0%, #3a7a9d 100%);
+    --primary: #3464b0;
     --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     --dark: #1a1a2e;
@@ -28,7 +28,7 @@ button{
     font-family: 'Tajawal', 'Inter', sans-serif !important;
 }
 .btn-primary{
-    color: #2254bd;
+    color: #3464b0;
 }
 
 .container {
@@ -84,7 +84,7 @@ nav {
 }
 
 .nav-links a:hover {
-    color: #667eea;
+    color: #3464b0;
 }
 
 .nav-links a::after {
@@ -103,7 +103,6 @@ nav {
 }
 
 .lang-switch {
-    background: var(--accent);
     background:  var(--primary);
     color: white;
     border: none;
@@ -112,12 +111,12 @@ nav {
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    box-shadow: 0 4px 15px #3464b0;
 }
 
 .lang-switch:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    box-shadow: 0 8px 25px #3464b0;
 }
 
 /* Hero Section */
@@ -125,7 +124,7 @@ nav {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #667eea 0%, #3a7a9d 100%);
+    background: #3464b0;
     position: relative;
     overflow: hidden;
 }
@@ -195,7 +194,7 @@ nav {
 
 .btn-primary {
     background: white;
-    color: #667eea;
+    color: #3464b0;
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 }
 
@@ -383,7 +382,7 @@ nav {
     right: -2rem;
     width: 4rem;
     height: 2px;
-    background: linear-gradient(90deg, #667eea, transparent);
+    background: #3464b0;
 }
 
 .process-step:last-child::after {
@@ -393,7 +392,7 @@ nav {
 .step-number {
     width: 80px;
     height: 80px;
-    background: var(--accent);
+    background: #3464b0;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -401,9 +400,8 @@ nav {
     font-size: 2rem;
     font-weight: 800;
     color: white;
-    background: linear-gradient(45deg, #30529b, #447baf);;
     margin: 0 auto 2rem;
-    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+    box-shadow: 0 10px 30px #3464b0;
 }
 
 .step-title {
@@ -484,7 +482,7 @@ footer {
 [dir="rtl"] .process-step::after {
     right: auto;
     left: -2rem;
-    background: linear-gradient(-90deg, #667eea, transparent);
+    background: #3464b0;
 }
 
 [dir="rtl"] .nav-links a::after {

@@ -30,7 +30,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.applicants') }}</div>
-        <a href="#" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index') }}" class="sidebar-item">
             <i class="fas fa-user-tie"></i>
             {{ __('words.all_applicants') }}
         </a>

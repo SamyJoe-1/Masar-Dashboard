@@ -3,7 +3,7 @@ button {
 }
 
 .btn-primary {
-    color: #2254bd;
+    color: #3464b0;
 }
 
 .container-fluid {
@@ -26,7 +26,7 @@ button {
 
 .btn-primary {
     background: white;
-    color: #667eea;
+    color: #3464b0;
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 }
 
@@ -193,7 +193,7 @@ button {
 }
 
 .text-primary {
-    color: #667eea;
+    color: #3464b0;
 }
 
 .d-flex {
@@ -323,7 +323,7 @@ button {
 .upload-box {
     background: #e5e5e585;
     color: #333;
-    border: 3px dashed #517bc0;
+    border: 3px dashed #3464b0;
     border-radius: 20px;
     padding: 48px 32px;
     text-align: center;
@@ -337,7 +337,7 @@ button {
 }
 
 .upload-box:hover {
-    border-color: #3761a5;
+    border-color: #3464b0;
     background: #e5e5e585;
     transform: translateY(-4px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
@@ -351,7 +351,7 @@ button {
 
 .upload-box i.fa-upload {
     font-size: 4rem;
-    color: #667eea;
+    color: #3464b0;
     margin-bottom: 1.5rem;
 }
 
@@ -359,8 +359,8 @@ button {
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #583b3b;
-    text-shadow: 1px 2px 0px #c49292;
+    color: #f39d52;
+    text-shadow: 1px 2px 0px #29190a;
 }
 
 .upload-box p {
@@ -446,7 +446,7 @@ button {
 
 .progress-bar {
     height: 100%;
-    background: linear-gradient(-5deg, #4b7cb9, #54b1ff) !important;
+    background: #3464b0 !important;
     border-radius: 10px;
     transition: width 0.3s ease;
 }
@@ -463,7 +463,7 @@ button {
 
 /* Button Enhancements */
 .submit-btn, #cancelBtn, #finalSubmitBtn {
-    background: linear-gradient(189deg, #667eea, #4676ce);
+    background: #f39d52;
     color: white;
     border: none;
     border-radius: 50px;
@@ -495,12 +495,12 @@ button {
 }
 
 #finalSubmitBtn {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+    background: #f39d52;
+    box-shadow: 0 8px 25px #cc833f;
 }
 
 #finalSubmitBtn:hover:not(:disabled) {
-    box-shadow: 0 12px 35px rgba(0, 123, 255, 0.4);
+    box-shadow: 0 12px 35px #f39d52;
 }
 
 .submit-btn:disabled, #cancelBtn:disabled, #finalSubmitBtn:disabled {

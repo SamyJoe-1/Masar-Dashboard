@@ -73,9 +73,9 @@
 }
 
 .page-item.active .page-link {
-    background-color: #007bff;
+    background-color: #3464b0;
     color: white;
-    border-color: #007bff;
+    border-color: #3464b0;
 }
 
 .page-item.disabled .page-link {
@@ -88,7 +88,7 @@
 .page-link {
     display: block;
     padding: 8px 12px;
-    color: #007bff;
+    color: #3464b0;
     text-decoration: none;
     background-color: white;
     border: 1px solid #dee2e6;

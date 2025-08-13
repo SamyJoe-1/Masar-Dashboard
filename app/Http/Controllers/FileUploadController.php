@@ -355,6 +355,7 @@ class FileUploadController extends Controller
         }
 
         return response()->json([
+            'application' => $application->id,
             'title' => $title,
             'description' => $request->description
         ]);

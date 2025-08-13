@@ -60,7 +60,6 @@
                     <x-table.td :columns="$selectedColumns" column="action">
                         <div class="d-flex card-actions">
                             <a wire:click="Delete({{ $job->id }})" class="cursor-pointer"><i class='bx bx-trash text-danger'></i></a>
-                            <a href="{{ route('dashboard.hr.jobs.edit', $job) }}" wire:navigate class="ms-1"><i class='text-primary bx bx-edit'></i></a>
                             <a href="{{ route('dashboard.hr.jobs.show', $job) }}" wire:navigate class="ms-1"><i class='text-success bx bx-show'></i></a>
                         </div>
                     </x-table.td>

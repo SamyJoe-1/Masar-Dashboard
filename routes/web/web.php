@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\StaticPagesController;
 use App\Http\Controllers\JobAppController;
+use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\TestController;
 
 Auth::routes();
@@ -34,10 +35,14 @@ Route::group(['middleware' => ['lang']], function () {
 
 Route::group(['middleware' => ['auth', 'lang'], 'prefix' => 'dashboard/hr', 'as' => 'dashboard.hr.'], function () {
 
-//    HomeController
+    //    HomeController
     Route::get('/', [HomeController::class, 'dashboard'])->name('home');
 
+    //    Job Applications
     Route::resource('jobs', JobAppController::class);
+
+    //    Applicants
+    Route::resource('applicants', ApplicantController::class);
 
 });
 
@@ -48,4 +53,5 @@ Route::group(['controller' => TestController::class, 'prefix' => 'test'], functi
     Route::get('2', 'test_2');
     Route::get('3', 'test_3');
     Route::get('4', 'test_4');
+    Route::get('5', 'test_5');
 });

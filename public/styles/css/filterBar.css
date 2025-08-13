@@ -17,6 +17,12 @@
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.btn-white {
+    background: #dfdfdf;
+    color: black;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
 .btn-primary {
     color: #fff;
     background-color: #3464b0;
@@ -25,15 +31,15 @@
 
 .btn-primary:hover {
     color: #fff;
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
+    background-color: #3464b0;
+    border-color: #3464b0;
 }
 
 .btn-primary:focus {
     color: #fff;
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
-    box-shadow: 0 0 0 0.25rem rgba(49, 132, 253, 0.5);
+    background-color: #3464b0;
+    border-color: #3464b0;
+    box-shadow: 0 0 0 0.25rem #3464b0;
 }
 
 /* Border radius utilities */
@@ -205,7 +211,7 @@
 .form-control:focus {
     color: #212529;
     background-color: #fff;
-    border-color: #86b7fe;
+    border-color: #3464b0;
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }

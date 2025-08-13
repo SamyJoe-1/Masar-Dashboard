@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobApp;
+use App\Models\JobApp as Job;
 use Illuminate\Http\Request;
 
 class JobAppController extends Controller
@@ -34,9 +35,9 @@ class JobAppController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(JobApp $jobApp)
+    public function show(Job $job)
     {
-        //
+        return view('dashboard.hr.jobs.show', ['jobApp' => $job]);
     }
 
     /**

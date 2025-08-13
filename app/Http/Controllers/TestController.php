@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Log\LogHelper;
+use App\Models\Applicant;
 use App\Models\JobApp;
 use App\Services\MatchingCVsService;
 use Illuminate\Http\Request;
@@ -94,5 +96,49 @@ class TestController extends Controller
             $description,
 
         ];
+    }
+
+    public function test_5()
+    {
+        try {
+            $applicant = Applicant::find(26);
+            $jobDescription = $applicant->job_app->description ?? '-';
+            $urls = [
+                asset($applicant->file->fullpath)
+            ];
+            $http = Http::timeout(1200)->acceptJson();
+            $response = $http->post(config('app.match_cv_url') . '/match-cvs-from-urls', [
+                'job_description' => $jobDescription,
+//                'urls' => $urls,
+                'urls' => [
+                    "https://dashboard.massar.biz/storage/uploads/6f0fd62b-9d57-795c-7d29-47cbeae22346/mariam-ahmed_1754489229_L10uiE.pdf",
+                    "https://dashboard.massar.biz/storage/uploads/6f0fd62b-9d57-795c-7d29-47cbeae22346/mahmoud-el-nahal-compressed_1754489229_Pdx3cf.pdf"
+                ],
+                'output_format' => 'json',
+                "debug" => 'true'
+            ]);
+            if ($response->successful() && !count($response->json()['errors'])) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Files sent successfully',
+                    'data' => @$response->json()['results']
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'API request failed',
+                    'error' => $response->body(),
+                    'status' => $response->status()
+                ], 400);
+            }
+
+        } catch (\Exception $e) {
+            LogHelper::logError($e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

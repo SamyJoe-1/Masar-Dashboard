@@ -156,7 +156,7 @@ td {
 .pagination-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
 }
 
 .pagination-btn {
@@ -179,7 +179,7 @@ td {
 .pagination-btn.active {
     background: #3464b0;
     color: white;
-    border-color: #225098;
+    border-color: #3464b0;
 }
 
 .pagination-btn:disabled {
