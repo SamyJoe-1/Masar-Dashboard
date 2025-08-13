@@ -100,4 +100,8 @@ return [
     'Next' => 'التالي',
     'Previous' => 'السابق',
     'Not Answered' => 'لم يقم بالإجابة',
+    'Login' => 'الدخول',
+    'Dashboard' => 'لوحة التحكم',
+    'support' => 'الدعم',
+    'Profile' => 'الملف الشخصي',
 ];

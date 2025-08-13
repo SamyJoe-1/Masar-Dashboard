@@ -179,8 +179,16 @@ nav {
     margin-top: 2rem;
 }
 
+.beside-nav-items{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .btn {
-    padding: 0.5rem 2rem;
+    &:not(.btn-primary-2){
+        padding: 0.5rem 2rem;
+    }
     border: none;
     border-radius: 50px;
     font-weight: 600;
@@ -195,6 +203,38 @@ nav {
 .btn-primary {
     background: white;
     color: #3464b0;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.btn-lang {
+    padding: 0.2rem 2rem;
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    background: #d6d6d6;
+    color: #393939;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary-2 {
+    padding: 0.2rem 2rem !important;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    background: #3464b0;
+    color: white;
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 }
 

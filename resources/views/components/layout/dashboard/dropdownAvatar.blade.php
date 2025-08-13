@@ -7,17 +7,17 @@
     </div>
 
     <div class="dropdown-menu" id="userDropdown">
-        <a href="" class="dropdown-item">
+        <a href="#" class="dropdown-item">
             <i class="fas fa-user"></i>
-            الملف الشخصي
+            {{ __("words.Profile") }}
         </a>
-        <a href="#" class="dropdown-item">
+        <a href="{{ route('contact') }}" target="_blank" class="dropdown-item">
             <i class="fas fa-question-circle"></i>
-            المساعدة
+            {{ __("words.support") }}
         </a>
-        <a href="#" class="dropdown-item">
+        <a href="{{ route('logout') }}" class="dropdown-item">
             <i class="fas fa-sign-out-alt"></i>
-            تسجيل الخروج
+            {{ __("words.logout") }}
         </a>
     </div>
 </div>

@@ -50,11 +50,11 @@
             <i class="fa-solid fa-address-card"></i>
             {{ __('words.profile') }}
         </a>
-        <a href="#" class="sidebar-item">
+        <a href="{{ route('about') }}" target="_blank" class="sidebar-item">
             <i class="fa-solid fa-building"></i>
             {{ __('words.about_us') }}
         </a>
-        <a href="#" class="sidebar-item" style="color: #ff6060;text-shadow: 0 0 6px;font-weight: bolder;">
+        <a href="{{ route('logout') }}" class="sidebar-item" style="color: #ff6060;text-shadow: 0 0 6px;font-weight: bolder;">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             {{ __('words.logout') }}
         </a>

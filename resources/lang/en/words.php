@@ -100,4 +100,8 @@ return [
     'Next' => 'Next',
     'Previous' => 'Previous',
     'Not Answered' => 'Not Answered',
+    'Login' => 'Login',
+    'Dashboard' => 'Dashboard',
+    'support' => 'Support',
+    'Profile' => 'Profile',
 ];
