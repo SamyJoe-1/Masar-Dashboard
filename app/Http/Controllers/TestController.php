@@ -118,6 +118,7 @@ class TestController extends Controller
                 $result = $response->json()['results'][0] ?? [];
                 $status = @$result['status'] == Applicant::APPROVAL_KEYS[1];
                 $applicant->update([
+                    'information' => $result,
                     'status' => $status ? 'waiting for answering':'rejected',
                 ]);
                 return response()->json([
