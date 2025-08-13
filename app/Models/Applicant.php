@@ -24,6 +24,11 @@ class Applicant extends Model
 
     CONST STATUSES = ['pending', 'rejected', 'waiting for answering', 'approved'];
 
+    CONST APPROVAL_KEYS = [
+        0 => '❌ مرفوض',
+        1 => '✅ مقبول'
+    ];
+
     protected $table = 'applicants';
 
     public function getIcon()

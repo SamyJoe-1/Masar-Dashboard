@@ -115,6 +115,11 @@ class TestController extends Controller
                 "debug" => 'true'
             ]);
             if ($response->successful() && !count($response->json()['errors'])) {
+                $result = $response->json()['results'][0] ?? [];
+                $status = @$result['status'] == Applicant::APPROVAL_KEYS[1];
+                $applicant->update([
+                    'status' => $status ? 'waiting for answering':'rejected',
+                ]);
                 return response()->json([
                     'success' => true,
                     'message' => 'Files sent successfully',
