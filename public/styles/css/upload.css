@@ -417,6 +417,8 @@ button {
 
 /* File List Enhancements */
 #fileList {
+    overflow: auto;
+    height: 400px;
     margin-top: 32px;
 }
 
