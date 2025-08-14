@@ -150,7 +150,7 @@
                                             @foreach(['approved', 'rejected'] as $status)
                                                 <button wire:click="updateStatus({{ $applicant->id }}, '{{ $status }}')" class="status-btn status-btn-{{ $status }} {{ $applicant->status === $status ? 'active' : '' }}">
                                                     <i class="fas fa-{{ $status === 'approved' ? 'check' : ($status === 'rejected' ? 'times' : 'clock') }}"></i>
-                                                    {{ __(ucfirst($status)) }}
+                                                    {{ __('words.' . ucfirst($status)) }}
                                                 </button>
                                             @endforeach
                                         </div>
