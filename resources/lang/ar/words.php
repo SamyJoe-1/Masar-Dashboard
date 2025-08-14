@@ -76,6 +76,7 @@ return [
     'Rejected' => 'مرفوض',
     'Pending' => 'قيد الانتظار',
     'Waiting for Answering' => 'في انتظار الإجابة',
+    'waiting for answering' => 'في انتظار الإجابة',
     'Applications' => 'الطلبات',
     'Unknown' => 'غير معروف',
     'Score' => 'النقاط',

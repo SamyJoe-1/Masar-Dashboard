@@ -76,6 +76,7 @@ return [
     'Rejected' => 'Rejected',
     'Pending' => 'Pending',
     'Waiting for Answering' => 'Waiting for Answering',
+    'waiting for answering' => 'Waiting for Answering',
     'Applications' => 'Applications',
     'Unknown' => 'Unknown',
     'Score' => 'Score',
