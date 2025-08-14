@@ -60,6 +60,7 @@ class MatchCVs extends Command
                         $applicant->update([
                             'information' => $result,
                             'status' => $status ? 'waiting for answering' : 'rejected',
+                            'processing' => false,
                         ]);
                         $this->info("Applicant ({$applicant->id}) updated successfully");
                     }
