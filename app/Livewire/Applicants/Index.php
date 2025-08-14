@@ -44,7 +44,7 @@ class Index extends Component
             'Action' => ['sorting' => false, 'column' => 'action'],
         ];
         if ($status != 'all') {
-            $status == $this->selectedStatus = [$status];
+            $this->selectedStatus = [$status];
         }
         $this->FilterData();
     }
