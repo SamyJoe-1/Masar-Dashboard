@@ -72,7 +72,7 @@ return [
     'Open' => 'مفتوحة',
     'Job Description' => 'وصف الوظيفة',
     'Total Applications' => 'إجمالي الطلبات',
-    'Approved' => 'موافق عليه',
+    'Approved' => 'مقبول',
     'Rejected' => 'مرفوض',
     'Pending' => 'قيد الانتظار',
     'Waiting for Answering' => 'في انتظار الإجابة',
