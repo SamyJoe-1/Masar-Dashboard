@@ -283,7 +283,7 @@
 .status-badge.status-approved { background: #dcfce7; color: #166534; }
 .status-badge.status-rejected { background: #fef2f2; color: #991b1b; }
 .status-badge.status-pending { background: #fef3c7; color: #92400e; }
-.status-badge.status-waiting-for-answering { background: #f3e8ff; color: #7c3aed; }
+.status-badge.status-waiting-for-answering { background: #3464b0; color: #ffffff; }
 
 .expand-icon {
     color: #3464b0;
