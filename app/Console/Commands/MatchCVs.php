@@ -22,7 +22,7 @@ class MatchCVs extends Command
      *
      * @var string
      */
-    protected $description = 'Match CVs';
+    protected $description = 'match-cvs';
 
     /**
      * Execute the console command.
