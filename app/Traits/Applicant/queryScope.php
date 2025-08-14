@@ -23,6 +23,8 @@ trait queryScope
             return $query->whereIn('status', $statuses);
         })->when(@$filters['status'], function ($query, $status) {
             return $query->where('status', $status);
+        })->when(@$filters['user'], function ($query, $user) {
+            return $query->where('job_apps.user_id', $user);
         });
     }
 }

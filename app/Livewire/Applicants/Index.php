@@ -59,6 +59,7 @@ class Index extends Component
         $filters = [
             'search' => $this->search,
             'status' => $this->selectedStatus,
+            'user' => auth()->id() ?? 0,
         ];
         return Applicant::Filter($filters)
             ->select('applicants.*', 'job_apps.title as job_title', 'applicants.information->Name as name', 'applicants.information->Email as email', 'applicants.information->Phone as phone')
