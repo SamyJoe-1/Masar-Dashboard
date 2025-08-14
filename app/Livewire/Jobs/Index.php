@@ -58,6 +58,7 @@ class Index extends Component
         ];
         return JobApp::Filter($filters)
             ->WithCounts()
+            ->where('user_id', auth()->id())
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
     }
