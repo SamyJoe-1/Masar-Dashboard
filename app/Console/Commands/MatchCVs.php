@@ -52,7 +52,7 @@ class MatchCVs extends Command
                     "debug" => 'true'
                 ]);
 
-                if ($response->successful() && empty($response->json()['errors'])){
+                if (!empty($response->json()['results'])){
                     $this->info('Response received. Updating applicants profiles...');
                     foreach ($applicants as $key => $applicant) {
                         $result = $response->json()['results'][$key] ?? [];
