@@ -150,7 +150,7 @@
 .stat-card.approved .stat-icon { background: #10b981; }
 .stat-card.rejected .stat-icon { background: #ef4444; }
 .stat-card.pending .stat-icon { background: #f39d52; }
-.stat-card.waiting .stat-icon { background: #8b5cf6; }
+.stat-card.waiting .stat-icon { background: #898989; }
 
 .stat-number {
     font-size: 2.5rem;
