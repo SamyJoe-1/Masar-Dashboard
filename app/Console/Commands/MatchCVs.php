@@ -56,7 +56,7 @@ class MatchCVs extends Command
                     $this->info('Response received. Updating applicants profiles...');
                     foreach ($applicants as $key => $applicant) {
                         $result = $response->json()['results'][$key] ?? [];
-                        $status = @$result['status'] == Applicant::APPROVAL_KEYS[1];
+                        $status = @$result['Score'] >= 50;
                         $applicant->update([
                             'information' => $result,
                             'status' => $status ? 'waiting for answering' : 'rejected',
