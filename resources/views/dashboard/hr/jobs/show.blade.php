@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('dashboard.hr.jobs.index') }}" class="btn btn-white">Back</a>
+    <a href="{{ route('dashboard.hr.jobs.index') }}" class="btn btn-white">{{ __("words.Back") }}</a>
     @livewireStyles
     @livewire('jobs.show', ['jobApp' => $jobApp])
     @stack('scripts')

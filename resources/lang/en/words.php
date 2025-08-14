@@ -131,4 +131,7 @@ return [
     'reset' => 'Reset',
     'profile_updated_success' => 'Profile updated successfully!',
     'current_password_incorrect' => 'Current password is incorrect.',
+    'Show more' => 'Show more',
+    'Show less' => 'Show less',
+    'Back' => 'Back',
 ];

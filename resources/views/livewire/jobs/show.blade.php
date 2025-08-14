@@ -13,10 +13,17 @@
     </div>
 
     {{-- Job Description --}}
+
     <div class="job-description-card">
         <h3 class="section-title">{{ __('words.Job Description') }}</h3>
-        <div class="job-description">
-            {!! nl2br(e($jobApp->description)) !!}
+        <div class="job-description-wrapper">
+            <div class="job-description collapsed" id="job-description-{{ $jobApp->id }}">
+                {!! nl2br(e($jobApp->description)) !!}
+            </div>
+            <button class="show-more-btn" onclick="toggleDescription({{ $jobApp->id }})">
+                <span class="btn-text">{{ __('words.Show more') }}</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
         </div>
     </div>
 
@@ -392,3 +399,11 @@
         @endif
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        const showMore = '{{ __("words.Show more") }}'
+        const showLess = '{{ __("words.Show less") }}'
+    </script>
+    <script src="{{ asset('styles/js/descriptionCollapse.js') }}"></script>
+@endpush

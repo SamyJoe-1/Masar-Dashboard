@@ -131,4 +131,7 @@ return [
     'reset' => 'إعادة تعيين',
     'profile_updated_success' => 'تم تحديث الملف الشخصي بنجاح!',
     'current_password_incorrect' => 'كلمة المرور الحالية غير صحيحة.',
+    'Show more' => 'عرض المزيد',
+    'Show less' => 'عرض أقل',
+    'Back' => 'الرجوع',
 ];
