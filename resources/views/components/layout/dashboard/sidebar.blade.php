@@ -38,7 +38,7 @@
             <i class="fa-solid fa-circle-check"></i>
             {{ __('words.accepted_applicants') }}
         </a>
-        <a href="{{ route('dashboard.hr.applicants.index', 'rejected') }}" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index', 'status=rejected') }}" class="sidebar-item">
             <i class="fa-solid fa-circle-xmark"></i>
             {{ __('words.rejected_applicants') }}
         </a>

@@ -43,10 +43,10 @@ class Index extends Component
             'Updated' => ['sorting' => true, 'column' => 'updated_at'],
             'Action' => ['sorting' => false, 'column' => 'action'],
         ];
+        $this->FilterData();
         if ($status != 'all') {
             $this->selectedStatus = [$status];
         }
-        $this->FilterData();
     }
 
     public function render()
