@@ -52,7 +52,8 @@ class MatchCVs extends Command
                     "debug" => 'true'
                 ]);
 
-                if ($response->successful() && empty($response->json()['errors'])) {
+                $errors = $response->json()['errors'] ?? [];
+                if ($response->successful() && (!is_array($errors) || count($errors) === 0)) {
                     $this->info('Response received. Updating applicants profiles...');
                     foreach ($applicants as $key => $applicant) {
                         $result = $response->json()['results'][$key] ?? [];
