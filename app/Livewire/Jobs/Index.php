@@ -3,13 +3,14 @@
 namespace App\Livewire\Jobs;
 
 use App\Models\JobApp;
+use App\Traits\Job\SelectByBulk;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\Job\FilterBar;
 
 class Index extends Component
 {
-    use WithPagination, FilterBar;
+    use WithPagination, FilterBar, SelectByBulk;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -19,7 +20,6 @@ class Index extends Component
 
     public $perPage, $perPageOptions = [];
     public $columns, $selectedColumns = [], $tableColumns;
-    public $selectAll = false, $selected = [], $bulkAction = '';
 
     protected $listeners = [
         'updateCountry' => 'setCountry',
@@ -86,57 +86,5 @@ class Index extends Component
                 'icon' => 'success',
             ]);
         }
-    }
-
-    public function updatedSelectAll($value)
-    {
-        if ($value) {
-            $this->selected = $this->getJobs()->pluck('id')->map(fn($id) => (string) $id)->toArray();
-        } else {
-            $this->selected = [];
-        }
-    }
-
-    public function updatedSelected()
-    {
-        if (count($this->selected) == $this->perPage){
-            $this->selectAll = true;
-        }else{
-            $this->selectAll = false;
-        }
-    }
-
-    public function applyBulkAction()
-    {
-        if (empty($this->selected) || empty($this->bulkAction)) {
-            $this->dispatch('swal:error', [
-                'title' => 'No items selected or no action chosen',
-                'text' => 'Please select items and an action',
-                'icon' => 'warning',
-            ]);
-            return;
-        }
-
-        switch ($this->bulkAction) {
-            case 'delete':
-                $this->bulkDelete();
-                break;
-        }
-
-        // Reset selection after action
-        $this->selectAll = false;
-        $this->selected = [];
-        $this->bulkAction = '';
-    }
-
-    public function bulkDelete()
-    {
-        $count = JobApp::whereIn('id', $this->selected)->delete();
-
-        $this->dispatch('swal:success', [
-            'title' => "($count) Jobs deleted successfully!",
-            'text' => '',
-            'icon' => 'success',
-        ]);
     }
 }

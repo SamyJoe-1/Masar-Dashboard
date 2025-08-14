@@ -12,7 +12,11 @@ class ApplicantController extends Controller
      */
     public function index()
     {
-        return view('dashboard.hr.applicants.index');
+        $status = $_GET['status'] ?? "all";
+        if (!in_array($status, ['all', 'rejected', 'approved'])) {
+            $status = 'all';
+        }
+        return view('dashboard.hr.applicants.index', compact('status'));
     }
 
     /**

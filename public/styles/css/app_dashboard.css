@@ -196,6 +196,28 @@ body {
 .user-info:hover .username {
     color: white;
 }
+.truncate-text {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+.truncate-text.size-1{
+    max-width: 90px;
+}
+.truncate-text.size-2{
+    max-width: 120px;
+}
+.hyperText{
+    color: #3464b0;
+    font-weight: bolder;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.hyperText:hover{
+    color: rgba(52, 100, 176, 0.68);
+}
 
 .text-danger{
     color: #c40d1b;

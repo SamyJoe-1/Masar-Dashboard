@@ -31,6 +31,14 @@ class Applicant extends Model
 
     protected $table = 'applicants';
 
+    public function getFileName(){
+        if (empty($this->information['Name'])){
+            return @$this->file->name;
+        }else{
+            return $this->information['Name'] . '.' . @$this->file->getType();
+        }
+    }
+
     public function getIcon()
     {
         switch ($this->status){

@@ -3,13 +3,14 @@
 namespace App\Livewire\Applicants;
 
 use App\Models\Applicant;
+use App\Traits\Applicant\SelectByBulk;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\Applicant\FilterBar;
 
 class Index extends Component
 {
-    use WithPagination, FilterBar;
+    use WithPagination, FilterBar, SelectByBulk;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -19,27 +20,32 @@ class Index extends Component
 
     public $perPage, $perPageOptions = [];
     public $columns, $selectedColumns = [], $tableColumns;
-    public $selectAll = false, $selected = [], $bulkAction = '';
 
     protected $listeners = [
         'updateCountry' => 'setCountry',
     ];
 
-    public function mount(){
+    public function mount($status='all'){
         $this->perPageOptions = [10, 20, 50, 100, 200, 500];
         $this->perPage = $this->perPageOptions[0];
-        $this->columns = ['id', 'job_id', 'processing', 'answering', 'status', 'created_at', 'updated_at', 'action'];
+        $this->columns = ['id', 'job_title', 'name', 'email', 'phone', 'status', 'created_at', 'updated_at', 'action'];
         $this->selectedColumns = $this->columns;
         $this->tableColumns = [
             'ID' => ['sorting' => true, 'column' => 'id'],
-            'Job ID' => ['sorting' => true, 'column' => 'job_id'],
-            'Processing' => ['sorting' => true, 'column' => 'processing'],
-            'Answering' => ['sorting' => true, 'column' => 'answering'],
+            'Job' => ['sorting' => true, 'column' => 'job_title'],
+            'Name' => ['sorting' => true, 'column' => 'name'],
+            'Email' => ['sorting' => true, 'column' => 'email'],
+            'Phone' => ['sorting' => true, 'column' => 'phone'],
+//            'Processing' => ['sorting' => true, 'column' => 'processing'],
+//            'Answering' => ['sorting' => true, 'column' => 'answering'],
             'Status' => ['sorting' => true, 'column' => 'status'],
             'Created' => ['sorting' => true, 'column' => 'created_at'],
             'Updated' => ['sorting' => true, 'column' => 'updated_at'],
             'Action' => ['sorting' => false, 'column' => 'action'],
         ];
+        if ($status != 'all') {
+            $status == $this->selectedStatus = [$status];
+        }
         $this->FilterData();
     }
 
@@ -52,8 +58,11 @@ class Index extends Component
     public function getApplicants(){
         $filters = [
             'search' => $this->search,
+            'status' => $this->selectedStatus,
         ];
         return Applicant::Filter($filters)
+            ->select('applicants.*', 'job_apps.title as job_title', 'applicants.information->Name as name', 'applicants.information->Email as email', 'applicants.information->Phone as phone')
+            ->leftJoin('job_apps', 'job_apps.id', '=', 'applicants.job_id')
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
     }
@@ -82,57 +91,5 @@ class Index extends Component
                 'icon' => 'success',
             ]);
         }
-    }
-
-    public function updatedSelectAll($value)
-    {
-        if ($value) {
-            $this->selected = $this->getApplicants()->pluck('id')->map(fn($id) => (string) $id)->toArray();
-        } else {
-            $this->selected = [];
-        }
-    }
-
-    public function updatedSelected()
-    {
-        if (count($this->selected) == $this->perPage){
-            $this->selectAll = true;
-        }else{
-            $this->selectAll = false;
-        }
-    }
-
-    public function applyBulkAction()
-    {
-        if (empty($this->selected) || empty($this->bulkAction)) {
-            $this->dispatch('swal:error', [
-                'title' => 'No items selected or no action chosen',
-                'text' => 'Please select items and an action',
-                'icon' => 'warning',
-            ]);
-            return;
-        }
-
-        switch ($this->bulkAction) {
-            case 'delete':
-                $this->bulkDelete();
-                break;
-        }
-
-        // Reset selection after action
-        $this->selectAll = false;
-        $this->selected = [];
-        $this->bulkAction = '';
-    }
-
-    public function bulkDelete()
-    {
-        $count = Applicant::whereIn('id', $this->selected)->delete();
-
-        $this->dispatch('swal:success', [
-            'title' => "($count) Applicants deleted successfully!",
-            'text' => '',
-            'icon' => 'success',
-        ]);
     }
 }

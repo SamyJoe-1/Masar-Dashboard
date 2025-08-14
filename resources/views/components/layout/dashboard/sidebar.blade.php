@@ -34,11 +34,11 @@
             <i class="fas fa-user-tie"></i>
             {{ __('words.all_applicants') }}
         </a>
-        <a href="#" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index', 'status=approved') }}" class="sidebar-item">
             <i class="fa-solid fa-circle-check"></i>
             {{ __('words.accepted_applicants') }}
         </a>
-        <a href="#" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index', 'rejected') }}" class="sidebar-item">
             <i class="fa-solid fa-circle-xmark"></i>
             {{ __('words.rejected_applicants') }}
         </a>
@@ -46,7 +46,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.system') }}</div>
-        <a href="#" class="sidebar-item">
+        <a href="{{ route('profile') }}" class="sidebar-item">
             <i class="fa-solid fa-address-card"></i>
             {{ __('words.profile') }}
         </a>

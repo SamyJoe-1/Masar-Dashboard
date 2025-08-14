@@ -9,9 +9,10 @@ use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\TestController;
 
 Auth::routes();
-Route::group(['controller' => AuthenticationController::class], function () {
+Route::group(['controller' => AuthenticationController::class, 'middleware' => ['lang']], function () {
     Route::get('authentication', 'aio')->name('authentication');
     Route::get('logout', 'logout')->name('logout');
+    Route::get('profile', 'profile')->name('profile');
 });
 
 

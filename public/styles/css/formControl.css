@@ -124,3 +124,150 @@
     border-color: #e1e8ed;
     box-shadow: none;
 }
+/* Custom Select Dropdown Styles */
+.quiet-select-wrapper {
+    font-family: 'Tajawal', 'Inter', sans-serif !important;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.quiet-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: 12px 40px 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    color: #333;
+}
+
+.quiet-select:focus {
+    border-color: #aaa;
+    background-color: #fff;
+}
+
+.quiet-select:hover {
+    border-color: #bbb;
+}
+
+/* Custom dropdown arrow */
+.quiet-select-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #666;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.quiet-select:focus + .quiet-select-wrapper::after,
+.quiet-select-wrapper:hover::after {
+    border-top-color: #333;
+}
+
+/* Rotate arrow when focused */
+.quiet-select:focus ~ .quiet-select-arrow,
+.quiet-select-wrapper:focus-within::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Option styles */
+.quiet-select option {
+    padding: 8px 12px;
+    background-color: #fff;
+    color: #333;
+}
+
+.quiet-select option:hover {
+    background-color: #f0f4f8;
+}
+
+.quiet-select option:checked,
+.quiet-select option:selected {
+    background-color: #3464b0;
+    color: white;
+}
+
+/* Disabled state */
+.quiet-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #e9ecef;
+    color: #6c757d;
+}
+
+.quiet-select:disabled ~ .quiet-select-wrapper::after {
+    border-top-color: #6c757d;
+}
+
+/* Multiple select styles */
+.quiet-select[multiple] {
+    min-height: 120px;
+    padding: 8px;
+}
+
+.quiet-select[multiple] + .quiet-select-wrapper::after {
+    display: none;
+}
+
+/* Small variant */
+.quiet-select.small {
+    padding: 8px 32px 8px 10px;
+    font-size: 12px;
+}
+
+.quiet-select.small + .quiet-select-wrapper::after {
+    right: 10px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 5px;
+}
+
+/* Large variant */
+.quiet-select.large {
+    padding: 16px 48px 16px 18px;
+    font-size: 16px;
+}
+
+.quiet-select.large + .quiet-select-wrapper::after {
+    right: 18px;
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-top-width: 7px;
+}
+
+/* Error state */
+.quiet-select.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+.quiet-select.error:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Success state */
+.quiet-select.success {
+    border-color: #28a745;
+    background-color: #f8fff9;
+}
+
+.quiet-select.success:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}

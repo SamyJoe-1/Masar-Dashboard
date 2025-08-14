@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex justify-content-between" wire:ignore>
         <div class="flex-fill">
-            <x-table.filterBar search="1"></x-table.filterBar>
+            <x-table.filterBar search="1" :statuses="$statuses"></x-table.filterBar>
         </div>
     </div>
     <x-table.bulkActions :selected="$selected">
@@ -32,9 +32,35 @@
                 <tr>
                     <x-table.tdCheckbox :value="$applicant->id"></x-table.tdCheckbox>
                     <x-table.td :columns="$selectedColumns" column="id">{{ $applicant->id }}</x-table.td>
-                    <x-table.td :columns="$selectedColumns" column="job_id">{{ $applicant->job_id }}</x-table.td>
+                    <x-table.td :columns="$selectedColumns" column="job_title">
+                        <a class="hyperText" href="{{ route('dashboard.hr.jobs.show', $applicant->job_id) }}">
+                            <i class="bx bx-arrow-to-right"></i>
+                            {{ $applicant->job_title ?? '-' }}
+                        </a>
+                    </x-table.td>
+                    <x-table.td :columns="$selectedColumns" column="name">
+                        <span class="truncate-text size-2" title="{{ @$applicant->name }}">
+                            {{ $applicant->name ?? '-' }}
+                        </span>
+                    </x-table.td>
+                    <x-table.td :columns="$selectedColumns" column="email">
+                        <a class="hyperText" href="mailto:{{ $applicant->email }}">
+                            <i class="bx bx-envelope"></i>
+                            <span class="truncate-text size-2" title="{{ @$applicant->email }}">
+                                {{ $applicant->email ?? "-" }}
+                            </span>
+                        </a>
+                    </x-table.td>
+                    <x-table.td :columns="$selectedColumns" column="phone">
+                        <a class="hyperText" href="tel:{{ $applicant->phone }}">
+                            <i class="bx bx-phone"></i>
+                            <span class="truncate-text size-1" title="{{ @$applicant->phone }}">
+                                {{ $applicant->phone ?? "-" }}
+                            </span>
+                        </a>
+                    </x-table.td>
                     <x-table.td :columns="$selectedColumns" column="processing">
-                        <x-badge.active :status="$applicant->processing"></x-badge.active>
+                        <x-badge.processing :status="$applicant->status" :processing="$applicant->processing"></x-badge.processing>
                     </x-table.td>
                     <x-table.td :columns="$selectedColumns" column="answering">
                         <x-badge.answering :status="$applicant->status" :answering="$applicant->answering"></x-badge.answering>
@@ -47,7 +73,8 @@
                     <x-table.td :columns="$selectedColumns" column="action">
                         <div class="d-flex card-actions">
                             <a wire:click="Delete({{ $applicant->id }})" class="cursor-pointer"><i class='bx bx-trash text-danger'></i></a>
-{{--                            <a href="{{ route('dashboard.hr.applicants.show', $applicant) }}" wire:navigate class="ms-1"><i class='text-success bx bx-show'></i></a>--}}
+                            <a href="{{ asset(@$applicant->file->fullpath) }}" target="_blank" class="ms-1"><i class='text-success bx bx-show'></i></a>
+                            <a href="{{ asset(@$applicant->file->fullpath) }}" download="{{ $applicant->getFileName() }}" class="ms-1"><i class='text-primary bx bx-download'></i></a>
                         </div>
                     </x-table.td>
                 </tr>

@@ -20,4 +20,9 @@ class AuthenticationController extends Controller
         return redirect()->route('login')->with('status', 'You have been logged out successfully.');
     }
 
+    public function profile()
+    {
+        return view('dashboard.user.profile');
+    }
+
 }

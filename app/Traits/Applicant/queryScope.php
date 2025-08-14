@@ -19,6 +19,10 @@ trait queryScope
                     ->orWhere('job_id', $search)
                     ->orWhere('file_id', $search);
             });
+        })->when(@$filters['statuses'], function ($query, $statuses) {
+            return $query->whereIn('status', $statuses);
+        })->when(@$filters['status'], function ($query, $status) {
+            return $query->where('status', $status);
         });
     }
 }

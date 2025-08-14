@@ -7,7 +7,7 @@
     </div>
 
     <div class="dropdown-menu" id="userDropdown">
-        <a href="#" class="dropdown-item">
+        <a href="{{ route('profile') }}" class="dropdown-item">
             <i class="fas fa-user"></i>
             {{ __("words.Profile") }}
         </a>

@@ -12,6 +12,19 @@
                         </div>
                     </div>
                 @endif
+                @if(!empty($statuses))
+                    <div class="col">
+                        <div class="quiet-select-wrapper">
+                            <label for="status">{{ __("words.Status") }}</label>
+                            <select id="status" class="quiet-select" wire:model.live.debounce.300ms="selectedStatus">
+                                <option value="">{{ __("words.select :items", ["items" => __("words.Status")]) }}</option>
+                                @foreach($statuses as $status)
+                                    <option value="{{ $status }}">{{ __("words.$status") }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
