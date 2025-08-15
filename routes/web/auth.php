@@ -6,14 +6,18 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-//Google Authentication
-Route::group(['controller' => GoogleController::class, 'middleware' => ['lang']], function () {
-    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
-    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-});
+Route::group(['middleware' => ['lang']], function () {
 
-Route::group(['controller' => AuthenticationController::class, 'middleware' => ['lang']], function () {
-    Route::get('authentication', 'aio')->name('authentication');
-    Route::get('logout', 'logout')->name('logout');
-    Route::get('profile', 'profile')->name('profile');
+    //    GoogleController
+    Route::group(['controller' => GoogleController::class], function () {
+        Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+        Route::get('auth/google/callback', 'handleGoogleCallback');
+    });
+
+    //    AuthenticationController
+    Route::group(['controller' => AuthenticationController::class, 'middleware' => ['lang']], function () {
+        Route::get('authentication', 'aio')->name('authentication');
+        Route::get('logout', 'logout')->name('logout');
+        Route::get('profile', 'profile')->name('profile');
+    });
 });
