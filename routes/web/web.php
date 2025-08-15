@@ -1,20 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\StaticPagesController;
-use App\Http\Controllers\JobAppController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobAppController;
+use App\Http\Controllers\StaticPagesController;
 use App\Http\Controllers\TestController;
-
-Auth::routes();
-Route::group(['controller' => AuthenticationController::class, 'middleware' => ['lang']], function () {
-    Route::get('authentication', 'aio')->name('authentication');
-    Route::get('logout', 'logout')->name('logout');
-    Route::get('profile', 'profile')->name('profile');
-});
-
+use Illuminate\Support\Facades\Route;
 
 //HomeController
 Route::group(['middleware' => ['lang']], function () {

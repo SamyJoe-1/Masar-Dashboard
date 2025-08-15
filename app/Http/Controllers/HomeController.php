@@ -41,6 +41,11 @@ class HomeController extends Controller
             $applicantsQuery->whereBetween('created_at', $dateRange);
         }
 
+        $jobsQuery->where('user_id', auth()->id() ?? 0);
+        $applicantsQuery->whereHas('job_app', function ($query) use ($jobsQuery) {
+            $query->where('user_id', auth()->id() ?? 0);
+        });
+
         // Get analytics data
         $analytics = [
             'jobs_count' => $jobsQuery->count(),

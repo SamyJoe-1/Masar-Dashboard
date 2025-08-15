@@ -9,6 +9,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: [
             __DIR__ . '/../routes/web/web.php',
+            __DIR__ . '/../routes/web/auth.php',
             __DIR__ . '/../routes/web/upload.php',
         ],
         commands: __DIR__.'/../routes/console.php',
