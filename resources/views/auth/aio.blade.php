@@ -118,7 +118,7 @@
                         <label class="checkbox-wrapper">
                             <input type="checkbox" name="terms" required>
                             <span class="checkmark"></span>
-                            أوافق على <a href="#" class="link">الشروط والأحكام</a>
+                            أوافق على <a href="{{ route('terms') }}" class="link">الشروط والأحكام</a>
                         </label>
                     </div>
 
