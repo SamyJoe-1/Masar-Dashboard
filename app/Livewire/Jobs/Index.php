@@ -77,11 +77,25 @@ class Index extends Component
 
     public function Delete($id)
     {
-        $user = JobApp::find($id);
-        if ($user) {
-            $user->delete();
+        $job = JobApp::find($id);
+        if ($job) {
+            $job->delete();
             $this->dispatch('swal:error', [
                 'title' => 'تم حذف إعلان الوظيفة بنجاح',
+                'text' => '',
+                'icon' => 'success',
+            ]);
+        }
+    }
+
+    public function Close($id)
+    {
+        $job = JobApp::find($id);
+        if ($job) {
+            $job->close = !$job->close;
+            $job->save();
+            $this->dispatch('swal:error', [
+                'title' => 'تمت العملية بنجاح',
                 'text' => '',
                 'icon' => 'success',
             ]);

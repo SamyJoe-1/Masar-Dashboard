@@ -34,16 +34,16 @@
                     <x-table.td :columns="$selectedColumns" column="id">{{ $job->id }}</x-table.td>
                     <x-table.td :columns="$selectedColumns" column="title">{{ $job->title }}</x-table.td>
                     <x-table.td :columns="$selectedColumns" column="description">
-                        {{ showLess($job->description, 30) }}
+                        {{ showLess($job->description, 25) }}
                     </x-table.td>
                     <x-table.td :columns="$selectedColumns" column="applicants_count">
-                        <span class="text-{{ $job->applicants_count ? "":"danger" }}">{{ $job->applicants_count }} متقدم</span>
+                        <span class="text-{{ $job->applicants_count ? "":"danger" }}">{{ $job->applicants_count }} {{ __("words.applicant") }}</span>
                     </x-table.td>
                     <x-table.td :columns="$selectedColumns" column="approved_applicants_count" :danger="$job->approved_applicants_count">
-                        <span class="text-{{ $job->approved_applicants_count ? "success":"danger" }}">{{ $job->approved_applicants_count }} متقدم</span>
+                        <span class="text-{{ $job->approved_applicants_count ? "success":"danger" }}">{{ $job->approved_applicants_count }} {{ __("words.applicant") }}</span>
                     </x-table.td>
                     <x-table.td :columns="$selectedColumns" column="rejected_applicants_count" :danger="$job->approved_applicants_count">
-                        <span class="text-{{ $job->rejected_applicants_count ? "":"danger" }}">{{ $job->rejected_applicants_count }} متقدم</span>
+                        <span class="text-{{ $job->rejected_applicants_count ? "":"danger" }}">{{ $job->rejected_applicants_count }} {{ __("words.applicant") }}</span>
                     </x-table.td>
                     <x-table.td :columns="$selectedColumns" column="close">
                         <x-badge.active :status="!$job->close"></x-badge.active>
@@ -60,6 +60,7 @@
                     <x-table.td :columns="$selectedColumns" column="action">
                         <div class="d-flex card-actions">
                             <a wire:click="Delete({{ $job->id }})" class="cursor-pointer"><i class='bx bx-trash text-danger'></i></a>
+                            <a wire:click="Close({{ $job->id }})" class="cursor-pointer"><i class='bx bx-radio-circle-marked fs-4 text-{{ $job->close ? "primary":"secondary" }}'></i></a>
                             <a href="{{ route('dashboard.hr.jobs.show', $job) }}" wire:navigate class="ms-1"><i class='text-success bx bx-show'></i></a>
                         </div>
                     </x-table.td>

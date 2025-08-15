@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
     'match_cv_url' => env('APP_MATCH_CV_URL', '/'),
-    'evaluate_url' => env('APP_MATCH_CV_URL', '/'),
+    'evaluate_url' => env('APP_EVALUATE_CV_URL', '/'),
 
     /*
     |--------------------------------------------------------------------------

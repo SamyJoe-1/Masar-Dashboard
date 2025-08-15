@@ -37,7 +37,7 @@ class FileUploader {
         this.cancelBtn.className = 'btn btn-success submit-btn mt-4';
         this.cancelBtn.id = 'cancelBtn';
         this.cancelBtn.style.display = 'none';
-        this.cancelBtn.innerHTML = '<i class="fas fa-times me-2"></i>Cancel Upload';
+        this.cancelBtn.innerHTML = `<i class="fas fa-times me-2"></i>${window.translations.cancel_upload}`;
         this.cancelBtn.onclick = () => this.cancelUpload();
 
         this.finalSubmitBtn = document.createElement('button');
@@ -45,7 +45,7 @@ class FileUploader {
         this.finalSubmitBtn.className = 'btn btn-primary ms-2';
         this.finalSubmitBtn.id = 'finalSubmitBtn';
         this.finalSubmitBtn.style.display = 'none';
-        this.finalSubmitBtn.innerHTML = '<i class="fas fa-check me-2"></i>تأكيد';
+        this.finalSubmitBtn.innerHTML = `<i class="fas fa-check me-2"></i>${window.translations.confirm}`;
         this.finalSubmitBtn.onclick = () => this.finalSubmit();
 
         buttonContainer.appendChild(this.cancelBtn);
@@ -88,14 +88,14 @@ class FileUploader {
         newFiles.forEach(file => {
             // Check if file already exists
             if (this.files.find(f => f.name === file.name && f.size === file.size)) {
-                errors.push(`File "${file.name}" is already added`);
+                errors.push(`${window.translations.file} "${file.name}" ${window.translations.already_added}`);
                 return;
             }
 
             // Check extension
             const extension = file.name.split('.').pop().toLowerCase();
             if (!this.allowedExtensions.includes(extension)) {
-                errors.push(`File "${file.name}" has invalid extension. Allowed: ${this.allowedExtensions.join(', ')}`);
+                errors.push(`${window.translations.file} "${file.name}" ${window.translations.invalid_extension}. ${window.translations.allowed}: ${this.allowedExtensions.join(', ')}`);
                 return;
             }
 
@@ -111,7 +111,7 @@ class FileUploader {
         if (totalSize > maxSizeBytes) {
             const currentSizeMB = (currentSize / 1024 / 1024).toFixed(2);
             const newSizeMB = (newSize / 1024 / 1024).toFixed(2);
-            errors.push(`Total size limit exceeded! Current: ${currentSizeMB}MB, Adding: ${newSizeMB}MB, Limit: ${this.maxTotalSizeMB}MB`);
+            errors.push(`${window.translations.size_limit_exceeded}! ${window.translations.current}: ${currentSizeMB}MB, ${window.translations.adding}: ${newSizeMB}MB, ${window.translations.limit}: ${this.maxTotalSizeMB}MB`);
         } else {
             // Add valid files
             validFiles.forEach(file => {
@@ -123,11 +123,10 @@ class FileUploader {
         // Show errors if any
         if (errors.length > 0) {
             Swal.fire({
-                title: 'Some files were not added',
-                text: `Error: ${errors}\n`,
+                title: window.translations.some_files_not_added,
+                text: `${window.translations.error}: ${errors}\n`,
                 icon: 'error',
             });
-            // alert('Some files were not added:\n\n' + errors.join('\n'));
         }
 
         this.updateSubmitButton();
@@ -153,7 +152,7 @@ class FileUploader {
                         <div class="progress-bar bg-primary" role="progressbar" style="width: 0%"></div>
                     </div>
                     <div class="d-flex justify-content-between mt-1">
-                        <small class="text-muted">Ready to upload</small>
+                        <small class="text-muted">${window.translations.ready_to_upload}</small>
                         <small class="text-muted">0%</small>
                     </div>
                 `;
@@ -190,7 +189,7 @@ class FileUploader {
 
         sizeDisplay.innerHTML = `
             <small class="${colorClass}">
-                Total Size: ${totalSizeMB}MB / ${this.maxTotalSizeMB}MB (${percentage.toFixed(1)}%)
+                ${window.translations.total_size}: ${totalSizeMB}MB / ${this.maxTotalSizeMB}MB (${percentage.toFixed(1)}%)
             </small>
         `;
     }
@@ -198,7 +197,7 @@ class FileUploader {
     formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const sizes = [window.translations.bytes, window.translations.kb, window.translations.mb, window.translations.gb];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
@@ -206,7 +205,7 @@ class FileUploader {
     cancelUpload() {
         if (this.currentXHR && this.isUploading) {
             this.currentXHR.abort();
-            this.showError('Upload cancelled by user');
+            this.showError(window.translations.upload_cancelled);
             this.resetAfterUpload();
         }
     }
@@ -214,7 +213,7 @@ class FileUploader {
     async uploadFiles() {
         this.isUploading = true;
         this.submitBtn.disabled = true;
-        this.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+        this.submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>${window.translations.uploading}`;
         this.cancelBtn.style.display = 'inline-block';
 
         const formData = new FormData();
@@ -249,24 +248,24 @@ class FileUploader {
                         this.uploadedDirectory = result.directory; // Server should return directory path
                         this.showUploadComplete(result);
                     } catch (error) {
-                        this.showError('Invalid response from server');
+                        this.showError(window.translations.invalid_server_response);
                         this.resetAfterUpload();
                     }
                 } else {
-                    this.showError(`Upload failed with status: ${this.currentXHR.status}`);
+                    this.showError(`${window.translations.upload_failed}: ${this.currentXHR.status}`);
                     this.resetAfterUpload();
                 }
             });
 
             // Handle errors
             this.currentXHR.addEventListener('error', () => {
-                this.showError('Network error during upload');
+                this.showError(window.translations.network_error);
                 this.resetAfterUpload();
             });
 
             // Handle abort
             this.currentXHR.addEventListener('abort', () => {
-                this.showError('Upload was cancelled');
+                this.showError(window.translations.upload_cancelled);
                 this.resetAfterUpload();
             });
 
@@ -295,7 +294,7 @@ class FileUploader {
             percentText.textContent = Math.round(percentage) + '%';
 
             if (percentage < 100) {
-                statusText.textContent = `Uploading... (${loadedFormatted} / ${totalFormatted})`;
+                statusText.textContent = `${window.translations.uploading}... (${loadedFormatted} / ${totalFormatted})`;
                 statusText.className = 'text-primary';
             }
         });
@@ -311,7 +310,7 @@ class FileUploader {
 
             progressBar.style.width = '100%';
             progressBar.className = 'progress-bar bg-success';
-            statusText.textContent = 'Upload complete';
+            statusText.textContent = window.translations.upload_complete;
             statusText.className = 'text-success';
             percentText.textContent = '100%';
         });
@@ -324,16 +323,15 @@ class FileUploader {
         this.finalSubmitBtn.style.display = 'inline-block';
 
         Swal.fire({
-            title: 'Files uploaded successfully!',
+            title: window.translations.files_uploaded_successfully,
             icon: 'success',
         });
-        // alert('Files uploaded successfully! Now click "تأكيد" to finalize.');
     }
 
     resetAfterUpload() {
         this.isUploading = false;
         this.cancelBtn.style.display = 'none';
-        this.submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Upload Files';
+        this.submitBtn.innerHTML = `<i class="fas fa-paper-plane me-2"></i>${window.translations.upload_files}`;
         this.submitBtn.disabled = false;
         this.currentXHR = null;
     }
@@ -344,15 +342,15 @@ class FileUploader {
 
         if (!jobDescription){
             Swal.fire({
-                title: 'Validation Error',
-                text: `The Description Field is required`,
+                title: window.translations.validation_error,
+                text: window.translations.description_required,
                 icon: 'warning',
             });
-            throw new Error('Validation Error');
+            throw new Error(window.translations.validation_error);
         }
 
         this.finalSubmitBtn.disabled = true;
-        this.finalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating Directory...';
+        this.finalSubmitBtn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>${window.translations.generating_directory}`;
 
         try {
             const response = await fetch('/generate-directory', {
@@ -371,12 +369,12 @@ class FileUploader {
                 const result = await response.json();
                 this.showFinalSuccess(result, jobDescription);
             } else {
-                throw new Error('Failed to generate directory');
+                throw new Error(window.translations.failed_generate_directory);
             }
         } catch (error) {
-            this.showError('Failed to generate directory: ' + error.message);
+            this.showError(window.translations.failed_generate_directory + ': ' + error.message);
             this.finalSubmitBtn.disabled = false;
-            this.finalSubmitBtn.innerHTML = '<i class="fas fa-check me-2"></i>تأكيد';
+            this.finalSubmitBtn.innerHTML = `<i class="fas fa-check me-2"></i>${window.translations.confirm}`;
         }
     }
 
@@ -402,16 +400,15 @@ class FileUploader {
 
             // Handle the response if needed
             const previewData = await response.json();
-            // console.log('Preview generated:', previewData);
 
             // Show success dialog
             Swal.fire({
-                title: 'Your CV has been sent successfully!',
-                text: `If you'd like to explore the CV page`,
+                title: window.translations.cv_sent_successfully,
+                text: window.translations.explore_cv_page,
                 icon: 'success',
                 showCancelButton: true,
-                confirmButtonText: 'View',
-                cancelButtonText: 'Skip',
+                confirmButtonText: window.translations.view,
+                cancelButtonText: window.translations.skip,
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = `/dashboard/hr/jobs/${previewData['application']}`;
@@ -425,12 +422,12 @@ class FileUploader {
 
             // Still show success for the upload, but mention preview issue
             Swal.fire({
-                title: 'CV uploaded successfully!',
-                text: 'There was an issue generating the preview, but your files are saved.',
+                title: window.translations.cv_uploaded_successfully,
+                text: window.translations.preview_issue,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Try View Anyway',
-                cancelButtonText: 'Go Home',
+                confirmButtonText: window.translations.try_view_anyway,
+                cancelButtonText: window.translations.go_home,
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = `/result/preview/${directoryUuid}`;
@@ -443,20 +440,19 @@ class FileUploader {
 
     showError(message) {
         Swal.fire({
-            title: 'The process failed!',
-            text: `Share the issue with us`,
+            title: window.translations.process_failed,
+            text: window.translations.share_issue,
             icon: 'error',
             showCancelButton: true,
-            confirmButtonText: 'View',
-            cancelButtonText: 'Skip',
+            confirmButtonText: window.translations.view,
+            cancelButtonText: window.translations.skip,
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/contact`; // Change this to your "view" page
+                window.location.href = `/contact`;
             } else {
-                window.location.href = '/'; // Change this to your fallback page
+                window.location.href = '/';
             }
         });
-        // alert('Error: ' + message);
 
         // Reset progress bars on error
         const fileItems = this.fileList.querySelectorAll('.file-item');
@@ -467,7 +463,7 @@ class FileUploader {
 
             progressBar.style.width = '0%';
             progressBar.className = 'progress-bar bg-danger';
-            statusText.textContent = 'Upload failed';
+            statusText.textContent = window.translations.upload_failed;
             statusText.className = 'text-danger';
             percentText.textContent = '0%';
         });

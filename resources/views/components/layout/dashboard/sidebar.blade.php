@@ -10,7 +10,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.control_panel') }}</div>
-        <a href="#" class="sidebar-item {{ request()->routeIs('dashboard.hr.home') ? "active":"" }}">
+        <a href="{{ route('dashboard.hr.home') }}" class="sidebar-item {{ request()->routeIs('dashboard.hr.home') ? "active":"" }}">
             <i class="fas fa-users"></i>
             {{ __('words.statistics') }}
         </a>
@@ -18,7 +18,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.jobs') }}</div>
-        <a href="{{ route('dashboard.hr.jobs.index') }}" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.jobs.index') }}" class="sidebar-item {{ request()->routeIs('dashboard.hr.jobs.index') ? "active":"" }}">
             <i class="fas fa-briefcase"></i>
             {{ __('words.all_jobs') }}
         </a>
@@ -30,15 +30,15 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.applicants') }}</div>
-        <a href="{{ route('dashboard.hr.applicants.index') }}" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index') }}" class="sidebar-item {{ request()->routeIs('dashboard.hr.applicants.index') && !request()->has('status') ? 'active' : '' }}">
             <i class="fas fa-user-tie"></i>
             {{ __('words.all_applicants') }}
         </a>
-        <a href="{{ route('dashboard.hr.applicants.index', 'status=approved') }}" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index', 'status=approved') }}" class="sidebar-item {{ request()->routeIs('dashboard.hr.applicants.index') && strtolower(request()->query('status')) === 'approved' ? 'active' : '' }}">
             <i class="fa-solid fa-circle-check"></i>
             {{ __('words.accepted_applicants') }}
         </a>
-        <a href="{{ route('dashboard.hr.applicants.index', 'status=rejected') }}" class="sidebar-item">
+        <a href="{{ route('dashboard.hr.applicants.index', 'status=rejected') }}" class="sidebar-item {{ request()->routeIs('dashboard.hr.applicants.index') && strtolower(request()->query('status')) === 'rejected' ? 'active' : '' }}">
             <i class="fa-solid fa-circle-xmark"></i>
             {{ __('words.rejected_applicants') }}
         </a>
@@ -46,11 +46,11 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.system') }}</div>
-        <a href="{{ route('profile') }}" class="sidebar-item">
+        <a href="{{ route('profile') }}" class="sidebar-item {{ request()->routeIs('profile') ? "active":"" }}">
             <i class="fa-solid fa-address-card"></i>
             {{ __('words.profile') }}
         </a>
-        <a href="{{ route('about') }}" target="_blank" class="sidebar-item">
+        <a href="{{ route('about') }}" target="_blank" class="sidebar-item {{ request()->routeIs('about') ? "active":"" }}">
             <i class="fa-solid fa-building"></i>
             {{ __('words.about_us') }}
         </a>

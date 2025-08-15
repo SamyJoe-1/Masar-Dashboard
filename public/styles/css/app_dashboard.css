@@ -279,6 +279,9 @@ body {
 .fs-5{
     font-size: 1.2rem;
 }
+.fs-4{
+    font-size: 1.5rem;
+}
 
 .dropdown-menu {
     position: absolute;
@@ -525,7 +528,7 @@ body.ar .sidebar-item {
 
 body.en .sidebar-item:hover,
 body.en .sidebar-item.active {
-    border-left-color: white;
+    border-left-color: #f39d52;
     border-right-color: transparent;
 }
 
