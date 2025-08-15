@@ -441,7 +441,7 @@ class FileUploader {
             if (result.isConfirmed) {
                 window.location.href = `/contact`;
             } else {
-                window.location.href = '/';
+                window.location.href = '/home';
             }
         });
 
