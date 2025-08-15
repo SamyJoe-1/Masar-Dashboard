@@ -4,9 +4,11 @@ use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
-Auth::routes();
 
 Route::group(['middleware' => ['lang']], function () {
+
+    //    Login / Register / Forgot-Password
+    Auth::routes();
 
     //    GoogleController
     Route::group(['controller' => GoogleController::class], function () {
