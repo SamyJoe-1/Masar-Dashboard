@@ -425,15 +425,6 @@ class FileUploader {
                 title: window.translations.cv_uploaded_successfully,
                 text: window.translations.preview_issue,
                 icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: window.translations.try_view_anyway,
-                cancelButtonText: window.translations.go_home,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/result/preview/${directoryUuid}`;
-                } else {
-                    window.location.href = '/';
-                }
             });
         }
     }
