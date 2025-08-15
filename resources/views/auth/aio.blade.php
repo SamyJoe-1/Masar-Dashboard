@@ -12,31 +12,31 @@
             <div class="auth-card">
                 <!-- Header with Logo/Title -->
                 <div class="auth-header">
-                    <h1 class="auth-logo">مسار</h1>
-                    <p class="auth-subtitle">انضم إلى منصة الذكاء الاصطناعي الرائدة</p>
+                    <h1 class="auth-logo">{{ __('words.Path') }}</h1>
+                    <p class="auth-subtitle">{{ __('words.Join the leading artificial intelligence platform') }}</p>
                 </div>
 
                 <!-- Tab Switcher (Only show for login/register, hide for forgot password) -->
                 <div class="auth-tabs" id="authTabs">
-                    <button class="auth-tab {{ $utm == 'login' ? 'active':'' }}" data-tab="login">تسجيل الدخول</button>
-                    <button class="auth-tab {{ $utm == 'register' ? 'active':'' }}" data-tab="register">إنشاء حساب</button>
+                    <button class="auth-tab {{ $utm == 'login' ? 'active':'' }}" data-tab="login">{{ __('words.Login') }}</button>
+                    <button class="auth-tab {{ $utm == 'register' ? 'active':'' }}" data-tab="register">{{ __('words.Create Account') }}</button>
                 </div>
 
                 <!-- Login Form -->
                 <form id="loginForm" class="auth-form {{ $utm == 'login' ? 'active':'' }}" method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
-                        <label for="email" class="form-label">البريد الإلكتروني أو اسم المستخدم</label>
-                        <input type="text" id="email" name="email" class="form-input" placeholder="أدخل بريدك الإلكتروني" value="{{ old('email') }}" required>
+                        <label for="email" class="form-label">{{ __('words.Email or Username') }}</label>
+                        <input type="text" id="email" name="email" class="form-input" placeholder="{{ __('words.Enter your email') }}" value="{{ old('email') }}" required>
                         @error('email')
                         <span class="form-error">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="form-label">كلمة المرور</label>
+                        <label for="password" class="form-label">{{ __('words.Password') }}</label>
                         <div class="password-wrapper">
-                            <input type="password" id="password" name="password" class="form-input" placeholder="أدخل كلمة المرور" required>
+                            <input type="password" id="password" name="password" class="form-input" placeholder="{{ __('words.Enter password') }}" required>
                             <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
                         </div>
                         @error('password')
@@ -48,19 +48,19 @@
                         <label class="checkbox-wrapper">
                             <input type="checkbox" name="remember">
                             <span class="checkmark"></span>
-                            تذكرني
+                            {{ __('words.Remember me') }}
                         </label>
-                        <a href="#" class="forgot-link" onclick="showForgotPassword()">نسيت كلمة المرور؟</a>
+                        <a href="#" class="forgot-link" onclick="showForgotPassword()">{{ __('words.Forgot password?') }}</a>
                     </div>
 
                     <button type="submit" class="auth-btn">
-                        <span>تسجيل الدخول</span>
+                        <span>{{ __('words.Login') }}</span>
                         <div class="btn-loader"></div>
                     </button>
 
                     <div class="social-login">
                         <div class="divider">
-                            <span>أو</span>
+                            <span>{{ __('words.Or') }}</span>
                         </div>
                         <button type="button" class="social-btn google-btn" onclick="location.href = '{{ route('auth.google') }}'">
                             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -69,7 +69,7 @@
                                 <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                 <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
-                            الدخول بحساب Google
+                            {{ __('words.Sign in with Google') }}
                         </button>
                     </div>
                 </form>
@@ -79,25 +79,25 @@
                     @csrf
 
                     <div class="form-group">
-                        <label for="name" class="form-label">الإسم بالكامل</label>
-                        <input type="text" id="name" name="name" class="form-input" placeholder="ادخل اسمك بالكامل" value="{{ old('name') }}" required>
+                        <label for="name" class="form-label">{{ __('words.Full Name') }}</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="{{ __('words.Enter your full name') }}" value="{{ old('name') }}" required>
                         @error('name')
                         <span class="form-error">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="register_email" class="form-label">البريد الإلكتروني</label>
-                        <input type="email" id="register_email" name="email" class="form-input" placeholder="أدخل بريدك الإلكتروني" value="{{ old('email') }}" required>
+                        <label for="register_email" class="form-label">{{ __('words.Email') }}</label>
+                        <input type="email" id="register_email" name="email" class="form-input" placeholder="{{ __('words.Enter your email') }}" value="{{ old('email') }}" required>
                         @error('email')
                         <span class="form-error">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="register_password" class="form-label">كلمة المرور</label>
+                        <label for="register_password" class="form-label">{{ __('words.Password') }}</label>
                         <div class="password-wrapper">
-                            <input type="password" id="register_password" name="password" class="form-input" placeholder="أدخل كلمة مرور قوية" required>
+                            <input type="password" id="register_password" name="password" class="form-input" placeholder="{{ __('words.Enter a strong password') }}" required>
                             <button type="button" class="password-toggle" onclick="togglePassword('register_password')">👁️</button>
                         </div>
                         <div class="password-strength" id="passwordStrength"></div>
@@ -107,9 +107,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="password_confirmation" class="form-label">تأكيد كلمة المرور</label>
+                        <label for="password_confirmation" class="form-label">{{ __('words.Confirm Password') }}</label>
                         <div class="password-wrapper">
-                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-input" placeholder="أعد إدخال كلمة المرور" required>
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-input" placeholder="{{ __('words.Re-enter password') }}" required>
                             <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')">👁️</button>
                         </div>
                     </div>
@@ -118,18 +118,18 @@
                         <label class="checkbox-wrapper">
                             <input type="checkbox" name="terms" required>
                             <span class="checkmark"></span>
-                            أوافق على <a href="{{ route('terms') }}" class="link">الشروط والأحكام</a>
+                            {{ __('words.I agree to') }} <a href="{{ route('terms') }}" class="link">{{ __('words.Terms and Conditions') }}</a>
                         </label>
                     </div>
 
                     <button type="submit" class="auth-btn">
-                        <span>إنشاء الحساب</span>
+                        <span>{{ __('words.Create Account') }}</span>
                         <div class="btn-loader"></div>
                     </button>
 
                     <div class="social-login">
                         <div class="divider">
-                            <span>أو</span>
+                            <span>{{ __('words.Or') }}</span>
                         </div>
                         <button type="button" class="social-btn google-btn" onclick="location.href = '{{ route('auth.google') }}'">
                             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@
                                 <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                 <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
-                            التسجيل بحساب Google
+                            {{ __('words.Sign up with Google') }}
                         </button>
                     </div>
                 </form>
@@ -152,20 +152,20 @@
                                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                             </svg>
                         </button>
-                        <h2>استعادة كلمة المرور</h2>
+                        <h2>{{ __('words.Password Recovery') }}</h2>
                     </div>
-                    <p class="forgot-description">أدخل بريدك الإلكتروني وسنرسل لك رابط لإعادة تعيين كلمة المرور</p>
+                    <p class="forgot-description">{{ __('words.Enter your email and we will send you a link to reset your password') }}</p>
 
                     <div class="form-group">
-                        <label for="forgot_email" class="form-label">البريد الإلكتروني</label>
-                        <input type="email" id="forgot_email" name="email" class="form-input" placeholder="أدخل بريدك الإلكتروني" required>
+                        <label for="forgot_email" class="form-label">{{ __('words.Email') }}</label>
+                        <input type="email" id="forgot_email" name="email" class="form-input" placeholder="{{ __('words.Enter your email') }}" required>
                         @error('email')
                         <span class="form-error">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <button type="submit" class="auth-btn">
-                        <span>إرسال رابط الاستعادة</span>
+                        <span>{{ __('words.Send Recovery Link') }}</span>
                         <div class="btn-loader"></div>
                     </button>
 
