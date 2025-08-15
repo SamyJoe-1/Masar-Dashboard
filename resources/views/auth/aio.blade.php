@@ -154,7 +154,6 @@
                         </button>
                         <h2>استعادة كلمة المرور</h2>
                     </div>
-
                     <p class="forgot-description">أدخل بريدك الإلكتروني وسنرسل لك رابط لإعادة تعيين كلمة المرور</p>
 
                     <div class="form-group">
