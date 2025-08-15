@@ -30,7 +30,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         session(['path' => 'login']);
-        return view('auth.AIO');
+        return view('auth.aio');
     }
 
     /**

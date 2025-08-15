@@ -1,0 +1,12 @@
+[11-Aug-2025 12:37:39 UTC] PHP Warning:  include(/home/masarom/dashboard.massar.biz/project/vendor/composer/../sebastian/version/src/Version.php): Failed to open stream: No such file or directory in /home/masarom/dashboard.massar.biz/project/vendor/composer/ClassLoader.php on line 576
+[11-Aug-2025 12:37:39 UTC] PHP Warning:  include(): Failed opening '/home/masarom/dashboard.massar.biz/project/vendor/composer/../sebastian/version/src/Version.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/masarom/dashboard.massar.biz/project/vendor/composer/ClassLoader.php on line 576
+[11-Aug-2025 12:37:39 UTC] PHP Fatal error:  Uncaught Error: Class "SebastianBergmann\Version" not found in /home/masarom/dashboard.massar.biz/project/vendor/phpunit/phpunit/src/Runner/Version.php:37
+Stack trace:
+#0 /home/masarom/dashboard.massar.biz/project/vendor/phpunit/phpunit/src/Runner/Version.php(48): PHPUnit\Runner\Version::id()
+#1 /home/masarom/dashboard.massar.biz/project/vendor/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php(10): PHPUnit\Runner\Version::series()
+#2 /home/masarom/dashboard.massar.biz/project/vendor/composer/autoload_real.php(41): require('/home/masarom/d...')
+#3 /home/masarom/dashboard.massar.biz/project/vendor/composer/autoload_real.php(45): {closure}()
+#4 /home/masarom/dashboard.massar.biz/project/vendor/autoload.php(25): ComposerAutoloaderInita7159c5237c3c2e75dbd1d23c85e732c::getLoader()
+#5 /home/masarom/dashboard.massar.biz/project/public/index.php(13): require('/home/masarom/d...')
+#6 {main}
+  thrown in /home/masarom/dashboard.massar.biz/project/vendor/phpunit/phpunit/src/Runner/Version.php on line 37
