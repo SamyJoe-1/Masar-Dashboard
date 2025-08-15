@@ -15,8 +15,7 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $search;
-    public $sortField = 'id';
-    public $sortDirection = 'desc';
+    public $sortField = 'id', $sortDirection = 'desc';
 
     public $perPage, $perPageOptions = [];
     public $columns, $selectedColumns = [], $tableColumns;
