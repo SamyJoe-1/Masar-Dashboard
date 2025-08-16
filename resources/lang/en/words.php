@@ -261,4 +261,12 @@ return [
     'No Job Offers Available' => 'No Job Offers Available',
     'Check back later for new opportunities' => 'Check back later for new opportunities',
     'Apply Job' => 'Apply Job',
+    'Supported formats: PDF, DOC, DOCX (Max 5MB)' => 'Supported formats: PDF, DOC, DOCX (Max 5MB)',
+    'or click to browse files' => 'or click to browse files',
+    'Upload your resume to apply for this position' => 'Upload your resume to apply for this position',
+    'Submit Your Application' => 'Submit Your Application',
+    'Published by' => 'Published by',
+    'Drag & Drop your resume here' => 'Drag & Drop your resume here',
+    'Submit Application' => 'Submit Application',
+    'Submitting' => 'Submitting',
 ];

@@ -346,6 +346,7 @@ class FileUploadController extends Controller
             'user_id' => auth()->id(),
             'title' => $title,
             'description' => $request->description,
+            'slug' => $directoryUuid,
         ]);
         foreach ($files as $file) {
             Applicant::create([

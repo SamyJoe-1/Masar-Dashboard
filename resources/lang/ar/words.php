@@ -261,4 +261,12 @@ return [
     'No Job Offers Available' => 'لا توجد عروض وظائف متاحة',
     'Check back later for new opportunities' => 'تصفح في وقت لاحق لفرص جديدة',
     'Apply Job' => 'التقديم علي الوظيفة',
+    'Supported formats: PDF, DOC, DOCX (Max 5MB)' => 'الإمتدادات المدعومة: PDF, DOC, DOCX (Max 5MB)',
+    'or click to browse files' => 'او إضغط لتصفح الملفات',
+    'Upload your resume to apply for this position' => 'إرفع السيرة الذاتية للتقديم علي الوظيفة',
+    'Submit Your Application' => 'إملئ البيانات',
+    'Published by' => 'تم النشر بواسطة',
+    'Drag & Drop your resume here' => 'اسحب وارفق سيرتك الذاتية هنا',
+    'Submit Application' => 'تأكيد الطلب',
+    'Submitting' => 'جارٍ التأكيد',
 ];

@@ -93,10 +93,7 @@
                                 <p>{{ __('words.or click to browse files') }}</p>
                                 <span class="file-requirements">{{ __('words.Supported formats: PDF, DOC, DOCX (Max 5MB)') }}</span>
 
-                                <input type="file"
-                                       wire:model="resume"
-                                       accept=".pdf,.doc,.docx"
-                                       class="file-input">
+                                <input type="file" wire:model.live.debounce.200ms="resume" accept=".pdf,.doc,.docx" class="file-input">
                             </div>
                         @else
                             <div class="uploaded-file">
@@ -170,7 +167,7 @@
             <h3>{{ __('words.Application Already Submitted') }}</h3>
             <p>{{ __('words.You have already applied to this job position. You will be notified about the status of your application.') }}</p>
 
-            <a href="{{ route('jobs.offers') }}" class="back-to-jobs-btn">
+            <a href="{{ route('dashboard.applicant.jobs.index') }}" class="back-to-jobs-btn">
                 <i class="fas fa-arrow-left"></i>
                 {{ __('words.Back to Job Offers') }}
             </a>
@@ -184,7 +181,7 @@
             <h3>{{ __('words.Job Applications Closed') }}</h3>
             <p>{{ __('words.This job is no longer accepting applications. Please check other available positions.') }}</p>
 
-            <a href="{{ route('jobs.offers') }}" class="back-to-jobs-btn">
+            <a href="{{ route('dashboard.applicant.jobs.index') }}" class="back-to-jobs-btn">
                 <i class="fas fa-arrow-left"></i>
                 {{ __('words.Back to Job Offers') }}
             </a>
@@ -193,8 +190,6 @@
 </div>
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
     <script>
         // Handle SweetAlert events
@@ -210,7 +205,7 @@
         // Handle redirect after successful application
         window.addEventListener('redirect-after-success', () => {
             setTimeout(() => {
-                window.location.href = "{{ route('jobs.offers') }}";
+                window.location.href = "{{ route('dashboard.applicant.jobs.index') }}";
             }, 2000);
         });
 
@@ -234,5 +229,6 @@
                 @this.set('uploadProgress', Math.floor(progress));
             }, 200);
         }
+        console.log(123)
     </script>
 @endpush

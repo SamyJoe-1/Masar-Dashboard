@@ -4,19 +4,15 @@
     <link href="{{ asset('styles/css/pagination.css') }}" rel="stylesheet">
     <link href="{{ asset('styles/css/filterBar.css') }}" rel="stylesheet">
     <link href="{{ asset('styles/css/jobApply.css') }}" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="header">
-            <h1>{{ __("words.Apply Job") }}: {{ $jobApp->title }}</h1>
-        </div>
-
-        @livewireStyles
-        @livewire('jobs.apply', ['jobId' => $jobApp->id])
-        @stack('scripts')
-        @livewireScripts
-    </div>
+    @livewireStyles
+    @livewire('jobs.apply', ['jobId' => $jobApp->id])
+    @stack('scripts')
+    @livewireScripts
 @endsection
 
 @section('scripts')

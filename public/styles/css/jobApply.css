@@ -26,7 +26,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #3464b0, #5b82f3);
+    background: #3464b0;
 }
 
 .job-header {
@@ -48,7 +48,7 @@
 .publisher-avatar {
     width: 64px;
     height: 64px;
-    background: linear-gradient(135deg, #3464b0, #5b82f3);
+    background: #3464b0;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -137,7 +137,7 @@
 
 .visibility-badge.public {
     background: rgba(59, 130, 246, 0.1);
-    color: #2563eb;
+    color: #3464b0;
     border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
@@ -362,7 +362,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #3464b0, #5b82f3);
+    background: #3464b0;
     border-radius: 4px;
     transition: width 0.3s ease;
 }
@@ -393,7 +393,7 @@
 }
 
 .submit-application-btn {
-    background: linear-gradient(135deg, #059669, #10b981);
+    background: #ffc107;
     color: white;
     border: none;
     padding: 1rem 3rem;
@@ -412,7 +412,7 @@
 }
 
 .submit-application-btn:hover:not(.disabled) {
-    background: linear-gradient(135deg, #047857, #059669);
+    background: #ffc107;
     transform: translateY(-1px);
     box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3);
 }
@@ -444,7 +444,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #059669, #10b981);
+    background: #ffc107;
 }
 
 .job-closed-card::before {
@@ -504,7 +504,7 @@
 }
 
 .back-to-jobs-btn:hover {
-    background: #2563eb;
+    background: #3464b0;
     color: white;
     text-decoration: none;
     transform: translateY(-1px);
