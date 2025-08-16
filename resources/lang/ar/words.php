@@ -258,4 +258,6 @@ return [
     'Full Description' => 'الوصف بالكامل',
     'Apply Now' => 'تقديم ألانَ',
     'results' => 'النتائج',
+    'No Job Offers Available' => 'لا توجد عروض وظائف متاحة',
+    'Check back later for new opportunities' => 'تصفح في وقت لاحق لفرص جديدة',
 ];

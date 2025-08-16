@@ -258,4 +258,6 @@ return [
     'Full Description' => 'Full Description',
     'Apply Now' => 'APPLY NOW',
     'results' => 'results',
+    'No Job Offers Available' => 'No Job Offers Available',
+    'Check back later for new opportunities' => 'Check back later for new opportunities',
 ];
