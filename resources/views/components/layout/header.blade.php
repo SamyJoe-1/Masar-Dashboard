@@ -4,11 +4,11 @@
             <img src="{{ asset('assets/images/logo2.png') }}" width="100">
         </a>
         <ul class="nav-links">
-            <li><a href="/#features">المميزات</a></li>
-            <li><a href="/#process">كيف يعمل</a></li>
-            <li><a href="{{ route('services') }}">خدماتنا</a></li>
-            <li><a href="{{ route('contact') }}">تواصل معنا</a></li>
-            <li><a href="{{ route('about') }}">المزيد عنا</a></li>
+            <li><a href="/#features">{{ __("words.Features") }}</a></li>
+            <li><a href="/#process">{{ __("words.How_It_Works") }}</a></li>
+            <li><a href="{{ route('services') }}">{{ __("words.Our_Services") }}</a></li>
+            <li><a href="{{ route('contact') }}">{{ __("words.Contact_Us") }}</a></li>
+            <li><a href="{{ route('about') }}">{{ __("words.More_About_Us") }}</a></li>
         </ul>
         <div class="beside-nav-items">
             @if(app()->getLocale() == 'ar')
@@ -19,7 +19,7 @@
             @else
                 <a href="?locale=ar" class="btn-lang text-decoration-none">
                     <img src="{{ asset('assets/images/flags/oman.svg') }}" width="27">
-                    العربية
+                    {{ __("words.Arabic") }}
                 </a>
             @endif
             <div>

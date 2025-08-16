@@ -10,7 +10,7 @@
 
         // Update button text
         const button = document.querySelector('.lang-switch');
-        button.textContent = newLang === 'ar' ? 'English' : 'العربية';
+        button.textContent = newLang === 'ar' ? 'English' : '{{ __("words.Arabic") }}';
 
         // Here you would typically load different content or redirect
         // For demo purposes, we'll just toggle direction
@@ -35,10 +35,10 @@
     uploadZone.addEventListener('click', function() {
         // Simulate file upload
         this.style.background = 'rgba(255, 255, 255, 0.1)';
-        this.innerHTML = '<div class="upload-icon">⏳</div><h4>جاري المعالجة...</h4>';
+        this.innerHTML = '<div class="upload-icon">⏳</div><h4>{{ __("words.Processing") }}</h4>';
 
         setTimeout(() => {
-            this.innerHTML = '<div class="upload-icon">✅</div><h4>تم الرفع بنجاح!</h4><p>156 ملف تم تحليله</p>';
+            this.innerHTML = '<div class="upload-icon">✅</div><h4>{{ __("words.Upload_Successful") }}</h4><p>{{ __("words.File_Analyzed") }}</p>';
             this.style.background = 'rgba(16, 185, 129, 0.1)';
         }, 2000);
     });

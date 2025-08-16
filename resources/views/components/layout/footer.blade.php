@@ -2,31 +2,31 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>Masar</h3>
-                <p>منصة ذكية لفحص وتحليل السير الذاتية باستخدام أحدث تقنيات الذكاء الاصطناعي</p>
+                <h3>{{ __("words.Masar") }}</h3>
+                <p>{{ __("words.smart_platform_description") }}</p>
             </div>
             <div class="footer-section">
-                <h3>من نحن</h3>
-                <a href="{{ route('about') }}">المزيد عنا</a>
-                <a href="{{ route('contact') }}">تواصل معنا</a>
-                <a href="{{ route('terms') }}">البنود</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>خدماتنا</h3>
-                <a href="{{ route('services') }}">الخدمات</a>
-                <a href="{{ route('privacy') }}">الحماية والخصوصية</a>
-                <a href="{{ route('faq') }}">الأسئلة الشائعة</a>
+                <h3>{{ __("words.About_Us") }}</h3>
+                <a href="{{ route('about') }}">{{ __("words.More_About_Us") }}</a>
+                <a href="{{ route('contact') }}">{{ __("words.Contact_Us") }}</a>
+                <a href="{{ route('terms') }}">{{ __("words.Terms") }}</a>
             </div>
 
             <div class="footer-section">
-                <h3>معلومات التواصل</h3>
+                <h3>{{ __("words.Our_Services") }}</h3>
+                <a href="{{ route('services') }}">{{ __("words.Services") }}</a>
+                <a href="{{ route('privacy') }}">{{ __("words.Privacy_Protection") }}</a>
+                <a href="{{ route('faq') }}">{{ __("words.FAQ") }}</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>{{ __("words.Contact_Information") }}</h3>
                 <a href="#">info@xxxxx.xxx</a>
                 <a href="#">+xxx xx xxx xxxx</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 Masar. جميع الحقوق محفوظة.</p>
+            <p>&copy; 2025 {{ __("words.Masar") }}. {{ __("words.All_Rights_Reserved") }}</p>
         </div>
     </div>
 </footer>
