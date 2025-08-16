@@ -260,4 +260,5 @@ return [
     'results' => 'النتائج',
     'No Job Offers Available' => 'لا توجد عروض وظائف متاحة',
     'Check back later for new opportunities' => 'تصفح في وقت لاحق لفرص جديدة',
+    'Apply Job' => 'التقديم علي الوظيفة',
 ];

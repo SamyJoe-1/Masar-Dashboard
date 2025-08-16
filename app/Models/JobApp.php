@@ -12,7 +12,7 @@ class JobApp extends Model
     use BelongsUser, HasApplicants, queryScope;
 
     protected $fillable = [
-        'user_id', 'title', 'description', 'public', 'close'
+        'user_id', 'title', 'description', 'slug', 'public', 'close'
     ];
 
     protected $casts = [

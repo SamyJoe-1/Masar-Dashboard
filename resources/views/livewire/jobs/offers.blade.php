@@ -59,10 +59,10 @@
 
                         <div class="job-actions">
                             @if(!$job->close)
-                                <button class="apply-btn" wire:click="applyToJob({{ $job->id }})">
+                                <a href="{{ route('dashboard.applicant.jobs.show', $job->id) }}" class="apply-btn text-decoration-none">
                                     <i class="fas fa-paper-plane"></i>
                                     {{ __('words.Apply Now') }}
-                                </button>
+                                </a>
                             @endif
 
                             <div class="job-stats">

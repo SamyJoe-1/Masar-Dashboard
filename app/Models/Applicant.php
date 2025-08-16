@@ -5,15 +5,16 @@ namespace App\Models;
 use App\Traits\Applicant\queryScope;
 use App\Traits\Relations\BelongsToOne\BelongsFile;
 use App\Traits\Relations\BelongsToOne\BelongsJob;
+use App\Traits\Relations\BelongsToOne\BelongsUser;
 use App\Traits\Relations\HasOne\HasForm;
 use Illuminate\Database\Eloquent\Model;
 
 class Applicant extends Model
 {
-    use BelongsJob, BelongsFile, HasForm, queryScope;
+    use BelongsJob, BelongsFile, BelongsUser, HasForm, queryScope;
 
     protected $fillable = [
-        'job_id', 'file_id', 'information', 'processing', 'answering', 'status'
+        'job_id', 'user_id', 'file_id', 'information', 'processing', 'answering', 'status'
     ];
 
     protected $casts = [

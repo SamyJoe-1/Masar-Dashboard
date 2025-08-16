@@ -260,4 +260,5 @@ return [
     'results' => 'results',
     'No Job Offers Available' => 'No Job Offers Available',
     'Check back later for new opportunities' => 'Check back later for new opportunities',
+    'Apply Job' => 'Apply Job',
 ];

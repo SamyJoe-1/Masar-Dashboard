@@ -37,7 +37,7 @@ class JobAppController extends Controller
      */
     public function show(JobApp $job)
     {
-//        return view('dashboard.hr.jobs.show', ['jobApp' => $job]);
+        return view('dashboard.applicant.jobs.apply', ['jobApp' => $job]);
     }
 
     /**
