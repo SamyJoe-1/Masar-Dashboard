@@ -8,8 +8,8 @@
     <section class="static-hero">
         <div class="container">
             <div class="static-hero-content">
-                <h1 class="static-title">خدماتنا</h1>
-                <p class="static-subtitle">حلول ذكية ومتطورة لجميع احتياجات التوظيف وفحص السير الذاتية</p>
+                <h1 class="static-title">{{ __('static_pages.Our Services') }}</h1>
+                <p class="static-subtitle">{{ __('static_pages.Smart and advanced solutions for all recruitment and resume screening needs') }}</p>
             </div>
         </div>
     </section>
@@ -19,19 +19,19 @@
             <div class="services-stats">
                 <div class="stat-item">
                     <div class="stat-number">50,000+</div>
-                    <div class="stat-label">سيرة ذاتية تم فحصها</div>
+                    <div class="stat-label">{{ __('static_pages.Resume screened') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">95%</div>
-                    <div class="stat-label">دقة التحليل</div>
+                    <div class="stat-label">{{ __('static_pages.Analysis accuracy') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">500+</div>
-                    <div class="stat-label">شركة تثق بنا</div>
+                    <div class="stat-label">{{ __('static_pages.Companies trust us') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">10x</div>
-                    <div class="stat-label">تسريع عملية التوظيف</div>
+                    <div class="stat-label">{{ __('static_pages.Recruitment process acceleration') }}</div>
                 </div>
             </div>
         </div>
@@ -39,48 +39,48 @@
 
     <section class="main-services">
         <div class="container">
-            <h2 class="section-title">خدماتنا الرئيسية</h2>
+            <h2 class="section-title">{{ __('static_pages.Our Main Services') }}</h2>
             <div class="services-grid">
                 <div class="service-card featured">
                     <div class="service-icon">🤖</div>
-                    <h3>فحص ذكي للسير الذاتية</h3>
-                    <p>تحليل متقدم للسير الذاتية باستخدام الذكاء الاصطناعي مع تقارير مفصلة ودرجات تقييم دقيقة</p>
+                    <h3>{{ __('static_pages.Smart Resume Screening') }}</h3>
+                    <p>{{ __('static_pages.Advanced analysis of resumes using artificial intelligence with detailed reports and accurate evaluation scores') }}</p>
                     <ul class="service-features">
-                        <li>فحص مئات السير في دقائق</li>
-                        <li>تحليل المهارات والخبرات</li>
-                        <li>ترتيب المرشحين حسب الملاءمة</li>
-                        <li>تقارير مفصلة قابلة للتصدير</li>
+                        <li>{{ __('static_pages.Screen hundreds of resumes in minutes') }}</li>
+                        <li>{{ __('static_pages.Analyze skills and experiences') }}</li>
+                        <li>{{ __('static_pages.Rank candidates by suitability') }}</li>
+                        <li>{{ __('static_pages.Detailed exportable reports') }}</li>
                     </ul>
-                    <div class="service-pricing">ابتداء من 0.5 ريال لكل سيرة</div>
-                    <a href="{{ route('upload.form') }}" class="btn btn-primary">ابدأ الآن</a>
+                    <div class="service-pricing">{{ __('static_pages.Starting from 0.5 SAR per resume') }}</div>
+                    <a href="{{ route('upload.form') }}" class="btn btn-primary">{{ __('static_pages.Start Now') }}</a>
                 </div>
 
                 <div class="service-card">
                     <div class="service-icon">📊</div>
-                    <h3>تحليلات متقدمة</h3>
-                    <p>تحليلات عميقة لسوق التوظيف ومطابقة احتياجات الوظيفة مع المهارات المتاحة في السوق</p>
+                    <h3>{{ __('static_pages.Advanced Analytics') }}</h3>
+                    <p>{{ __('static_pages.Deep analysis of the job market and matching job requirements with available skills in the market') }}</p>
                     <ul class="service-features">
-                        <li>تحليل اتجاهات السوق</li>
-                        <li>معدلات الرواتب المتوقعة</li>
-                        <li>تحليل المهارات النادرة</li>
-                        <li>تقارير مقارنة بالسوق</li>
+                        <li>{{ __('static_pages.Market trend analysis') }}</li>
+                        <li>{{ __('static_pages.Expected salary rates') }}</li>
+                        <li>{{ __('static_pages.Rare skills analysis') }}</li>
+                        <li>{{ __('static_pages.Market comparison reports') }}</li>
                     </ul>
-                    <div class="service-pricing">باقات مخصصة</div>
-                    <a href="{{ route('contact') }}" class="btn btn-secondary">استفسر الآن</a>
+                    <div class="service-pricing">{{ __('static_pages.Custom packages') }}</div>
+                    <a href="{{ route('contact') }}" class="btn btn-secondary">{{ __('static_pages.Inquire Now') }}</a>
                 </div>
 
                 <div class="service-card">
                     <div class="service-icon">🎯</div>
-                    <h3>فلترة ذكية متخصصة</h3>
-                    <p>فلترة دقيقة للمرشحين باستخدام معايير مخصصة ومتطلبات الوظيفة الخاصة بشركتك</p>
+                    <h3>{{ __('static_pages.Specialized Smart Filter') }}</h3>
+                    <p>{{ __('static_pages.Precise filtering of candidates using custom criteria and specific job requirements for your company') }}</p>
                     <ul class="service-features">
-                        <li>معايير تقييم مخصصة</li>
-                        <li>فلترة متعددة المستويات</li>
-                        <li>استبعاد تلقائي للغير مناسبين</li>
-                        <li>ترشيح أفضل المرشحين</li>
+                        <li>{{ __('static_pages.Custom evaluation criteria') }}</li>
+                        <li>{{ __('static_pages.Multi-level filtering') }}</li>
+                        <li>{{ __('static_pages.Automatic exclusion of unsuitable candidates') }}</li>
+                        <li>{{ __('static_pages.Recommendation of best candidates') }}</li>
                     </ul>
-                    <div class="service-pricing">حسب المتطلبات</div>
-                    <a href="{{ route('contact') }}" class="btn btn-secondary">تواصل معنا</a>
+                    <div class="service-pricing">{{ __('static_pages.Based on requirements') }}</div>
+                    <a href="{{ route('contact') }}" class="btn btn-secondary">{{ __('static_pages.Contact Us') }}</a>
                 </div>
             </div>
         </div>
@@ -88,53 +88,53 @@
 
     <section class="specialized-services">
         <div class="container">
-            <h2 class="section-title">خدمات متخصصة</h2>
+            <h2 class="section-title">{{ __('static_pages.Specialized Services') }}</h2>
             <div class="specialized-grid">
                 <div class="specialized-item">
                     <div class="specialized-icon">🏢</div>
-                    <h3>للشركات الكبيرة</h3>
-                    <p>حلول مؤسسية مع تكامل كامل مع أنظمة إدارة الموارد البشرية</p>
+                    <h3>{{ __('static_pages.For Large Companies') }}</h3>
+                    <p>{{ __('static_pages.Enterprise solutions with full integration with human resource management systems') }}</p>
                     <ul>
-                        <li>تكامل مع أنظمة HR</li>
-                        <li>واجهات برمجة مخصصة</li>
-                        <li>دعم تقني مخصص</li>
-                        <li>تدريب للفرق</li>
+                        <li>{{ __('static_pages.Integration with HR systems') }}</li>
+                        <li>{{ __('static_pages.Custom programming interfaces') }}</li>
+                        <li>{{ __('static_pages.Dedicated technical support') }}</li>
+                        <li>{{ __('static_pages.Team training') }}</li>
                     </ul>
                 </div>
 
                 <div class="specialized-item">
                     <div class="specialized-icon">🎓</div>
-                    <h3>للجامعات ومراكز التدريب</h3>
-                    <p>تقييم شامل لخريجي الجامعات والمتدربين لمساعدتهم في سوق العمل</p>
+                    <h3>{{ __('static_pages.For Universities and Training Centers') }}</h3>
+                    <p>{{ __('static_pages.Comprehensive evaluation for university graduates and trainees to help them in the job market') }}</p>
                     <ul>
-                        <li>تحليل نقاط القوة والضعف</li>
-                        <li>توجيهات للتطوير</li>
-                        <li>مقارنة مع متطلبات السوق</li>
-                        <li>تقارير للمؤسسات التعليمية</li>
+                        <li>{{ __('static_pages.Analyze strengths and weaknesses') }}</li>
+                        <li>{{ __('static_pages.Development guidance') }}</li>
+                        <li>{{ __('static_pages.Comparison with market requirements') }}</li>
+                        <li>{{ __('static_pages.Reports for educational institutions') }}</li>
                     </ul>
                 </div>
 
                 <div class="specialized-item">
-                    <div class="specialized-icon">👔</div>
-                    <h3>لشركات التوظيف</h3>
-                    <p>أدوات متطورة لشركات التوظيف لتسريع عمليات البحث والاختيار</p>
+                    <div class="specialized-icon">💼</div>
+                    <h3>{{ __('static_pages.For Recruitment Companies') }}</h3>
+                    <p>{{ __('static_pages.Advanced tools for recruitment companies to accelerate search and selection processes') }}</p>
                     <ul>
-                        <li>معالجة مجمعة للسير</li>
-                        <li>قوالب تقييم متخصصة</li>
-                        <li>تصنيف حسب القطاعات</li>
-                        <li>أسعار تفضيلية للكميات</li>
+                        <li>{{ __('static_pages.Batch resume processing') }}</li>
+                        <li>{{ __('static_pages.Specialized evaluation templates') }}</li>
+                        <li>{{ __('static_pages.Classification by sectors') }}</li>
+                        <li>{{ __('static_pages.Preferential prices for quantities') }}</li>
                     </ul>
                 </div>
 
                 <div class="specialized-item">
                     <div class="specialized-icon">🏛️</div>
-                    <h3>للقطاع الحكومي</h3>
-                    <p>حلول متوافقة مع متطلبات القطاع الحكومي ومعايير الأمان العالية</p>
+                    <h3>{{ __('static_pages.For Government Sector') }}</h3>
+                    <p>{{ __('static_pages.Solutions compliant with government sector requirements and high security standards') }}</p>
                     <ul>
-                        <li>امتثال كامل للأنظمة</li>
-                        <li>أمان وخصوصية محسنة</li>
-                        <li>تقارير مفصلة للجان التوظيف</li>
-                        <li>دعم اللغة العربية الكامل</li>
+                        <li>{{ __('static_pages.Full compliance with regulations') }}</li>
+                        <li>{{ __('static_pages.Enhanced security and privacy') }}</li>
+                        <li>{{ __('static_pages.Detailed reports for recruitment committees') }}</li>
+                        <li>{{ __('static_pages.Full Arabic language support') }}</li>
                     </ul>
                 </div>
             </div>
@@ -143,34 +143,34 @@
 
     <section class="service-process">
         <div class="container">
-            <h2 class="section-title">كيف نعمل</h2>
+            <h2 class="section-title">{{ __('static_pages.How We Work') }}</h2>
             <div class="process-timeline">
                 <div class="timeline-item">
                     <div class="timeline-number">1</div>
                     <div class="timeline-content">
-                        <h3>تحديد المتطلبات</h3>
-                        <p>نفهم احتياجاتك ومتطلبات الوظيفة المحددة</p>
+                        <h3>{{ __('static_pages.Define Requirements') }}</h3>
+                        <p>{{ __('static_pages.We understand your needs and specific job requirements') }}</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-number">2</div>
                     <div class="timeline-content">
-                        <h3>رفع السير الذاتية</h3>
-                        <p>رفع مجموعة السير الذاتية بصيغ مختلفة</p>
+                        <h3>{{ __('static_pages.Upload Resumes') }}</h3>
+                        <p>{{ __('static_pages.Upload resume collection in different formats') }}</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-number">3</div>
                     <div class="timeline-content">
-                        <h3>التحليل الذكي</h3>
-                        <p>معالجة متقدمة باستخدام الذكاء الاصطناعي</p>
+                        <h3>{{ __('static_pages.Smart Analysis') }}</h3>
+                        <p>{{ __('static_pages.Advanced processing using artificial intelligence') }}</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-number">4</div>
                     <div class="timeline-content">
-                        <h3>النتائج والتقارير</h3>
-                        <p>تقارير شاملة مع ترتيب المرشحين والتوصيات</p>
+                        <h3>{{ __('static_pages.Results and Reports') }}</h3>
+                        <p>{{ __('static_pages.Comprehensive reports with candidate ranking and recommendations') }}</p>
                     </div>
                 </div>
             </div>
@@ -179,37 +179,37 @@
 
     <section class="service-benefits">
         <div class="container">
-            <h2 class="section-title">لماذا تختار مسار؟</h2>
+            <h2 class="section-title">{{ __('static_pages.Why Choose Masar?') }}</h2>
             <div class="benefits-grid">
                 <div class="benefit-item">
                     <div class="benefit-icon">⚡</div>
-                    <h3>سرعة فائقة</h3>
-                    <p>توفير 80% من الوقت المستغرق في فحص السير الذاتية يدوياً</p>
+                    <h3>{{ __('static_pages.Superior Speed') }}</h3>
+                    <p>{{ __('static_pages.Save 80% of time spent manually screening resumes') }}</p>
                 </div>
                 <div class="benefit-item">
                     <div class="benefit-icon">🎯</div>
-                    <h3>دقة عالية</h3>
-                    <p>خوارزميات متطورة تضمن دقة في التحليل تصل إلى 95%</p>
+                    <h3>{{ __('static_pages.High Accuracy') }}</h3>
+                    <p>{{ __('static_pages.Advanced algorithms ensure analysis accuracy up to 95%') }}</p>
                 </div>
                 <div class="benefit-item">
                     <div class="benefit-icon">💰</div>
-                    <h3>توفير في التكاليف</h3>
-                    <p>تقليل تكاليف التوظيف بنسبة تصل إلى 60%</p>
+                    <h3>{{ __('static_pages.Cost Savings') }}</h3>
+                    <p>{{ __('static_pages.Reduce recruitment costs by up to 60%') }}</p>
                 </div>
                 <div class="benefit-item">
                     <div class="benefit-icon">🔒</div>
-                    <h3>أمان متقدم</h3>
-                    <p>حماية شاملة للبيانات مع عدم الاحتفاظ بالملفات</p>
+                    <h3>{{ __('static_pages.Advanced Security') }}</h3>
+                    <p>{{ __('static_pages.Comprehensive data protection with no file retention') }}</p>
                 </div>
                 <div class="benefit-item">
-                    <div class="benefit-icon">🌐</div>
-                    <h3>دعم متعدد اللغات</h3>
-                    <p>معالجة السير الذاتية باللغتين العربية والإنجليزية</p>
+                    <div class="benefit-icon">🌍</div>
+                    <h3>{{ __('static_pages.Multi-language Support') }}</h3>
+                    <p>{{ __('static_pages.Process resumes in Arabic and English') }}</p>
                 </div>
                 <div class="benefit-item">
                     <div class="benefit-icon">📱</div>
-                    <h3>سهولة الاستخدام</h3>
-                    <p>واجهة بسيطة وسهلة تناسب جميع مستويات المستخدمين</p>
+                    <h3>{{ __('static_pages.Ease of Use') }}</h3>
+                    <p>{{ __('static_pages.Simple and easy interface suitable for all user levels') }}</p>
                 </div>
             </div>
         </div>
@@ -217,71 +217,71 @@
 
     <section class="pricing-preview" id="pricing-preview">
         <div class="container">
-            <h2 class="section-title">باقات الأسعار</h2>
+            <h2 class="section-title">{{ __('static_pages.Pricing Plans') }}</h2>
             <div class="pricing-cards">
                 <div class="pricing-card">
-                    <h3>الباقة الأساسية</h3>
+                    <h3>{{ __('static_pages.Basic Plan') }}</h3>
                     <div class="price">
-                        <span class="currency">ريال</span>
+                        <span class="currency">{{ __('static_pages.SAR') }}</span>
                         <span class="amount">199</span>
-                        <span class="period">/شهرياً</span>
+                        <span class="period">{{ __('static_pages./monthly') }}</span>
                     </div>
                     <ul class="features">
-                        <li>حتى 500 سيرة شهرياً</li>
-                        <li>تقارير أساسية</li>
-                        <li>دعم بالبريد الإلكتروني</li>
-                        <li>تصدير PDF</li>
+                        <li>{{ __('static_pages.Up to 500 resumes monthly') }}</li>
+                        <li>{{ __('static_pages.Basic reports') }}</li>
+                        <li>{{ __('static_pages.Email support') }}</li>
+                        <li>{{ __('static_pages.PDF export') }}</li>
                     </ul>
-                    <a href="{{ route('contact') }}" class="btn btn-outline">اختر الباقة</a>
+                    <a href="{{ route('contact') }}" class="btn btn-outline">{{ __('static_pages.Choose Plan') }}</a>
                 </div>
 
                 <div class="pricing-card featured">
-                    <div class="popular-badge">الأكثر شيوعاً</div>
-                    <h3>الباقة المتقدمة</h3>
+                    <div class="popular-badge">{{ __('static_pages.Most Popular') }}</div>
+                    <h3>{{ __('static_pages.Advanced Plan') }}</h3>
                     <div class="price">
-                        <span class="currency">ريال</span>
+                        <span class="currency">{{ __('static_pages.SAR') }}</span>
                         <span class="amount">499</span>
-                        <span class="period">/شهرياً</span>
+                        <span class="period">{{ __('static_pages./monthly') }}</span>
                     </div>
                     <ul class="features">
-                        <li>حتى 2000 سيرة شهرياً</li>
-                        <li>تقارير مفصلة</li>
-                        <li>دعم هاتفي وبالبريد</li>
-                        <li>تصدير متعدد الصيغ</li>
-                        <li>تحليلات متقدمة</li>
+                        <li>{{ __('static_pages.Up to 2000 resumes monthly') }}</li>
+                        <li>{{ __('static_pages.Detailed reports') }}</li>
+                        <li>{{ __('static_pages.Phone and email support') }}</li>
+                        <li>{{ __('static_pages.Multi-format export') }}</li>
+                        <li>{{ __('static_pages.Advanced analytics') }}</li>
                     </ul>
-                    <a href="{{ route('contact') }}" class="btn btn-primary">اختر الباقة</a>
+                    <a href="{{ route('contact') }}" class="btn btn-primary">{{ __('static_pages.Choose Plan') }}</a>
                 </div>
 
                 <div class="pricing-card">
-                    <h3>الباقة المؤسسية</h3>
+                    <h3>{{ __('static_pages.Enterprise Plan') }}</h3>
                     <div class="price">
-                        <span class="currency">ريال</span>
+                        <span class="currency">{{ __('static_pages.SAR') }}</span>
                         <span class="amount">1299</span>
-                        <span class="period">/شهرياً</span>
+                        <span class="period">{{ __('static_pages./monthly') }}</span>
                     </div>
                     <ul class="features">
-                        <li>سير ذاتية غير محدودة</li>
-                        <li>تكامل مع أنظمة HR</li>
-                        <li>دعم مخصص 24/7</li>
-                        <li>واجهات برمجة مخصصة</li>
-                        <li>تدريب للفريق</li>
+                        <li>{{ __('static_pages.Unlimited resumes') }}</li>
+                        <li>{{ __('static_pages.Integration with HR systems') }}</li>
+                        <li>{{ __('static_pages.Dedicated support 24/7') }}</li>
+                        <li>{{ __('static_pages.Custom programming interfaces') }}</li>
+                        <li>{{ __('static_pages.Team training') }}</li>
                     </ul>
-                    <a href="{{ route('contact') }}" class="btn btn-outline">تواصل معنا</a>
+                    <a href="{{ route('contact') }}" class="btn btn-outline">{{ __('static_pages.Contact Us') }}</a>
                 </div>
             </div>
-            <p class="pricing-note">جميع الباقات تشمل نسخة تجريبية مجانية لمدة 14 يوم</p>
+            <p class="pricing-note">{{ __('static_pages.All plans include a free 14-day trial') }}</p>
         </div>
     </section>
 
     <section class="service-cta">
         <div class="container">
             <div class="cta-content">
-                <h2>جاهز لتجربة مسار؟</h2>
-                <p>ابدأ الآن واكتشف كيف يمكن لمسار تحسين عملية التوظيف في شركتك</p>
+                <h2>{{ __('static_pages.Ready to try Masar?') }}</h2>
+                <p>{{ __('static_pages.Start now and discover how Masar can improve the recruitment process in your company') }}</p>
                 <div class="cta-buttons">
-                    <a href="{{ route('upload.form') }}" class="btn btn-primary">جرب مجاناً</a>
-                    <a href="{{ route('contact') }}" class="btn btn-secondary">تحدث مع خبير</a>
+                    <a href="{{ route('upload.form') }}" class="btn btn-primary">{{ __('static_pages.Try for Free') }}</a>
+                    <a href="{{ route('contact') }}" class="btn btn-secondary">{{ __('static_pages.Talk to Expert') }}</a>
                 </div>
             </div>
         </div>
