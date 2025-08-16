@@ -8,7 +8,7 @@ class AuthenticationController extends Controller
 {
     public function aio()
     {
-        return view('auth.AIO');
+        return view('auth.aio');
     }
 
     public function logout()

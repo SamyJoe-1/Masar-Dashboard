@@ -53,7 +53,7 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         session(['path' => 'register']);
-        return view('auth.AIO');
+        return view('auth.aio');
     }
 
     /**
