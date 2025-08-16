@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller
@@ -25,5 +26,17 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        // Set the session variable
+        session(['path' => 'reset-confirm']);
+
+        return view('auth.aio')->with([
+            'token' => $token,
+            'email' => @$_GET['email'],
+        ]);
+    }
+
     protected $redirectTo = '/home';
 }

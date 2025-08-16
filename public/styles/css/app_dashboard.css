@@ -88,6 +88,10 @@ body {
     font-size: 1rem;
 }
 
+.d-none{
+    display: none !important;
+}
+
 /* Top Navbar */
 .navbar {
     position: fixed;

@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    @php($utm = session()->get('path') == 'register' ? 'register':'login')
+    @php($utm = in_array(@session()->get('path'), ['register', 'login', 'reset', 'reset-confirm']) ? session()->get('path'):'login')
     <section class="auth-section">
         <div class="auth-container">
             <div class="auth-card">
@@ -16,11 +16,13 @@
                     <p class="auth-subtitle">{{ __('words.Join the leading artificial intelligence platform') }}</p>
                 </div>
 
-                <!-- Tab Switcher (Only show for login/register, hide for forgot password) -->
-                <div class="auth-tabs" id="authTabs">
-                    <button class="auth-tab {{ $utm == 'login' ? 'active':'' }}" data-tab="login">{{ __('words.Login') }}</button>
-                    <button class="auth-tab {{ $utm == 'register' ? 'active':'' }}" data-tab="register">{{ __('words.Create Account') }}</button>
-                </div>
+                @if(in_array($utm, ['login', 'register']))
+                    <!-- Tab Switcher (Only show for login/register, hide for forgot password) -->
+                    <div class="auth-tabs" id="authTabs">
+                        <button class="auth-tab {{ $utm == 'login' ? 'active':'' }}" data-tab="login">{{ __('words.Login') }}</button>
+                        <button class="auth-tab {{ $utm == 'register' ? 'active':'' }}" data-tab="register">{{ __('words.Create Account') }}</button>
+                    </div>
+                @endif
 
                 <!-- Login Form -->
                 <form id="loginForm" class="auth-form {{ $utm == 'login' ? 'active':'' }}" method="POST" action="{{ route('login') }}">
@@ -144,10 +146,10 @@
                 </form>
 
                 <!-- Forgot Password Form -->
-                <form id="forgotPasswordForm" class="auth-form" method="POST" action="{{ route('password.email') }}">
+                <form id="forgotPasswordForm" class="auth-form {{ $utm == 'reset' ? 'active':'' }}" method="POST" action="{{ route('password.email') }}">
                     @csrf
                     <div class="forgot-header">
-                        <button type="button" class="back-btn" onclick="showLogin()">
+                        <button type="button" class="back-btn" onclick="location.href = '{{ route('login') }}'">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                             </svg>
@@ -174,6 +176,54 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                </form>
+
+                <!-- Reset Password Confirmation Form -->
+                <form id="resetConfirmForm" class="auth-form {{ $utm == 'reset-confirm' ? 'active':'' }}" method="POST" action="{{ route('password.update') }}">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ request()->route('token') ?? old('token') }}">
+
+                    <div class="forgot-header">
+                        <button type="button" class="back-btn" onclick="location.href = '{{ route('login') }}'">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                        </button>
+                        <h2>{{ __('words.Reset Password') }}</h2>
+                    </div>
+                    <p class="forgot-description">{{ __('words.Enter your new password below') }}</p>
+
+                    <div class="form-group">
+                        <label for="reset_email" class="form-label">{{ __('words.Email') }}</label>
+                        <input type="email" id="reset_email" name="email" class="form-input" placeholder="{{ __('words.Enter your email') }}" value="{{ request()->email ?? old('email') }}" required>
+                        @error('email')
+                        <span class="form-error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reset_new_password" class="form-label">{{ __('words.New Password') }}</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="reset_new_password" name="password" class="form-input" placeholder="{{ __('words.Enter new password') }}" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('reset_new_password')">👁️</button>
+                        </div>
+                        @error('password')
+                        <span class="form-error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reset_password_confirmation" class="form-label">{{ __('words.Confirm New Password') }}</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="reset_password_confirmation" name="password_confirmation" class="form-input" placeholder="{{ __('words.Confirm new password') }}" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('reset_password_confirmation')">👁️</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-btn">
+                        <span>{{ __('words.Reset Password') }}</span>
+                        <div class="btn-loader"></div>
+                    </button>
                 </form>
             </div>
         </div>

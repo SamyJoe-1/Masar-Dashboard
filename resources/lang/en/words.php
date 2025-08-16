@@ -244,4 +244,10 @@ return [
     'All_Rights_Reserved' => 'All Rights Reserved',
     'Upload_Successful' => 'Upload Successful!',
     'File_Analyzed' => '156 file analyzed',
+    'Reset Password' => 'Reset Password',
+    'Enter your new password below' => 'Enter your new password below',
+    'New Password' => 'New Password',
+    'Enter new password' => 'Enter new password',
+    'Confirm New Password' => 'Confirm New Password',
+    'Confirm new password' => 'Confirm new password',
 ];

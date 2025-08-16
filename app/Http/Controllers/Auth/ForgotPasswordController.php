@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Request;
 
 class ForgotPasswordController extends Controller
 {
@@ -17,6 +18,14 @@ class ForgotPasswordController extends Controller
     | your application to your users. Feel free to explore this trait.
     |
     */
+
+    public function showLinkRequestForm()
+    {
+        // Set the session variable
+        session(['path' => 'reset']);
+
+        return view('auth.aio');
+    }
 
     use SendsPasswordResetEmails;
 }

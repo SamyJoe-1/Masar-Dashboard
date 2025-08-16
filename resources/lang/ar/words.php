@@ -244,4 +244,10 @@ return [
     'All_Rights_Reserved' => 'جميع الحقوق محفوظة',
     'Upload_Successful' => 'تم الرفع بنجاح!',
     'File_Analyzed' => '156 ملف تم تحليله',
+    'Reset Password' => 'إعادة تعيين كلمة المرور',
+    'Enter your new password below' => 'أدخل كلمة المرور الجديدة أدناه',
+    'New Password' => 'كلمة المرور الجديدة',
+    'Enter new password' => 'أدخل كلمة المرور الجديدة',
+    'Confirm New Password' => 'تأكيد كلمة المرور الجديدة',
+    'Confirm new password' => 'أدخل تأكيد كلمة المرور الجديدة',
 ];
