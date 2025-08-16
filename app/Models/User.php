@@ -17,12 +17,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected $table = 'users';
+
+    CONST ROLES = ['hr', 'applicant'];
 
     protected function casts(): array
     {

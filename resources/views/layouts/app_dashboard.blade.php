@@ -14,7 +14,11 @@
     @yield('header')
 </head>
 <body class="{{ app()->getLocale() }}">
-<x-layout.dashboard.sidebar></x-layout.dashboard.sidebar>
+@if(auth()->user()->isHR())
+    <x-layout.dashboard.sidebar.hr></x-layout.dashboard.sidebar.hr>
+@elseif(auth()->user()->isApplicant())
+    <x-layout.dashboard.sidebar.applicant></x-layout.dashboard.sidebar.applicant>
+@endif
 
 <!-- Top Navbar -->
 <nav class="navbar">

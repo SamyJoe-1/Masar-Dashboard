@@ -250,4 +250,12 @@ return [
     'Enter new password' => 'Enter new password',
     'Confirm New Password' => 'Confirm New Password',
     'Confirm new password' => 'Confirm new password',
+    'Account Type' => 'Account Type',
+    'HR' => 'HR',
+    'Applicant' => 'Applicant',
+    'Job Offers' => 'Job Offers',
+    'Open for Applications' => 'Open for Applications',
+    'Full Description' => 'Full Description',
+    'Apply Now' => 'APPLY NOW',
+    'results' => 'results',
 ];

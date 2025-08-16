@@ -116,6 +116,22 @@
                         </div>
                     </div>
 
+                    <div style="display: flex;gap: 5px;margin-bottom: 10px">
+                        <p class="auth-subtitle">{{ __("words.Account Type") }}:</p>
+                        <label class="radio-wrapper">
+                            <input type="radio" name="option" value="hr">
+                            <span class="radiomark"></span>
+                            {{ __("words.HR") }}
+                        </label>
+
+                        <label class="radio-wrapper">
+                            <input type="radio" name="option" value="applicant">
+                            <span class="radiomark"></span>
+
+                            {{ __("words.Applicant") }}
+                        </label>
+                    </div>
+
                     <div class="form-options">
                         <label class="checkbox-wrapper">
                             <input type="checkbox" name="terms" required>

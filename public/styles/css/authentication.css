@@ -233,7 +233,43 @@ html[dir=ltr] .password-toggle{
     font-weight: bold;
     font-size: 12px;
 }
+.radio-wrapper {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
 
+.radio-wrapper input[type="radio"] {
+    display: none;
+}
+
+.radiomark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.radio-wrapper input[type="radio"]:checked + .radiomark {
+    background: white;
+    border-color: white;
+}
+
+.radio-wrapper input[type="radio"]:checked + .radiomark::after {
+    content: '';
+    position: absolute;
+    top: 3.7px;
+    left: 3.2px;
+    width: 8px;
+    height: 8px;
+    background: #3464b0;
+    border-radius: 50%;
+}
 .forgot-link, .link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;

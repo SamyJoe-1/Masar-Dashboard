@@ -250,4 +250,12 @@ return [
     'Enter new password' => 'أدخل كلمة المرور الجديدة',
     'Confirm New Password' => 'تأكيد كلمة المرور الجديدة',
     'Confirm new password' => 'أدخل تأكيد كلمة المرور الجديدة',
+    'Account Type' => 'نوع الحساب',
+    'HR' => 'شئون موظفين',
+    'Applicant' => 'متقدم لوظيفة',
+    'Job Offers' => 'عروض الوظائف',
+    'Open for Applications' => 'مفتوح للتقديم',
+    'Full Description' => 'الوصف بالكامل',
+    'Apply Now' => 'تقديم ألانَ',
+    'results' => 'النتائج',
 ];

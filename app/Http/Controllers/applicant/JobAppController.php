@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\applicant;
 
+use App\Http\Controllers\Controller;
 use App\Models\JobApp;
-use App\Models\JobApp as Job;
 use Illuminate\Http\Request;
 
 class JobAppController extends Controller
@@ -13,7 +13,7 @@ class JobAppController extends Controller
      */
     public function index()
     {
-        return view('dashboard.hr.jobs.index');
+        return view('dashboard.applicant.jobs.index');
     }
 
     /**
@@ -35,9 +35,9 @@ class JobAppController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Job $job)
+    public function show(JobApp $job)
     {
-        return view('dashboard.hr.jobs.show', ['jobApp' => $job]);
+//        return view('dashboard.hr.jobs.show', ['jobApp' => $job]);
     }
 
     /**
