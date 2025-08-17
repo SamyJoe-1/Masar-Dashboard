@@ -10,7 +10,7 @@ class ApplicantForm extends Model
     use BelongsApplicant;
 
     protected $fillable = [
-        'applicant_id', 'questions', 'answers', 'status'
+        'applicant_id', 'questions', 'answers', 'started_at', 'expire_date', 'status'
     ];
 
     CONST STATUSES = [
