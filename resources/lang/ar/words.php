@@ -297,4 +297,10 @@ return [
     'Jobs' => 'الوظائف',
     'deleted' => 'تم الحذف',
     "You haven't applied to any jobs yet" => "لم تقم بالتقديم علي اي وظيفة بعد",
+    "my_applications" => "طلباتي",
+    "pending applications" => "الطلبات قيد الانتظار",
+    "approved_applications" => "الطلبات المقبولة",
+    "rejected_applications" => "الطلبات المرفوضة",
+    "waiting_applications" => "بإنتظار الإجابة",
+    "success_rate" => "معدل القبول",
 ];
