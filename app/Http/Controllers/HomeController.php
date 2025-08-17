@@ -115,6 +115,17 @@ class HomeController extends Controller
 
     private function getPreviousApplicantAnalytics($filter)
     {
+        // Check if the method exists in the HR trait, if not return default values
+        if (!method_exists($this, 'getPreviousDateRange')) {
+            return [
+                'my_applications' => 0,
+                'pending_applications' => 0,
+                'approved_applications' => 0,
+                'rejected_applications' => 0,
+                'waiting_applications' => 0,
+            ];
+        }
+
         $previousDateRange = $this->getPreviousDateRange($filter);
 
         if (!$previousDateRange) {
