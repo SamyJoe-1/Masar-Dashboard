@@ -44,7 +44,7 @@
                     <i class="fas fa-file-alt"></i>
                 </div>
             </div>
-            <div class="card-title">{{ __('words.my_applications') }}</div>
+            <div class="card-title">{{ __('words.All Orders') }}</div>
             <div class="card-value">{{ number_format($analytics['my_applications']) }}</div>
             <div class="card-trend {{ strpos($trends['applications_trend'], '-') === 0 ? 'down' : '' }}">
                 {{ __('words.trend_from_previous_period', ['trend' => $trends['applications_trend']]) }}
