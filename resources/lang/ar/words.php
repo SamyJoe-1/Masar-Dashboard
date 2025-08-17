@@ -303,4 +303,5 @@ return [
     "rejected_applications" => "الطلبات المرفوضة",
     "waiting_applications" => "بإنتظار الإجابة",
     "success_rate" => "معدل القبول",
+    "of_my_applications" => "من إجمالي طلبات",
 ];
