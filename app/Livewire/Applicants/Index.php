@@ -87,7 +87,7 @@ class Index extends Component
         if ($user) {
             $user->delete();
             $this->dispatch('swal:error', [
-                'title' => 'تم حذف المتقدم بنجاح',
+                'title' => __("words.The applicant has been successfully deleted."),
                 'text' => '',
                 'icon' => 'success',
             ]);

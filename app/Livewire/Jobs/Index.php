@@ -81,7 +81,7 @@ class Index extends Component
         if ($job) {
             $job->delete();
             $this->dispatch('swal:error', [
-                'title' => 'تم حذف إعلان الوظيفة بنجاح',
+                'title' => __("words.Job ad has been successfully deleted."),
                 'text' => '',
                 'icon' => 'success',
             ]);
@@ -95,7 +95,21 @@ class Index extends Component
             $job->close = !$job->close;
             $job->save();
             $this->dispatch('swal:error', [
-                'title' => 'تمت العملية بنجاح',
+                'title' => __("words.The operation was successful."),
+                'text' => '',
+                'icon' => 'success',
+            ]);
+        }
+    }
+
+    public function Public($id)
+    {
+        $job = JobApp::find($id);
+        if ($job) {
+            $job->public = !$job->public;
+            $job->save();
+            $this->dispatch('swal:error', [
+                'title' => __("words.The operation was successful."),
                 'text' => '',
                 'icon' => 'success',
             ]);

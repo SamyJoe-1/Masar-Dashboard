@@ -288,4 +288,13 @@ return [
     'Download' => 'تنزيل',
     'No Applications Found' => 'لم يتم العثور علي طلبات',
     'Search Orders' => 'ابحث عن طلبات',
+    'Job ad has been successfully deleted.' => 'تم حذف إعلان الوظيفة بنجاح',
+    'The applicant has been successfully deleted.' => 'تم حذف المتقدم بنجاح',
+    'The operation was successful.' => 'تمت العملية بنجاح',
+    '(count) item action successfully!' => 'تم :action (:count) :item بنجاح',
+    'No items selected or no action chosen' => 'لم يتم تحديد او اختيار حدث للتنفيذ',
+    'Please select items and an action' => 'برجاء تحديد العناصر لتنفيذ الحدث',
+    'Jobs' => 'الوظائف',
+    'deleted' => 'تم الحذف',
+    "You haven't applied to any jobs yet" => "لم تقم بالتقديم علي اي وظيفة بعد",
 ];

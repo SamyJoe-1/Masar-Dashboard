@@ -288,4 +288,13 @@ return [
     'Download' => 'Download',
     'No Applications Found' => 'No Applications Found',
     'Search Orders' => 'Search Orders',
+    'Job ad has been successfully deleted.' => 'Job ad has been successfully deleted.',
+    'The applicant has been successfully deleted.' => 'The applicant has been successfully deleted.',
+    'The operation was successful.' => 'The operation was successful.',
+    '(count) item action successfully!' => '(:count) :item :action successfully!',
+    'No items selected or no action chosen' => 'No items selected or no action chosen',
+    'Please select items and an action' => 'Please select items and an action',
+    'Jobs' => 'Jobs',
+    'deleted' => 'deleted',
+    "You haven't applied to any jobs yet" => "You haven't applied to any jobs yet",
 ];

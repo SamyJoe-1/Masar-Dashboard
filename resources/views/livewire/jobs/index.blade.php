@@ -59,9 +59,18 @@
                     <x-table.td :columns="$selectedColumns" column="updated_at">{{ dateFormat_1($job->updated_at) }}</x-table.td>
                     <x-table.td :columns="$selectedColumns" column="action">
                         <div class="d-flex card-actions">
-                            <a wire:click="Delete({{ $job->id }})" class="cursor-pointer"><i class='bx bx-trash text-danger'></i></a>
-                            <a wire:click="Close({{ $job->id }})" class="cursor-pointer"><i class='bx bx-radio-circle-marked fs-4 text-{{ $job->close ? "primary":"secondary" }}'></i></a>
-                            <a href="{{ route('dashboard.hr.jobs.show', $job) }}" wire:navigate class="ms-1"><i class='text-success bx bx-show'></i></a>
+                            <a wire:click="Delete({{ $job->id }})" class="cursor-pointer">
+                                <i class='bx bx-trash text-danger'></i>
+                            </a>
+                            <a wire:click="Close({{ $job->id }})" class="cursor-pointer">
+                                <i class='bx bx-radio-circle-marked fs-4 text-{{ $job->close ? "primary":"secondary" }}'></i>
+                            </a>
+                            <a wire:click="Public({{ $job->id }})" class="cursor-pointer">
+                                <i class='bx bx-{{ $job->public ? "lock":"planet" }} text-{{ $job->public ? "secondary":"primary" }}'></i>
+                            </a>
+                            <a href="{{ route('dashboard.hr.jobs.show', $job) }}" wire:navigate class="ms-1">
+                                <i class='text-success bx bx-show'></i>
+                            </a>
                         </div>
                     </x-table.td>
                 </tr>

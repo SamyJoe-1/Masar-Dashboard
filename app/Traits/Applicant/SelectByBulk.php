@@ -32,8 +32,8 @@ trait SelectByBulk
     {
         if (empty($this->selected) || empty($this->bulkAction)) {
             $this->dispatch('swal:error', [
-                'title' => 'No items selected or no action chosen',
-                'text' => 'Please select items and an action',
+                'title' => __('words.No items selected or no action chosen'),
+                'text' => __("words.Please select items and an action"),
                 'icon' => 'warning',
             ]);
             return;
@@ -56,7 +56,7 @@ trait SelectByBulk
         $count = Applicant::whereIn('id', $this->selected)->delete();
 
         $this->dispatch('swal:success', [
-            'title' => "($count) Applicants deleted successfully!",
+            'title' => __("words.(count) item action successfully!", ["action" => __("words.delete"), "count" => $count, "item" => __("words.applicants")]),
             'text' => '',
             'icon' => 'success',
         ]);
