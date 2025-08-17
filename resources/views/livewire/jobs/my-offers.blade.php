@@ -3,8 +3,8 @@
     <div class="filters-section mb-4">
         <div class="row g-3 align-items-end">
             <!-- Search Bar -->
-            <div class="col-md-6">
-                <label for="search" class="form-label">{{ __('words.Search Jobs') }}</label>
+            <div class="col-md-4">
+                <label for="search" class="form-label">{{ __('words.Search Orders') }}</label>
                 <div class="input-group">
                     <span class="input-group-text">
                         <i class="fas fa-search"></i>
@@ -18,9 +18,9 @@
                 </div>
             </div>
 
-            <!-- Status Filter -->
-            <div class="col-md-4">
-                <label for="statusFilter" class="form-label">{{ __('words.Status') }}</label>
+            <!-- Job Status Filter -->
+            <div class="col-md-3">
+                <label for="statusFilter" class="form-label">{{ __('words.Job Status') }}</label>
                 <select class="form-select" id="statusFilter" wire:model.live="statusFilter">
                     <option value="all">{{ __('words.All Jobs') }}</option>
                     <option value="open">{{ __('words.Open') }}</option>
@@ -28,9 +28,20 @@
                 </select>
             </div>
 
+            <!-- Applicant Status Filter -->
+            <div class="col-md-3">
+                <label for="applicantStatusFilter" class="form-label">{{ __('words.Application Status') }}</label>
+                <select class="form-select" id="applicantStatusFilter" wire:model.live="applicantStatusFilter">
+                    <option value="all">{{ __('words.All Orders') }}</option>
+                    @foreach($applicantStatuses as $status)
+                        <option value="{{ $status }}">{{ ucfirst(str_replace('_', ' ', __('words.' . $status))) }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <!-- Clear Filters Button -->
             <div class="col-md-2">
-                @if($search || $statusFilter !== 'all')
+                @if($search || $statusFilter !== 'all' || $applicantStatusFilter !== 'all')
                     <button class="btn btn-outline-danger w-100" wire:click="clearFilters">
                         <i class="fas fa-eraser"></i>
                         {{ __('words.Clear') }}
@@ -40,7 +51,7 @@
         </div>
 
         <!-- Active Filters Display -->
-        @if($search || $statusFilter !== 'all')
+        @if($search || $statusFilter !== 'all' || $applicantStatusFilter !== 'all')
             <div class="active-filters mt-3 d-none">
                 <small class="text-muted">{{ __('words.Active Filters') }}:</small>
                 <div class="d-flex gap-2 flex-wrap mt-1">
@@ -53,9 +64,16 @@
                     @endif
                     @if($statusFilter !== 'all')
                         <span class="badge bg-info">
-                            {{ __('words.Status') }}: {{ $statusFilter === 'open' ? __('words.Open') : __('words.Closed') }}
+                            {{ __('words.Job Status') }}: {{ $statusFilter === 'open' ? __('words.Open') : __('words.Closed') }}
                             <button type="button" class="btn-close btn-close-white ms-1"
                                     wire:click="$set('statusFilter', 'all')" style="font-size: 0.6em;"></button>
+                        </span>
+                    @endif
+                    @if($applicantStatusFilter !== 'all')
+                        <span class="badge bg-success">
+                            {{ __('words.Application') }}: {{ ucfirst(str_replace('_', ' ', __('words.' . $applicantStatusFilter))) }}
+                            <button type="button" class="btn-close btn-close-white ms-1"
+                                    wire:click="$set('applicantStatusFilter', 'all')" style="font-size: 0.6em;"></button>
                         </span>
                     @endif
                 </div>
@@ -65,6 +83,9 @@
 
     <div class="offers-grid">
         @forelse($jobs as $job)
+            @php
+                $applicant = $job->applicants->first(); // Get the user's application
+            @endphp
             <div class="job-offer-card {{ in_array($job->id, $expandedCards) ? 'expanded' : '' }}" wire:key="job-{{ $job->id }}">
 
                 <!-- Card Header -->
@@ -106,25 +127,10 @@
                     {{ Str::limit($job->description, 120) }}
                 </div>
 
-                <!-- Status Badge -->
+                <!-- Application Status Badge -->
                 <div class="job-status">
-                    @if($job->close)
-                        <span class="status-badge closed">
-                            <i class="fas fa-lock"></i>
-                            {{ __('words.Closed') }}
-                        </span>
-                    @else
-                        @if($job->isApplied())
-                            <span class="status-badge open">
-                                <i class="fas fa-check-circle"></i>
-                                {{ __('words.Already Submitted') }}
-                            </span>
-                        @else
-                            <span class="status-badge open">
-                                <i class="bx bx-edit"></i>
-                                {{ __('words.Open for Applications') }}
-                            </span>
-                        @endif
+                    @if($applicant)
+                        <x-badge.applicant :status="$applicant->status" :icon="$applicant->getIcon()"></x-badge.applicant>
                     @endif
                 </div>
 
@@ -137,11 +143,32 @@
                         </div>
 
                         <div class="job-actions">
-                            @if(!$job->close && !$job->isApplied())
-                                <a href="{{ route('dashboard.applicant.jobs.show', $job->id) }}" class="apply-btn text-decoration-none">
-                                    <i class="fas fa-paper-plane"></i>
-                                    {{ __('words.Apply Now') }}
-                                </a>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <!-- Download CV Button -->
+                                @if($applicant && $applicant->file)
+                                    <a href="{{ asset(@$applicant->file->fullpath) }}" class="btn btn-warning" download="CV.{{ $applicant->file->getType() }}">
+                                        <i class="fas fa-download"></i>
+                                        {{ __('words.Download') }}
+                                    </a>
+                                @endif
+
+                                <!-- Continue Application Button (only for waiting for answering status) -->
+                                @if($applicant && $applicant->status === 'waiting for answering')
+                                    <button class="btn btn-warning" wire:click="continueApplication({{ $job->id }})">
+                                        <i class="fas fa-arrow-right"></i>
+                                        {{ __('words.Continue Application') }}
+                                    </button>
+                                @endif
+                            </div>
+
+                            <!-- Application Date -->
+                            @if($applicant)
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock"></i>
+                                        {{ __('words.Applied') }}: {{ $applicant->created_at->diffForHumans() }}
+                                    </small>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -150,15 +177,15 @@
         @empty
             <div class="no-jobs-message">
                 <i class="fas fa-briefcase"></i>
-                @if($search || $statusFilter !== 'all')
-                    <h3>{{ __('words.No Jobs Found') }}</h3>
+                @if($search || $statusFilter !== 'all' || $applicantStatusFilter !== 'all')
+                    <h3>{{ __('words.No Applications Found') }}</h3>
                     <p>{{ __('words.Try adjusting your filters or search terms') }}</p>
                     <button class="btn btn-primary mt-2" wire:click="clearFilters">
                         {{ __('words.Clear') }}
                     </button>
                 @else
-                    <h3>{{ __('words.No Job Offers Available') }}</h3>
-                    <p>{{ __('words.Check back later for new opportunities') }}</p>
+                    <h3>{{ __('words.No Applications Yet') }}</h3>
+                    <p>{{ __('words.You haven\'t applied to any jobs yet') }}</p>
                 @endif
             </div>
         @endforelse

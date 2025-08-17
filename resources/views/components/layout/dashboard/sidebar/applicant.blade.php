@@ -22,6 +22,10 @@
             <i class="fas fa-briefcase"></i>
             {{ __('words.Job Offers') }}
         </a>
+        <a href="{{ route('dashboard.applicant.orders.index') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.orders.index') ? "active":"" }}">
+            <i class="fas fa-clipboard-check"></i>
+            {{ __('words.My Orders') }}
+        </a>
     </div>
 
     <div class="sidebar-section">

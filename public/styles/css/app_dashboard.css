@@ -671,6 +671,29 @@ body.ar .dropdown-menu {
     --shadow: 0 1px 0 rgba(0,0,0,0.02);
 }
 
+.btn-warning {
+    color: #ffffff !important;
+    background-color: #f39d52 !important;
+    border-color: #f39d52 !important;
+}
+.btn-warning:hover {
+    color: #e6e6e6 !important;
+    background-color: #f39d52 !important;
+    border-color: #f39d52 !important;
+}
+
+.btn-warning:focus,
+.btn-warning.focus {
+    box-shadow: 0 0 0 0.25rem rgba(255,193,7,.5) !important;
+}
+
+.btn-warning.disabled,
+.btn-warning:disabled {
+    color: #212529;
+    background-color: #f39d52 !important;
+    border-color: #f39d52 !important;
+    opacity: 0.65;
+}
 .quiet-btn{
     background: var(--bg);
     color: var(--fg);
