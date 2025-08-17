@@ -297,4 +297,10 @@ return [
     'Jobs' => 'Jobs',
     'deleted' => 'deleted',
     "You haven't applied to any jobs yet" => "You haven't applied to any jobs yet",
+    "my_applications" => "my_applications",
+    "pending_applications" => "pending_applications",
+    "approved_applications" => "approved_applications",
+    "rejected_applications" => "rejected_applications",
+    "waiting_applications" => "waiting_applications",
+    "success_rate" => "success_rate",
 ];
