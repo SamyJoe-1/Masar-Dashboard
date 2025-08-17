@@ -4,6 +4,7 @@
         <div class="sidebar-logo">
             <a href="/home">
                 <img src="{{ asset('assets/images/logo.png') }}" width="170">
+                <img src="{{ asset('assets/images/logo_oman.svg') }}" width="170">
             </a>
         </div>
     </div>

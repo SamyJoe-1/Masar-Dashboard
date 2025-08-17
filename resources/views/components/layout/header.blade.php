@@ -1,7 +1,8 @@
 <header>
     <nav class="container">
         <a href="/" class="logo">
-            <img src="{{ asset('assets/images/logo2.png') }}" width="100">
+            <img src="{{ asset('assets/images/logo2.png') }}" width="130">
+            <img src="{{ asset('assets/images/logo_oman.svg') }}" width="140">
         </a>
         <ul class="nav-links">
             <li><a href="/#features">{{ __("words.Features") }}</a></li>
