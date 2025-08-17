@@ -39,6 +39,12 @@ button{
 nav.container{
     height: 75px;
 }
+.d-flex{
+    display: flex;
+}
+.d-flex.gap-3 {
+    gap: 1rem;
+}
 
 /* Header */
 header {
@@ -404,6 +410,7 @@ nav {
 .process {
     padding: 8rem 0;
     background: white;
+    max-width: 94%;
 }
 
 .process-steps {
@@ -541,4 +548,260 @@ footer {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Add these styles to your existing app.css - don't replace anything, just add these */
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--dark);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+/* Mobile Sidebar Overlay */
+.mobile-sidebar-overlay {
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.mobile-sidebar-overlay + .active {
+    position: fixed;
+    display: block;
+}
+
+.mobile-sidebar-overlay.active {
+    opacity: 1;
+}
+
+/* Mobile Sidebar */
+.mobile-sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 380px;
+    height: 100vh;
+    background: white;
+    z-index: 1999;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.mobile-sidebar.active {
+    left: 0;
+}
+
+.mobile-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-sidebar-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--dark);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobile-nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-nav-links li {
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-nav-links a {
+    display: block;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+
+.mobile-nav-links a:hover {
+    background-color: #f8fafc;
+    color: #3464b0;
+}
+
+.mobile-auth-section {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: start;
+    padding: 1rem;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+}
+
+.mobile-auth-section .btn-primary-2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Update the responsive section */
+@media (max-width: 1150px) {
+    .nav-links a {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 1050px) {
+    .btn-lang{
+        text-wrap-mode: nowrap;
+        display: flex;
+        height: 35px;
+    }
+    html[dir=rtl] .btn-lang:not(#langSwitcher){
+        margin-left: 20px;
+    }
+    html[dir=ltr] .btn-lang:not(#langSwitcher){
+        margin-right: 20px;
+    }
+    /* Show mobile menu toggle */
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* Show mobile sidebar elements */
+    .mobile-sidebar-overlay + .active,
+    .mobile-sidebar {
+        display: block;
+    }
+
+    /* Hide desktop navigation */
+    .nav-links {
+        display: none;
+    }
+
+    /* Adjust nav container for mobile */
+    nav {
+        justify-content: space-between;
+    }
+
+    .beside-nav-items {
+        gap: 1rem;
+    }
+
+    /* Hero adjustments */
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .features-grid,
+    .process-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    /* Container padding adjustment for mobile */
+    .container {
+        padding: 0 15px;
+    }
+}
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+
+    .feature-card,
+    .process-step {
+        padding: 2rem 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .hero-dashboard {
+        padding: 1.5rem;
+    }
+
+    .upload-zone {
+        padding: 2rem 1rem;
+    }
+}
+@media (max-width: 674px) {
+    #langSwitcher{
+        display: none;
+    }
+}
+@media (max-width: 500px) {
+    #dashboardBtn{
+        display: none;
+    }
+}
+@media (max-width: 480px) {
+
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    .btn-lang{
+        text-wrap-mode: nowrap;
+        display: flex;
+        height: 40px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .btn-primary-2 {
+        padding: 0.5rem 1.5rem !important;
+        font-size: 1rem;
+    }
+
+    .btn-lang {
+        padding: 0.4rem 1rem;
+        font-size: 1rem;
+    }
+
+    .mobile-sidebar {
+        width: 100%;
+        left: -100%;
+    }
 }

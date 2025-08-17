@@ -30,17 +30,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Upload zone drag and drop simulation
-const uploadZone = document.querySelector('.upload-zone');
-uploadZone.addEventListener('click', function() {
-    // Simulate file upload
-    this.style.background = 'rgba(255, 255, 255, 0.1)';
-    this.innerHTML = '<div class="upload-icon">⏳</div><h4>جاري المعالجة...</h4>';
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadZone = document.querySelector('.upload-zone');
+    if (uploadZone) {
+        uploadZone.addEventListener('click', function() {
+            this.style.background = 'rgba(255, 255, 255, 0.1)';
+            this.innerHTML = '<div class="upload-icon">⏳</div><h4>جاري المعالجة...</h4>';
 
-    setTimeout(() => {
-        this.innerHTML = '<div class="upload-icon">✅</div><h4>تم الرفع بنجاح!</h4><p>156 ملف تم تحليله</p>';
-        this.style.background = 'rgba(16, 185, 129, 0.1)';
-    }, 2000);
+            setTimeout(() => {
+                this.innerHTML = '<div class="upload-icon">✅</div><h4>تم الرفع بنجاح!</h4><p>156 ملف تم تحليله</p>';
+                this.style.background = 'rgba(16, 185, 129, 0.1)';
+            }, 2000);
+        });
+    }
 });
+
 
 // Scroll animations
 const observerOptions = {
@@ -90,3 +94,38 @@ const heroObserver = new IntersectionObserver((entries) => {
 });
 
 heroObserver.observe(document.querySelector('.hero'));
+function toggleMobileMenu() {
+    console.log('12')
+    const sidebar = document.getElementById('mobileSidebar');
+    const overlay = document.getElementById('mobileOverlay');
+
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+    const sidebar = document.getElementById('mobileSidebar');
+    const overlay = document.getElementById('mobileOverlay');
+
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300);
+}
+
+// Close mobile menu when clicking on links with anchors
+document.addEventListener('DOMContentLoaded', function() {
+    const anchorLinks = document.querySelectorAll('a[href*="#"]');
+    anchorLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 1050) {
+                closeMobileMenu();
+            }
+        });
+    });
+});
