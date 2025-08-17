@@ -6,8 +6,8 @@
 
 @section('content')
     <div class="page-header">
-        <h1 class="page-title">{{ __('words.welcome_applicant_title') }}</h1>
-        <p class="page-subtitle">{{ __('words.welcome_applicant_subtitle') }}</p>
+        <h1 class="page-title">{{ __('words.welcome_title') }}</h1>
+        <p class="page-subtitle">{{ __('words.welcome_subtitle') }}</p>
     </div>
 
     <!-- Filter Bar -->
