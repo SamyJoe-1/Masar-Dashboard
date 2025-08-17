@@ -21,4 +21,9 @@ class JobApp extends Model
     ];
 
     protected $table = 'job_apps';
+
+    public function isApplied()
+    {
+        return Applicant::where('job_id', @$this->id)->where('user_id', @auth()->id())->count();
+    }
 }

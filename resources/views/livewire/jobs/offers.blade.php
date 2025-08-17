@@ -1,8 +1,7 @@
 <div class="job-offers-container">
     <div class="offers-grid">
         @forelse($jobs as $job)
-            <div class="job-offer-card {{ in_array($job->id, $expandedCards) ? 'expanded' : '' }}"
-                 wire:key="job-{{ $job->id }}">
+            <div class="job-offer-card {{ in_array($job->id, $expandedCards) ? 'expanded' : '' }}" wire:key="job-{{ $job->id }}">
 
                 <!-- Card Header -->
                 <div class="job-card-header" wire:click="toggleCard({{ $job->id }})">
@@ -42,10 +41,17 @@
                             {{ __('words.Closed') }}
                         </span>
                     @else
-                        <span class="status-badge open">
-                            <i class="fas fa-check-circle"></i>
-                            {{ __('words.Open for Applications') }}
-                        </span>
+                        @if($job->isApplied())
+                            <span class="status-badge open">
+                                <i class="fas fa-check-circle"></i>
+                                {{ __('words.Already Submitted') }}
+                            </span>
+                        @else
+                            <span class="status-badge open">
+                                <i class="bx bx-edit"></i>
+                                {{ __('words.Open for Applications') }}
+                            </span>
+                        @endif
                     @endif
                 </div>
 
@@ -58,7 +64,7 @@
                         </div>
 
                         <div class="job-actions">
-                            @if(!$job->close)
+                            @if(!$job->close && !$job->isApplied())
                                 <a href="{{ route('dashboard.applicant.jobs.show', $job->id) }}" class="apply-btn text-decoration-none">
                                     <i class="fas fa-paper-plane"></i>
                                     {{ __('words.Apply Now') }}

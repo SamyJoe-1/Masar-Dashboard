@@ -269,4 +269,9 @@ return [
     'Drag & Drop your resume here' => 'Drag & Drop your resume here',
     'Submit Application' => 'Submit Application',
     'Submitting' => 'Submitting',
+    'Application Already Submitted' => 'Application Already Submitted',
+    'You have already applied to this job position. You will be notified about the status of your application.' => 'You have already applied to this job position. You will be notified about the status of your application.',
+    'Back to Job Offers' => 'Back to Job Offers',
+    'Ready to upload' => 'Ready to upload',
+    'Already Submitted' => 'Already Submitted',
 ];

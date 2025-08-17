@@ -66,8 +66,8 @@ class Apply extends Component
     {
         // Check if job is still open
         if ($this->job->close) {
-            $this->dispatchBrowserEvent('swal', [
-                'type' => 'error',
+            $this->dispatch('swal', [
+                'icon' => 'error',
                 'title' => __('words.Application Failed'),
                 'text' => __('words.This job is no longer accepting applications.'),
             ]);
@@ -76,8 +76,8 @@ class Apply extends Component
 
         // Check if user already applied
         if ($this->hasApplied) {
-            $this->dispatchBrowserEvent('swal', [
-                'type' => 'warning',
+            $this->dispatch('swal', [
+                'icon' => 'warning',
                 'title' => __('words.Already Applied'),
                 'text' => __('words.You have already applied to this job.'),
             ]);
@@ -89,35 +89,52 @@ class Apply extends Component
         try {
             $this->isUploading = true;
 
-            // Store the resume file
-            $resumePath = $this->resume->store('resumes', 'public');
+            // Generate UUID for the folder
+            $uuid = \Str::uuid();
+
+            // Get original filename
+            $originalName = $this->resume->getClientOriginalName();
+
+            // Store the resume file in uploads/<uuid>/<filename>
+            $resumePath = $this->resume->storeAs("uploads/{$uuid}", $originalName, 'public');
+
+            // Create File record
+            $file = \App\Models\File::create([
+                'name' => $originalName,
+                'path' => $resumePath,
+                'fullpath' => "storage/$resumePath",
+                'type' => $this->resume->getMimeType(),
+                'size' => $this->resume->getSize(),
+            ]);
 
             // Create the application
             Applicant::create([
                 'job_id' => $this->jobId,
                 'user_id' => Auth::id(),
-                'resume_path' => $resumePath,
-                'applied_at' => now(),
+                'file_id' => @$file->id,
+                'information' => null,
+                'processing' => true,
+                'answering' => false,
             ]);
 
             $this->isUploading = false;
 
             // Success alert and redirect
-            $this->dispatchBrowserEvent('swal', [
-                'type' => 'success',
+            $this->dispatch('swal', [
+                'icon' => 'success',
                 'title' => __('words.Application Submitted'),
                 'text' => __('words.Your application has been submitted successfully!'),
                 'confirmButtonText' => __('words.OK'),
             ]);
 
             // Redirect after 2 seconds
-            $this->dispatchBrowserEvent('redirect-after-success');
+            $this->dispatch('redirect-after-success');
 
         } catch (\Exception $e) {
             $this->isUploading = false;
 
-            $this->dispatchBrowserEvent('swal', [
-                'type' => 'error',
+            $this->dispatch('swal', [
+                'icon' => 'error',
                 'title' => __('words.Application Failed'),
                 'text' => __('words.Something went wrong. Please try again.'),
             ]);

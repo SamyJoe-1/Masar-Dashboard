@@ -18,7 +18,7 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.jobs') }}</div>
-        <a href="{{ route('dashboard.applicant.jobs.index') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicants.jobs.index') ? "active":"" }}">
+        <a href="{{ route('dashboard.applicant.jobs.index') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.jobs.index') ? "active":"" }}">
             <i class="fas fa-briefcase"></i>
             {{ __('words.Job Offers') }}
         </a>

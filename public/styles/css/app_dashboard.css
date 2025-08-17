@@ -539,7 +539,7 @@ body.en .sidebar-item.active {
 /* Arabic Layout */
 body.ar .sidebar-item:hover,
 body.ar .sidebar-item.active {
-    border-right-color: white;
+    border-right-color: #f39d52;
     border-left-color: transparent;
 }
 

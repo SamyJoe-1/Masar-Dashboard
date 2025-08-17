@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\Relations\HasMany\HasApplicants;
 use App\Traits\Relations\HasMany\HasJobApps;
 use App\Traits\User\Memberships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasJobApps, Memberships;
+    use HasFactory, Notifiable, HasJobApps, HasApplicants, Memberships;
 
     protected $fillable = [
         'name',

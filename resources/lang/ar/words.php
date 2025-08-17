@@ -269,4 +269,9 @@ return [
     'Drag & Drop your resume here' => 'اسحب وارفق سيرتك الذاتية هنا',
     'Submit Application' => 'تأكيد الطلب',
     'Submitting' => 'جارٍ التأكيد',
+    'Application Already Submitted' => 'لقد قمت بالتقديم بالفعل',
+    'You have already applied to this job position. You will be notified about the status of your application.' => 'لقد تقدمت بالفعل لهذه الوظيفة. سيتم إعلامك بحالة طلبك.',
+    'Back to Job Offers' => 'الرجوع الي عروض الوظائف',
+    'Ready to upload' => 'مستعد للتنزيل',
+    'Already Submitted' => 'تم التقديم',
 ];
