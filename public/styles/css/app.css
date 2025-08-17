@@ -36,6 +36,9 @@ button{
     margin: 0 auto;
     padding: 0 20px;
 }
+nav.container{
+    height: 75px;
+}
 
 /* Header */
 header {
