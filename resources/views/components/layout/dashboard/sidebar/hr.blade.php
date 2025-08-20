@@ -3,7 +3,6 @@
     <div class="sidebar-header">
         <div class="sidebar-logo">
             <a href="/home">
-                <img src="{{ asset('assets/images/logo.png') }}" width="170">
                 <img src="{{ asset('assets/images/logo_oman.svg') }}" width="170">
             </a>
         </div>
@@ -59,5 +58,8 @@
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             {{ __('words.logout') }}
         </a>
+    </div>
+    <div align="center">
+        <img src="{{ asset('assets/images/logo.png') }}" width="170">
     </div>
 </div>
