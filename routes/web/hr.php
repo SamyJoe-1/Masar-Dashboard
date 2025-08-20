@@ -5,7 +5,7 @@ use App\Http\Controllers\hr\ApplicantController;
 use App\Http\Controllers\hr\JobAppController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth', 'lang'], 'prefix' => 'dashboard/hr', 'as' => 'dashboard.hr.'], function () {
+Route::group(['middleware' => ['auth', 'hr', 'lang'], 'prefix' => 'dashboard/hr', 'as' => 'dashboard.hr.'], function () {
 
     //    HomeController
     Route::get('/', [HomeController::class, 'dashboard_hr'])->name('home');

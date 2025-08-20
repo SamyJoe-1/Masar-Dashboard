@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\LanguageSwitcher;
+use App\Http\Middleware\IsHR;
+use App\Http\Middleware\IsApplicant;
 use App\Providers\ObserverProvider;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -28,6 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'lang' => LanguageSwitcher::class,
+            'hr' => IsHR::class,
+            'applicant' => IsApplicant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

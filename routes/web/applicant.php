@@ -5,7 +5,7 @@ use App\Http\Controllers\applicant\JobAppController;
 use App\Http\Controllers\Guest\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth', 'lang'], 'prefix' => 'dashboard/applicant', 'as' => 'dashboard.applicant.'], function () {
+Route::group(['middleware' => ['auth', 'applicant', 'lang'], 'prefix' => 'dashboard/applicant', 'as' => 'dashboard.applicant.'], function () {
 
     //    HomeController
     Route::get('/', [HomeController::class, 'dashboard_applicant'])->name('home');

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileUploadController;
 
-Route::group(['controller' => FileUploadController::class, 'middleware' => ['auth', 'lang']], function () {
+Route::group(['controller' => FileUploadController::class, 'middleware' => ['auth', 'lang', 'hr']], function () {
     // Upload form
     Route::get('/upload', 'showUploadForm')->name('upload.form');
 
