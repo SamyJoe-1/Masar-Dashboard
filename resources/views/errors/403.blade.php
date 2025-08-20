@@ -8,14 +8,14 @@
 </head>
 <body>
 <!-- Navigation -->
-{{--<div class="nav-top">--}}
-{{--    <button class="nav-btn active" onclick="showPage('404')" id="nav-404">404</button>--}}
-{{--    <button class="nav-btn" onclick="showPage('500')" id="nav-500">500</button>--}}
-{{--    <button class="nav-btn" onclick="showPage('403')" id="nav-403">403</button>--}}
-{{--</div>--}}
+<div class="nav-top" style="visibility: hidden">
+    <button class="nav-btn" onclick="showPage('404')" id="nav-404">404</button>
+    <button class="nav-btn" onclick="showPage('500')" id="nav-500">500</button>
+    <button class="nav-btn active" onclick="showPage('403')" id="nav-403">403</button>
+</div>
 
 <!-- 404 Page - Space Theme -->
-<div class="page page-404 active" id="page-404">
+<div class="page page-404" id="page-404">
     <div class="stars"></div>
     <div class="particles" id="particles-404"></div>
     <div class="space-container">
@@ -40,7 +40,7 @@
 </div>
 
 <!-- 403 Page - Lock Theme -->
-<div class="page page-403" id="page-403">
+<div class="page page-403 active" id="page-403">
     <div class="particles" id="particles-403"></div>
     <div class="lock-container">
         <div class="lock-icon">
