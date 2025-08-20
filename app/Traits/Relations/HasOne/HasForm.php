@@ -11,4 +11,9 @@ trait HasForm
     {
         return $this->hasMany(ApplicantForm::class);
     }
+
+    public function form(): HasOne
+    {
+        return $this->hasOne(ApplicantForm::class);
+    }
 }

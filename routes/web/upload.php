@@ -21,6 +21,9 @@ Route::group(['controller' => FileUploadController::class, 'middleware' => ['aut
 
     // Delete directory
     Route::delete('/directory/{directoryUuid}', 'deleteDirectory')->name('delete.directory');
+
+    // Check Limits
+    Route::get('/upload/check/limits', 'checkLimits')->name('upload.limits');
 });
 
 // Optional: Debug session route (if you want to keep sessions alive)

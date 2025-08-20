@@ -430,6 +430,7 @@ class FileUploader {
     }
 
     showError(message) {
+        console.log(message)
         Swal.fire({
             title: window.translations.process_failed,
             text: window.translations.share_issue,

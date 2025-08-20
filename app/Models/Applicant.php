@@ -23,7 +23,7 @@ class Applicant extends Model
         'answering' => 'boolean',
     ];
 
-    CONST STATUSES = ['pending', 'rejected', 'waiting for answering', 'approved'];
+    CONST STATUSES = ['pending', 'rejected', 'interview requested', 'waiting for answering', 'approved'];
 
     CONST APPROVAL_KEYS = [
         0 => '❌ مرفوض',
@@ -45,16 +45,14 @@ class Applicant extends Model
         switch ($this->status){
             case "pending":
                 return "bx bx-loader-alt bx-spin";
-                break;
             case "rejected":
                 return "bx bx-x";
-                break;
             case "waiting for answering":
                 return "bx bx-question-mark";
-                break;
+            case "interview requested":
+                return "bx bx-edit-alt";
             case "approved":
                 return "bx bx-check";
-                break;
             default:
                 return '';
         }

@@ -3,6 +3,11 @@
         <i class="bx bxs-phone bx-tada"></i>
         {{ __("words.Pending") }}
     </span>
+@elseif($status == 'interview requested')
+    <span class="badge badge-info">
+        <i class="bx bx-check"></i>
+        {{ __("words.Interview Requested") }}
+    </span>
 @elseif($status == 'waiting for answering' && $answering)
     <span class="badge badge-success">
         <i class="bx bx-check"></i>

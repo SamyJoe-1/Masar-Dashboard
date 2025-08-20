@@ -37,4 +37,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function sendPasswordResetNotification($token)
+    {
+        \Log::info('Sending reset notification to: ' . $this->email);
+
+        $this->notify(new \Illuminate\Auth\Notifications\ResetPassword($token));
+
+        \Log::info('Reset notification sent');
+    }
 }

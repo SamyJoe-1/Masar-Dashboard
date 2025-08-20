@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Guest\HomeController;
 use App\Http\Controllers\hr\ApplicantController;
 use App\Http\Controllers\hr\JobAppController;
 use Illuminate\Support\Facades\Route;

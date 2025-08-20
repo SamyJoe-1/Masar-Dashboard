@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guest;
 
+use App\Http\Controllers\Controller;
 use App\Models\ApplicantForm;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,14 @@ class ApplicantFormController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ApplicantForm $applicantForm)
+    public function show($interview)
     {
-        //
+        $interview = ApplicantForm::where('slug', $interview)->where('status', 'waiting')->first();
+        if (!$interview){
+            abort(404);
+        }
+        return view('dashboard.guest.interviewForm', compact('interview'));
+//        return view('dashboard.guest.interviewForm3', compact('interview'));
     }
 
     /**

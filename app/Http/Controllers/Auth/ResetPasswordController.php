@@ -27,16 +27,16 @@ class ResetPasswordController extends Controller
      * @var string
      */
 
-    public function showResetForm(Request $request, $token = null)
-    {
-        // Set the session variable
-        session(['path' => 'reset-confirm']);
-
-        return view('auth.aio')->with([
-            'token' => $token,
-            'email' => @$_GET['email'],
-        ]);
-    }
+//    public function showResetForm(Request $request, $token = null)
+//    {
+//        // Set the session variable
+//        session(['path' => 'reset-confirm']);
+//
+//        return view('auth.aio')->with([
+//            'token' => $token,
+//            'email' => @$_GET['email'],
+//        ]);
+//    }
 
     protected $redirectTo = '/home';
 }

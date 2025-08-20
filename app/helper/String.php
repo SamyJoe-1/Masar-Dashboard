@@ -33,3 +33,8 @@ function showLess($text, $length){
         return "$result...";
     }
 }
+
+function getRandUUID()
+{
+    return strtolower(Str::random(15) . '-' . Str::random(7) . '-' . Str::random(8));
+}

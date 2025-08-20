@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\StaticPagesController;
+use App\Http\Controllers\Guest\HomeController;
+use App\Http\Controllers\Guest\StaticPagesController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 

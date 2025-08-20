@@ -96,6 +96,7 @@ class Show extends Component
             'approved' => $allApplicants->where('status', 'approved')->count(),
             'rejected' => $allApplicants->where('status', 'rejected')->count(),
             'pending' => $allApplicants->where('status', 'pending')->count(),
+            'under_review' => $allApplicants->where('status', 'interview requested')->count(),
             'waiting' => $allApplicants->where('status', 'waiting for answering')->count(),
         ];
     }

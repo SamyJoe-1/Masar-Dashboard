@@ -153,11 +153,11 @@
                                 @endif
 
                                 <!-- Continue Application Button (only for waiting for answering status) -->
-                                @if($applicant && $applicant->status === 'waiting for answering')
-                                    <button class="btn btn-warning" wire:click="continueApplication({{ $job->id }})">
+                                @if($applicant && $applicant->status === 'interview requested')
+                                    <a href="{{ route('interview.show', @$applicant->form->slug) }}" class="btn btn-warning">
                                         <i class="fas fa-arrow-right"></i>
                                         {{ __('words.Continue Application') }}
-                                    </button>
+                                    </a>
                                 @endif
                             </div>
 

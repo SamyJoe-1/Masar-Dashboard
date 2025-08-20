@@ -77,6 +77,8 @@ return [
     'Pending' => 'Pending',
     'Waiting for Answering' => 'Waiting for Answering',
     'waiting for answering' => 'Waiting for Answering',
+    'Interview Requested' => 'Interview Requested',
+    'interview requested' => 'Interview Requested',
     'Applications' => 'Applications',
     'Unknown' => 'Unknown',
     'Score' => 'Score',

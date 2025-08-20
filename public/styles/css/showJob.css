@@ -151,6 +151,7 @@
 .stat-card.rejected .stat-icon { background: #ef4444; }
 .stat-card.pending .stat-icon { background: #f39d52; }
 .stat-card.waiting .stat-icon { background: #898989; }
+.stat-card.review .stat-icon { background: #278cc6; }
 
 .stat-number {
     font-size: 2.5rem;
@@ -284,6 +285,7 @@
 .status-badge.status-rejected { background: #fef2f2; color: #991b1b; }
 .status-badge.status-pending { background: #fef3c7; color: #92400e; }
 .status-badge.status-waiting-for-answering { background: #3464b0; color: #ffffff; }
+.status-badge.status-interview-requested { background: #278cc6; color: #ffffff; }
 
 .expand-icon {
     color: #3464b0;

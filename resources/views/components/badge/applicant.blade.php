@@ -13,6 +13,11 @@
         <i class="{{ @$icon }}"></i>
         {{ __("words.Waiting for Answering") }}
     </span>
+@elseif($status == 'interview requested')
+    <span class="badge badge-info">
+        <i class="{{ @$icon }}"></i>
+        {{ __("words.Interview Requested") }}
+    </span>
 @elseif($status == 'approved')
     <span class="badge badge-success">
         <i class="{{ @$icon }}"></i>

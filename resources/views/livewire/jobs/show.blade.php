@@ -69,10 +69,22 @@
             </div>
         </div>
 
-        @if($this->stats['waiting'] > 0)
+        @if($this->stats['under_review'] > 0)
             <div class="stat-card waiting">
                 <div class="stat-icon">
                     <i class="fas fa-hourglass-half"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number">{{ $this->stats['under_review'] }}</div>
+                    <div class="stat-label">{{ __('words.Interview Requested') }}</div>
+                </div>
+            </div>
+        @endif
+
+        @if($this->stats['waiting'] > 0)
+            <div class="stat-card review">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-pen-to-square"></i>
                 </div>
                 <div class="stat-content">
                     <div class="stat-number">{{ $this->stats['waiting'] }}</div>
