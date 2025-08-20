@@ -23,8 +23,8 @@ class LanguageSwitcher
         if (!empty($locale)) {
             app()->setLocale($locale);
         } else {
-            session()->put('locale', "en");  // Fixed: correct key 'locale'
-            app()->setLocale("en");
+            session()->put('locale', "ar");  // Fixed: correct key 'locale'
+            app()->setLocale("ar");
         }
         return $next($request);
     }
