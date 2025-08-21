@@ -9,10 +9,25 @@
         {{ __("words.Rejected") }}
     </span>
 @elseif($status == 'waiting for answering')
-    <span class="badge badge-primary">
-        <i class="{{ @$icon }}"></i>
-        {{ __("words.Waiting for Answering") }}
-    </span>
+    @empty($form)
+        <span class="badge badge-primary">
+            <i class="{{ @$icon }}"></i>
+            {{ __("words.Waiting for Answering") }}
+        </span>
+    @else
+        @if($form == 'answered')
+            <span class="badge badge-warning">
+                <i class="{{ @$icon }}"></i>
+                {{ __("words.pending") }}
+            </span>
+        @else
+            <span class="badge badge-danger">
+                <i class="{{ @$icon }}"></i>
+                {{ __("words.Not Answered") }}
+            </span>
+        @endif
+    @endempty
+
 @elseif($status == 'interview requested')
     <span class="badge badge-info">
         <i class="{{ @$icon }}"></i>

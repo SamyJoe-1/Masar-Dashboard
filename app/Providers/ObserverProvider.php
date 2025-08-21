@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Applicant;
+use App\Observers\ApplicantObserver;
 use Illuminate\Support\ServiceProvider;
 use App\Models\ApplicantForm;
 use App\Observers\ApplicantFormObserver;
@@ -22,5 +24,6 @@ class ObserverProvider extends ServiceProvider
     public function boot(): void
     {
         ApplicantForm::observe(ApplicantFormObserver::class);
+//        Applicant::observe(ApplicantObserver::class);
     }
 }

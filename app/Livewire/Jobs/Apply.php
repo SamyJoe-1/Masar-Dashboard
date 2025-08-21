@@ -102,7 +102,7 @@ class Apply extends Component
             $file = \App\Models\File::create([
                 'name' => $originalName,
                 'path' => $resumePath,
-                'fullpath' => "storage/$resumePath",
+                'fullpath' => "/storage/$resumePath",
                 'type' => $this->resume->getMimeType(),
                 'size' => $this->resume->getSize(),
             ]);

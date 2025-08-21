@@ -34,4 +34,5 @@ Route::group(['controller' => TestController::class, 'prefix' => 'test'], functi
     Route::get('3', 'test_3');
     Route::get('4', 'test_4');
     Route::get('5', 'test_5');
+    Route::get('6', 'test_6');
 });

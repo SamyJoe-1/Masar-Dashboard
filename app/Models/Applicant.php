@@ -14,11 +14,12 @@ class Applicant extends Model
     use BelongsJob, BelongsFile, BelongsUser, HasForm, queryScope;
 
     protected $fillable = [
-        'job_id', 'user_id', 'file_id', 'information', 'processing', 'answering', 'status'
+        'job_id', 'user_id', 'file_id', 'information', 'processing', 'answering', 'emails', 'status'
     ];
 
     protected $casts = [
         'information' => 'array',
+        'emails' => 'array',
         'processing' => 'boolean',
         'answering' => 'boolean',
     ];

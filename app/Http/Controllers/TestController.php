@@ -144,4 +144,11 @@ class TestController extends Controller
             ], 500);
         }
     }
+
+    public function test_6(){
+        $applicant = Applicant::find(23);
+        $applicant->status = 'rejected';
+        $applicant->save();
+        return 'Done';
+    }
 }

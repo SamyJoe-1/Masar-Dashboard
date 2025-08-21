@@ -195,9 +195,9 @@
         // Handle SweetAlert events
         window.addEventListener('swal', event => {
             swal({
-                title: event.detail.title,
-                text: event.detail.text,
-                icon: event.detail.type,
+                title: event.detail[0].title,
+                text: event.detail[0].text,
+                icon: event.detail[0].icon,
                 button: event.detail.confirmButtonText || 'OK',
             });
         });

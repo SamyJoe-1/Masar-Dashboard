@@ -306,4 +306,12 @@ return [
     "waiting_applications" => "Waiting Applications",
     "success_rate" => "Success Rate",
     "of_my_applications" => "of my Applications",
+    'Application Failed' => 'Application Failed',
+    'This job is no longer accepting applications.' => 'This job is no longer accepting applications.',
+    'Already Applied' => 'Already Applied',
+    'You have already applied to this job.' => 'You have already applied to this job.',
+    'Application Submitted' => 'Application Submitted',
+    'Your application has been submitted successfully!' => 'Your application has been submitted successfully!',
+    'Something went wrong. Please try again.' => 'Something went wrong. Please try again.',
+    'Start Session' => 'Start Session',
 ];

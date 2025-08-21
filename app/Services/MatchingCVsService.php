@@ -144,6 +144,51 @@ class MatchingCVsService
         }
     }
 
+    public function evaluateAnswers($url)
+    {
+        try {
+            $response = Http::asForm()
+                ->timeout(120)
+                ->post(config('app.evaluate_url') . '/extract-questions-from-cv-url', [
+                    'pdf_url' => url($url),
+                    'job_description' => $this->jobDescription,
+                    'language' => 'English',
+//                    'output_format' => 'json',
+//                    'debug' => true,
+                ]);
+
+            if ($response->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Interview Sent successfully',
+                    'data' => $response->json()
+                ]);
+            } else {
+                Log::error('Exception occurred during API (sendInterview)', [
+                    'message' => 'API request failed',
+                    'trace' => $response->body()
+                ]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'API request failed',
+                    'error' => $response->body(),
+                    'status' => $response->status()
+                ], 400);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Exception occurred during API (sendInterview)', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getData($response)
     {
         return json_decode($response->getContent(), true);

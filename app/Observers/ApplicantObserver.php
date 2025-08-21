@@ -3,15 +3,13 @@
 namespace App\Observers;
 
 use App\Log\LogHelper;
+use App\Mail\ApprovalNotificationMail;
 use App\Models\Applicant;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Http;
+use App\Mail\RejectionNotificationMail;
+use Illuminate\Support\Facades\Mail;
 
-class ApplicantObserver implements ShouldQueue
+class ApplicantObserver
 {
-    use InteractsWithQueue;
 
     /**
      * Handle the Applicant "created" event.
@@ -26,39 +24,44 @@ class ApplicantObserver implements ShouldQueue
      */
     public function updated(Applicant $applicant): void
     {
-        if ($applicant->isDirty('status') && $applicant->status == 'waiting for answering' && !$applicant->answering) {
-            try {
-                $applicants = Applicant::where('processing', true)->where('status', 'pending')->get();
+        if ($applicant->isDirty('status')) {
+            \Log::info('Status changed to: ' . $applicant->status);
+            @$email = $applicant->information['Email'];
+            if ($applicant->status == 'rejected') {
+                try {
+                    // Send rejection email if applicant has email
+                    if (!empty($email)) {
+                        Mail::send(new RejectionNotificationMail($applicant));
 
-                if ($applicants->count()) {
-                    $urls = [];
-                    $jobDescription = $applicants[0]->job_app->description ?? '-';
-                    foreach ($applicants as $applicant) {
-                        $urls[] = asset($applicant->file->fullpath);
-                        $http = Http::timeout(6000)->acceptJson();
+                        // Log the email sending
+                        LogHelper::logInfo("Rejection email sent to applicant ID: {$applicant->id}, Email: $email");
+                    } else {
+                        // Log if no email available
+                        LogHelper::logWarning("Cannot send rejection email to applicant ID: {$applicant->id} - No email address available");
                     }
 
-                    $response = $http->post(config('app.evaluate_url') . '/match-cvs-from-urls', [
-                        'job_description' => $jobDescription,
-                        'urls' => $urls,
-                        'output_format' => 'json',
-                        "debug" => 'true'
-                    ]);
-
-                    if (!empty($response->json()['results'])){
-                        foreach ($applicants as $key => $applicant) {
-                            $result = $response->json()['results'][$key] ?? [];
-                            $status = @$result['Score'] >= 50;
-                            $applicant->update([
-                                'information' => $result,
-                                'status' => $status ? 'waiting for answering' : 'rejected',
-                                'processing' => false,
-                            ]);
-                        }
-                    }
+                } catch (\Exception $e) {
+                    LogHelper::logError($e);
+                    // Log specific error about email sending failure
+                    LogHelper::logError("Failed to send rejection email to applicant ID: {$applicant->id} - " . $e->getMessage());
                 }
-            } catch (\Exception $e) {
-                LogHelper::logError($e);
+            } elseif ($applicant->status == 'approved') {
+                try {
+                    // Send approval email if applicant has email
+                    if (!empty($email)) {
+                        Mail::send(new ApprovalNotificationMail($applicant));
+
+                        // Log the email sending
+                        LogHelper::logInfo("Approval email sent to applicant ID: {$applicant->id}, Email: $email");
+                    } else {
+                        // Log if no email available
+                        LogHelper::logWarning("Cannot send approval email to applicant ID: {$applicant->id} - No email address available");
+                    }
+                } catch (\Exception $e) {
+                    LogHelper::logError($e);
+                    // Log specific error about email sending failure
+                    LogHelper::logError("Failed to send approval email to applicant ID: {$applicant->id} - " . $e->getMessage());
+                }
             }
         }
     }

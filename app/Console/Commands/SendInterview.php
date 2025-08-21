@@ -33,8 +33,8 @@ class SendInterview extends Command
         if ($applicants->count()) {
             $jobDescription = $applicants[0]->job_app->description ?? '-';
 
+            $this->info($applicants->count() . ' Applicant(s) caught');
             foreach ($applicants as $applicant) {
-                $this->info($applicants->count() . ' Applicant(s) caught');
 
                 // Use the service to make the API request
                 $matchingService = new MatchingCVsService($jobDescription);
