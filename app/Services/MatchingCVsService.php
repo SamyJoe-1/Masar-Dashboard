@@ -149,7 +149,7 @@ class MatchingCVsService
         try {
             $response = Http::asForm()
                 ->timeout(120)
-                ->post(rtrim(config('app.evaluate_url'), '/') . '/extract-questions-from-cv-url/', [
+                ->post(config('app.evaluate_url') . '/extract-questions-from-cv-url', [
                     'pdf_url' => url($url),
                     'job_description' => $this->jobDescription,
                     'language' => 'English',
