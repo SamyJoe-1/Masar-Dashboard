@@ -33,7 +33,7 @@ class MatchCVs extends Command
             $applicants = Applicant::where('processing', true)
                 ->where('status', 'pending')
                 ->with('job_app', 'file')
-                ->get();
+                ->get()->take(60);
 
             if ($applicants->count()) {
                 // Group applicants by job_app_id
