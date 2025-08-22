@@ -60,9 +60,9 @@ class EvaluateAnswers extends Command
                 $answers = json_encode($applicant->form->answers ?? "-");
 
                 // Debug the data being sent
-                $this->info("Debug - Applicant ID: {$applicant->id}");
-                $this->info("Debug - Job Description: " . (is_string($jobDescription) ? substr($jobDescription, 0, 100) . '...' : json_encode($jobDescription)));
-                $this->info("Debug - Answers: " . (is_array($answers) ? json_encode($answers) : $answers));
+//                $this->info("Debug - Applicant ID: {$applicant->id}");
+//                $this->info("Debug - Job Description: " . (is_string($jobDescription) ? substr($jobDescription, 0, 100) . '...' : json_encode($jobDescription)));
+//                $this->info("Debug - Answers: " . (is_array($answers) ? json_encode($answers) : $answers));
 
                 // Validate answers before sending
                 if (empty($answers) || $answers === "-") {
