@@ -47,6 +47,7 @@ class RejectionNotificationMail extends Mailable
                 'applicantPhone' => $this->applicant->information['Phone'] ?? $this->applicant->information['Phone'] ?? '',
                 'applicantId' => $this->applicant->id,
                 'jobTitle' => $this->applicant->job_app->title ?? '-',
+                'feedback' => @$this->applicant->feedback,
                 'companyName' => config('app.name', 'Our Company'),
             ]
         );

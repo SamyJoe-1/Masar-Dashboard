@@ -41,6 +41,30 @@
             border-radius: 5px;
             margin: 15px 0;
         }
+        .feedback-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .feedback-item {
+            margin-bottom: 15px;
+        }
+        .feedback-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .strengths .feedback-title {
+            color: #28a745;
+        }
+        .weaknesses .feedback-title {
+            color: #dc3545;
+        }
+        .overall-fit .feedback-title {
+            color: #007bff;
+        }
         .highlight {
             color: #dc3545;
             font-weight: bold;
@@ -62,7 +86,7 @@
 
     <div class="applicant-info">
         <h4>Application Details:</h4>
-{{--        <p><strong>Applicant ID:</strong> #{{ $applicantId }}</p>--}}
+        {{--        <p><strong>Applicant ID:</strong> #{{ $applicantId }}</p>--}}
         <p><strong>Position:</strong> {{ $jobTitle }}</p>
         <p><strong>Email:</strong> {{ $applicantEmail }}</p>
         @if($applicantPhone)
@@ -70,6 +94,39 @@
         @endif
         <p><strong>Status:</strong> <span class="highlight">Rejected</span></p>
     </div>
+
+    @if($feedback)
+        @php
+            $feedbackData = is_string($feedback) ? json_decode($feedback, true) : $feedback;
+        @endphp
+
+        @if($feedbackData)
+            <div class="feedback-section">
+                <h4>Application Feedback:</h4>
+
+                @if(isset($feedbackData['strengths']))
+                    <div class="feedback-item strengths">
+                        <div class="feedback-title">Strengths:</div>
+                        <p>{{ $feedbackData['strengths'] }}</p>
+                    </div>
+                @endif
+
+                @if(isset($feedbackData['weaknesses']))
+                    <div class="feedback-item weaknesses">
+                        <div class="feedback-title">Areas for Development:</div>
+                        <p>{{ $feedbackData['weaknesses'] }}</p>
+                    </div>
+                @endif
+
+                @if(isset($feedbackData['overall_fit_justification']))
+                    <div class="feedback-item overall-fit">
+                        <div class="feedback-title">Overall Assessment:</div>
+                        <p>{{ $feedbackData['overall_fit_justification'] }}</p>
+                    </div>
+                @endif
+            </div>
+        @endif
+    @endif
 
     <p>We want to emphasize that this decision does not reflect your capabilities or potential. The selection process is highly competitive, and we often have to make difficult choices among many qualified candidates.</p>
 
