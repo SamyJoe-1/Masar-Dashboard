@@ -30,66 +30,84 @@ class MatchCVs extends Command
     public function handle()
     {
         try {
-            $applicants = Applicant::where('processing', true)->where('status', 'pending')->get();
+            $applicants = Applicant::where('processing', true)
+                ->where('status', 'pending')
+                ->with('job_app', 'file')
+                ->get();
 
             if ($applicants->count()) {
-                $urls = [];
-                $jobDescription = $applicants[0]->job_app->description ?? '-';
+                // Group applicants by job_app_id
+                $groupedApplicants = $applicants->groupBy('job_id');
 
-                foreach ($applicants as $applicant) {
-                    $urls[] = asset($applicant->file->fullpath);
-                }
+                $this->info($applicants->count() . ' Total Applicant(s) found in ' . $groupedApplicants->count() . ' job(s)');
 
-                $this->info($applicants->count() . ' Applicant(s) caught');
+                foreach ($groupedApplicants as $jobAppId => $jobApplicants) {
+                    $jobDescription = $jobApplicants->first()->job_app->description ?? '-';
+                    $urls = [];
 
-                // Use the service to make the API request
-                $matchingService = new MatchingCVsService($jobDescription);
-                $response = $matchingService->matchCVs($urls);
-
-                $responseData = $matchingService->getData($response);
-
-                if ($responseData['success'] && !empty($responseData['data']['results'])) {
-                    $this->info('Response received. Updating applicants profiles...');
-
-                    // Create a lookup array for results by filename
-                    $resultsByFilename = [];
-                    foreach ($responseData['data']['results'] as $result) {
-                        $filename = $result['File'] ?? null;
-                        if ($filename) {
-                            $resultsByFilename[$filename] = $result;
-                        }
+                    foreach ($jobApplicants as $applicant) {
+                        $urls[] = asset($applicant->file->fullpath);
                     }
 
-                    foreach ($applicants as $applicant) {
-                        $fileName = $applicant->file->name;
+                    $this->info("Processing {$jobApplicants->count()} applicant(s) for Job ID: {$jobAppId}");
 
-                        // Find the matching result by filename
-                        $result = $resultsByFilename[$fileName] ?? [];
+                    // Use the service to make the API request for this job
+                    $matchingService = new MatchingCVsService($jobDescription);
+                    $response = $matchingService->matchCVs($urls);
 
-                        if (!empty($result)) {
-                            $status = @$result['Score'] >= 50;
-                            $applicant->update([
-                                'information' => $result,
-                                'status' => $status ? 'interview requested' : 'rejected',
-                                'processing' => false,
-                            ]);
-                            $this->info("Applicant ({$applicant->id}) updated successfully with score: " . ($result['Score'] ?? 'N/A'));
-                        } else {
-                            // Handle case where no matching result found
+                    $responseData = $matchingService->getData($response);
+
+                    if ($responseData['success'] && !empty($responseData['data']['results'])) {
+                        $this->info('Response received. Updating applicants profiles...');
+
+                        // Create a lookup array for results by filename
+                        $resultsByFilename = [];
+                        foreach ($responseData['data']['results'] as $result) {
+                            $filename = $result['File'] ?? null;
+                            if ($filename) {
+                                $resultsByFilename[$filename] = $result;
+                            }
+                        }
+
+                        foreach ($jobApplicants as $applicant) {
+                            $fileName = $applicant->file->name;
+
+                            // Find the matching result by filename
+                            $result = $resultsByFilename[$fileName] ?? [];
+
+                            if (!empty($result)) {
+                                $status = @$result['Score'] >= 50;
+                                $applicant->update([
+                                    'information' => $result,
+                                    'status' => $status ? 'interview requested' : 'rejected',
+                                    'processing' => false,
+                                ]);
+                                $this->info("Applicant ({$applicant->id}) updated successfully with score: " . ($result['Score'] ?? 'N/A'));
+                            } else {
+                                // Handle case where no matching result found
+                                $applicant->update([
+                                    'information' => null,
+                                    'status' => 'rejected',
+                                    'processing' => false,
+                                ]);
+                                $this->warn("No matching result found for applicant ({$applicant->id}) with file: {$fileName}");
+                            }
+                        }
+                    } else {
+                        // Mark all applicants in this job as failed
+                        foreach ($jobApplicants as $applicant) {
                             $applicant->update([
                                 'information' => null,
                                 'status' => 'rejected',
                                 'processing' => false,
                             ]);
-                            $this->warn("No matching result found for applicant ({$applicant->id}) with file: {$fileName}");
                         }
+                        $this->error('API request failed for Job ID ' . $jobAppId . ': ' . ($responseData['error'] ?? 'Unknown error'));
                     }
-                    $this->info('Process completed successfully');
-                    return Command::SUCCESS;
-                } else {
-                    $this->error('API request failed: ' . ($responseData['error'] ?? 'Unknown error'));
-                    return Command::FAILURE;
                 }
+
+                $this->info('Process completed successfully');
+                return Command::SUCCESS;
             } else {
                 $this->info('0 Applicants found');
                 return Command::SUCCESS;

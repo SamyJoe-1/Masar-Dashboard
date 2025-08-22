@@ -31,10 +31,10 @@ class SendInterview extends Command
         $applicants = Applicant::where('processing', false)->where('answering', false)->where('status', 'interview requested')->get();
 
         if ($applicants->count()) {
-            $jobDescription = $applicants[0]->job_app->description ?? '-';
 
             $this->info($applicants->count() . ' Applicant(s) caught');
             foreach ($applicants as $applicant) {
+                $jobDescription = $applicant->job_app->description ?? '-';
 
                 // Use the service to make the API request
                 $matchingService = new MatchingCVsService($jobDescription);
