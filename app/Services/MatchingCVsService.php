@@ -59,7 +59,7 @@ class MatchingCVsService
     public function matchCVs($urls)
     {
         try {
-            $http = Http::timeout(6000)->acceptJson();
+            $http = Http::timeout(60)->acceptJson();
             $response = $http->post(config('app.match_cv_url') . '/match-cvs-from-urls', [
                 'job_description' => $this->jobDescription,
                 'urls' => $urls,

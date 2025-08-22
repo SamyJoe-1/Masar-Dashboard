@@ -95,13 +95,13 @@ class MatchCVs extends Command
                         }
                     } else {
                         // Mark all applicants in this job as failed
-                        foreach ($jobApplicants as $applicant) {
-                            $applicant->update([
-                                'information' => null,
-                                'status' => 'rejected',
-                                'processing' => false,
-                            ]);
-                        }
+//                        foreach ($jobApplicants as $applicant) {
+//                            $applicant->update([
+//                                'information' => null,
+//                                'status' => 'rejected',
+//                                'processing' => false,
+//                            ]);
+//                        }
                         $this->error('API request failed for Job ID ' . $jobAppId . ': ' . ($responseData['error'] ?? 'Unknown error'));
                     }
                 }
