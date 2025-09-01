@@ -1,0 +1,29 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+ignore/
+
+# Environment variables
+.env
+
+# macOS system files
+.DS_Store
+
+# SQLite database files
+*.sqlite3
+
+# VSCode settings (optional)
+.vscode/
+
+# Streamlit cache
+.streamlit/
+
+# Jupyter notebook checkpoints (if used)
+.ipynb_checkpoints/
+
