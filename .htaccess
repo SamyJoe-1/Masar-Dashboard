@@ -1,0 +1,10 @@
+Options +FollowSymLinks -Indexes
+IndexIgnore *
+DirectoryIndex
+<IfModule mod_headers.c>
+ RequestHeader set X-Forwarded-Proto https
+</IfModule>
+<IfModule mod_rewrite.c>
+ RewriteEngine on
+RewriteRule ^(.*)$ http://0.0.0.0:8081/$1 [P]
+</IfModule>

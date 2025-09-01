@@ -1,0 +1,14 @@
+
+fastapi 
+python-dotenv
+pydantic>= 2.10.4
+langchain>=0.3.6
+langchain-google-vertexai >=2.0.26
+langchain-core>=0.3.66
+PyMuPDF>= 1.26.0
+uvicorn>=0.34.2
+tqdm>=4.67.1
+python-multipart>=0.0.20
+aiohttp>=3.8.0
+aiofiles>=23.0.0
+asgiref
