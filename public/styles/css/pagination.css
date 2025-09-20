@@ -1,0 +1,139 @@
+/* Flexbox utilities */
+.d-flex {
+    display: flex !important;
+}
+.gap-1{
+    gap: 0.5rem;
+}
+.gap-2{
+    gap: 0.8rem;
+}
+.gap-3{
+    gap: 1rem;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.flex-fill {
+    flex: 1 1 auto !important;
+}
+
+.flex-sm-fill {
+    flex: 1 1 auto !important;
+}
+
+.justify-items-center {
+    justify-items: center !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-sm-between {
+    justify-content: space-between !important;
+}
+
+.align-items-sm-center {
+    align-items: center !important;
+}
+
+/* Responsive utilities */
+@media (min-width: 576px) {
+    .d-sm-none {
+        display: none !important;
+    }
+
+    .d-sm-flex {
+        display: flex !important;
+    }
+
+    .flex-sm-fill {
+        flex: 1 1 auto !important;
+    }
+
+    .align-items-sm-center {
+        align-items: center !important;
+    }
+
+    .justify-content-sm-between {
+        justify-content: space-between !important;
+    }
+}
+
+.small.text-muted{
+    margin: 10px;
+}
+
+/* Simple Pagination */
+.pagination {
+    background: transparent;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    margin: 10px;
+    gap: 0;
+}
+
+.page-item.active .page-link {
+    background-color: #3464b0;
+    color: white;
+    border-color: #3464b0;
+}
+
+.page-item.disabled .page-link {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+.page-link {
+    display: block;
+    padding: 8px 12px;
+    color: #3464b0;
+    text-decoration: none;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+}
+
+.page-link:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+button.page-link {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button.page-link:disabled {
+    cursor: not-allowed;
+}
+
+/* Typography */
+.small {
+    font-size: 0.875em;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}

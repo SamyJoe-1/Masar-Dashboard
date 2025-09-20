@@ -1,0 +1,427 @@
+<?php
+
+return [
+    // About Page
+    'More About Us' => 'المزيد عنا',
+    'We are a team of specialists in artificial intelligence and recruitment, seeking a real revolution in the world of talent selection' => 'نحن فريق من المتخصصين في الذكاء الاصطناعي والتوظيف، نسعى لثورة حقيقية في عالم اختيار المواهب',
+    'Masar Story' => 'قصة مسار',
+    'In a world where growth is accelerating and companies\' needs for suitable talents are increasing, the idea of "Masar" was born from a simple and ambitious vision: making the recruitment process smarter, more efficient and accurate.' => 'في عالم يتسارع فيه النمو وتتزايد احتياجات الشركات للمواهب المناسبة، وُلدت فكرة "مسار" من رؤية بسيطة وطموحة: جعل عملية التوظيف أذكى وأكثر كفاءة ودقة.',
+    'Our journey began when we noticed that companies face major challenges in manually screening thousands of resumes, which takes a long time and carries the risk of losing suitable candidates amid this massive amount of data.' => 'بدأت رحلتنا عندما لاحظنا أن الشركات تواجه تحديات كبيرة في فحص آلاف السير الذاتية يدوياً، مما يستغرق وقتاً طويلاً ويحمل خطر فقدان المرشحين المناسبين وسط هذا الكم الهائل من البيانات.',
+    'Today, "Masar" stands as an advanced solution that combines the power of artificial intelligence with a deep understanding of local labor market needs, providing an unparalleled recruitment experience.' => 'اليوم، يقف "مسار" كحل متطور يجمع بين قوة الذكاء الاصطناعي والفهم العميق لاحتياجات سوق العمل المحلي، مقدماً تجربة توظيف لا مثيل لها.',
+    'Development and Innovation Journey' => 'رحلة التطوير والابتكار',
+    'Our Mission' => 'مهمتنا',
+    'Empowering companies and institutions to make smarter and faster recruitment decisions through advanced artificial intelligence technologies, while ensuring fairness and transparency in selection processes.' => 'تمكين الشركات والمؤسسات من اتخاذ قرارات توظيف أذكى وأسرع من خلال تقنيات الذكاء الاصطناعي المتقدمة، مع ضمان العدالة والشفافية في عمليات الاختيار.',
+    'Our Vision' => 'رؤيتنا',
+    'To become the first and most reliable choice for all companies in the region for screening and analyzing resumes, and to contribute to building a more efficient and fair job market.' => 'أن نصبح الخيار الأول والأكثر موثوقية لجميع الشركات في المنطقة لفحص وتحليل السير الذاتية، والمساهمة في بناء سوق عمل أكثر كفاءة وعدالة.',
+    'Our Core Values' => 'قيمنا الأساسية',
+    'Accuracy and Quality' => 'الدقة والجودة',
+    'We are committed to the highest standards of accuracy in analysis and continuously strive to improve the quality of our results' => 'نلتزم بأعلى معايير الدقة في التحليل ونسعى باستمرار لتحسين جودة نتائجنا',
+    'Trust and Transparency' => 'الثقة والشفافية',
+    'We build relationships based on mutual trust and complete clarity in all our dealings' => 'نبني العلاقات على أساس الثقة المتبادلة والوضوح الكامل في جميع تعاملاتنا',
+    'Continuous Innovation' => 'الابتكار المستمر',
+    'We keep up with the latest technological developments and continuously develop our solutions to meet our clients\' needs' => 'نواكب أحدث التطورات التكنولوجية ونطور حلولنا باستمرار لتلبية احتياجات عملائنا',
+    'Security and Privacy' => 'الأمان والخصوصية',
+    'We put the protection of our clients\' and candidates\' data at the forefront and apply the highest security standards' => 'نضع حماية بيانات عملائنا والمرشحين في المقدمة ونطبق أعلى معايير الأمان',
+    'Positive Impact' => 'التأثير الإيجابي',
+    'We strive to create a positive impact on the job market and improve the recruitment experience for everyone' => 'نسعى لخلق تأثير إيجابي على سوق العمل وتحسين تجربة التوظيف للجميع',
+    'Excellence in Service' => 'التميز في الخدمة',
+    'We provide exceptional customer service and put our clients\' satisfaction at the top of our priorities' => 'نقدم خدمة عملاء استثنائية ونضع رضا عملائنا في مقدمة أولوياتنا',
+    'Team' => 'الفريق',
+    'A group of experts and specialists in various fields' => 'مجموعة من الخبراء والمختصين في مختلف المجالات',
+    'Development and Technology Team' => 'فريق التطوير والتكنولوجيا',
+    'Engineers specialized in artificial intelligence, natural language processing and systems development' => 'مهندسون متخصصون في الذكاء الاصطناعي ومعالجة اللغات الطبيعية وتطوير الأنظمة',
+    '10+ developers' => '10+ مطورين',
+    '15+ years average experience' => '15+ سنة خبرة متوسطة',
+    '5+ AI experts' => '5+ خبراء ذكاء اصطناعي',
+    'Human Resources Team' => 'فريق الموارد البشرية',
+    'Experts in recruitment and talent management who understand local and global market challenges' => 'خبراء في التوظيف وإدارة المواهب يفهمون تحديات السوق المحلي والعالمي',
+    '8+ HR experts' => '8+ خبراء موارد بشرية',
+    '20+ years combined experience' => '20+ سنة خبرة مجمعة',
+    '500+ companies dealt with' => '500+ شركة تعاملنا معها',
+    'Customer Service Team' => 'فريق خدمة العملاء',
+    'Specialists in providing support and ensuring the best customer experience around the clock' => 'متخصصون في تقديم الدعم وضمان أفضل تجربة عملاء على مدار الساعة',
+    '6+ consultants' => '6+ مستشارين',
+    '24/7 support' => 'دعم 24/7',
+    '98% customer satisfaction' => '98% رضا العملاء',
+    'Our Achievements' => 'إنجازاتنا',
+    'Masar Launch' => 'إطلاق مسار',
+    'Official platform launch after two years of research and development' => 'الإطلاق الرسمي للمنصة بعد عامين من البحث والتطوير',
+    '10,000 resumes' => '10,000 سيرة ذاتية',
+    'We reached processing our first 10,000 resumes successfully' => 'وصلنا لمعالجة أول 10,000 سيرة ذاتية بنجاح',
+    '100+ companies' => '100+ شركة',
+    'More than 100 companies joined our distinguished clients list' => 'أكثر من 100 شركة انضمت لقائمة عملائنا المميزين',
+    'Regional Expansion' => 'التوسع الإقليمي',
+    'Beginning of expansion to serve companies in Gulf countries' => 'بداية التوسع لخدمة الشركات في دول الخليج',
+    'Technologies Used' => 'التقنيات المستخدمة',
+    'Artificial Intelligence' => 'الذكاء الاصطناعي',
+    'Natural Language Processing' => 'معالجة اللغات الطبيعية',
+    'Machine Learning' => 'التعلم الآلي',
+    'Neural Networks' => 'الشبكات العصبية',
+    'Semantic Analysis' => 'التحليل الدلالي',
+    'Security and Protection' => 'الأمان والحماية',
+    'AES-256 encryption' => 'تشفير AES-256',
+    'Server protection' => 'حماية الخوادم',
+    'Secure backup' => 'النسخ الاحتياطي الآمن',
+    'Continuous monitoring' => 'المراقبة المستمرة',
+    'Infrastructure' => 'البنية التحتية',
+    'Cloud computing' => 'الحوسبة السحابية',
+    'Parallel processing' => 'المعالجة المتوازية',
+    'Advanced databases' => 'قواعد البيانات المتقدمة',
+    'RESTful APIs' => 'واجهات برمجة RESTful',
+    'Join the Success Journey' => 'انضم لرحلة النجاح',
+    'Are you looking for smart solutions to improve the recruitment process in your company? We are here to help you achieve your goals' => 'هل تبحث عن حلول ذكية لتحسين عملية التوظيف في شركتك؟ نحن هنا لمساعدتك في تحقيق أهدافك',
+    'happy companies' => 'شركة سعيدة',
+    'resumes screened' => 'سيرة ذاتية فُحصت',
+    'results accuracy' => 'دقة النتائج',
+    'technical support' => 'دعم تقني',
+    'Try for Free' => 'جرب مجاناً',
+    'Contact Us' => 'اتصل بنا',
+
+    // Contact Page
+    'We are here to help and answer all your inquiries about Masar platform' => 'نحن هنا للمساعدة والإجابة على جميع استفساراتك حول منصة مسار',
+    'Contact Information' => 'معلومات الاتصال',
+    'Email' => 'البريد الإلكتروني',
+    'Phone' => 'الهاتف',
+    'Address' => 'العنوان',
+    ' Muscat, Al-Khoudh 1334, OM' => 'مسقط، الخوض 1334، عُمان',
+    'King Fahd District, Prince Mohammed bin Abdulaziz Street' => 'حي الملك فهد، شارع الأمير محمد بن عبدالعزيز',
+    'Working Hours' => 'ساعات العمل',
+    'Sunday - Thursday: 9:00 AM - 6:00 PM' => 'الأحد - الخميس: 9:00 ص - 6:00 م',
+    'Friday: Closed' => 'الجمعة: مغلق',
+    'All The Time' => 'متاح دائما',
+    'Send us a message' => 'أرسل لنا رسالة',
+    'Full Name' => 'الاسم الكامل',
+    'Phone Number' => 'رقم الهاتف',
+    'Subject' => 'الموضوع',
+    'Choose Subject' => 'اختر الموضوع',
+    'General Inquiry' => 'استفسار عام',
+    'Technical Support' => 'الدعم التقني',
+    'Billing and Payment' => 'الفواتير والدفع',
+    'Partnerships' => 'الشراكات',
+    'Other' => 'أخرى',
+    'Message' => 'الرسالة',
+    'Write your message here...' => 'اكتب رسالتك هنا...',
+    'Send Message' => 'إرسال الرسالة',
+    'Frequently Asked Questions' => 'الأسئلة الشائعة',
+    'You may find the answer to your question here before contacting us' => 'قد تجد إجابة سؤالك هنا قبل التواصل معنا',
+    'How long does the resume screening process take?' => 'كم من الوقت تستغرق عملية فحص السير الذاتية؟',
+    'Usually the process of screening hundreds of resumes takes only 5-10 minutes' => 'عادة ما تستغرق عملية فحص مئات السير الذاتية 5-10 دقائق فقط',
+    'Is the data safe and protected?' => 'هل البيانات آمنة ومحمية؟',
+    'Yes, we use the latest encryption technologies to ensure complete protection of candidate data' => 'نعم، نستخدم أحدث تقنيات التشفير لضمان الحماية الكاملة لبيانات المرشحين',
+    'Can resumes in English be screened?' => 'هل يمكن فحص السير الذاتية باللغة الإنجليزية؟',
+    'Absolutely, the platform supports screening resumes in both Arabic and English' => 'بالطبع، المنصة تدعم فحص السير الذاتية باللغتين العربية والإنجليزية',
+    'More Questions' => 'المزيد من الأسئلة',
+
+    // FAQ Page
+    'Answers to the most frequently asked questions about Masar resume screening platform' => 'إجابات على الأسئلة الأكثر شيوعاً حول منصة مسار لفحص السير الذاتية',
+    'Search in FAQ...' => 'ابحث في الأسئلة الشائعة...',
+    'All Questions' => 'جميع الأسئلة',
+    'General' => 'عام',
+    'Technical' => 'تقني',
+    'Pricing' => 'الأسعار',
+    'Security' => 'الأمان',
+    'General Questions' => 'الأسئلة العامة',
+    'What is Masar platform and how does it work?' => 'ما هي منصة مسار وكيف تعمل؟',
+    'Masar is a smart platform that uses artificial intelligence technologies to screen and analyze resumes. The platform uploads hundreds of resumes, analyzes them automatically, and matches them with job requirements to provide a comprehensive report of the best candidates ranked by suitability.' => 'مسار هي منصة ذكية تستخدم تقنيات الذكاء الاصطناعي لفحص وتحليل السير الذاتية. تقوم المنصة برفع مئات السير الذاتية وتحليلها تلقائياً ومطابقتها مع متطلبات الوظيفة لتقديم تقرير شامل بأفضل المرشحين مرتبين حسب المناسبة.',
+    'What file types are supported?' => 'ما هي أنواع الملفات المدعومة؟',
+    'The platform supports the following formats: PDF, DOC, DOCX. These are the most common and used resume formats in the job market.' => 'المنصة تدعم الصيغ التالية: PDF, DOC, DOCX. وهي أكثر صيغ السير الذاتية شيوعاً واستخداماً في سوق العمل.',
+    'Technical Questions' => 'الأسئلة التقنية',
+    'What is the accuracy of the analysis results?' => 'ما هي دقة نتائج التحليل؟',
+    'The analysis system accuracy reaches 95% thanks to using advanced machine learning algorithms. The system continuously improves through learning from data and regular updates.' => 'تصل دقة نظام التحليل إلى 95% بفضل استخدام خوارزميات التعلم الآلي المتقدمة. النظام يتحسن باستمرار من خلال التعلم من البيانات والتحديثات المنتظمة.',
+    'How are skills and experiences analyzed?' => 'كيف يتم تحليل المهارات والخبرات؟',
+    'The system uses Natural Language Processing (NLP) techniques to extract and analyze skills and experiences from texts, then compares them with job requirements and calculates the match score for each candidate.' => 'يستخدم النظام تقنيات معالجة اللغة الطبيعية (NLP) لاستخراج وتحليل المهارات والخبرات من النصوص، ثم يقارنها مع متطلبات الوظيفة ويحسب درجة التطابق لكل مرشح.',
+    'Can evaluation criteria be customized?' => 'هل يمكن تخصيص معايير التقييم؟',
+    'Yes, evaluation criteria can be customized according to each job requirements. You can specify required skills, years of experience, educational qualifications, and any other criteria specific to the job.' => 'نعم، يمكن تخصيص معايير التقييم حسب متطلبات كل وظيفة. يمكنك تحديد المهارات المطلوبة وسنوات الخبرة والمؤهلات التعليمية وأي معايير أخرى خاصة بالوظيفة.',
+    'What if the resume is unclear or has complex formatting?' => 'ماذا لو كانت السيرة الذاتية غير واضحة أو لها تنسيق معقد؟',
+    'The system is designed to handle different resume formats. In case of difficulty reading a specific file, it will be marked in the report with clarification of the problem type.' => 'النظام مصمم للتعامل مع صيغ السير الذاتية المختلفة. في حالة صعوبة قراءة ملف معين، سيتم تمييزه في التقرير مع توضيح نوع المشكلة.',
+    'Pricing and Plans' => 'الأسعار والخطط',
+    'Is there a free trial version available?' => 'هل يوجد إصدار تجريبي مجاني؟',
+    'Yes, we provide free screening for a limited number of resumes so you can try the platform and evaluate the quality of results before subscribing to paid plans.' => 'نعم، نوفر فحص مجاني لعدد محدود من السير الذاتية حتى تتمكن من تجربة المنصة وتقييم جودة النتائج قبل الاشتراك في الخطط المدفوعة.',
+    'What are the available plans?' => 'ما هي الخطط المتاحة؟',
+    'We offer several plans to suit different needs: Basic plan for small companies, Advanced plan for medium companies, and Enterprise plan for large companies and government institutions.' => 'نوفر عدة خطط لتناسب الاحتياجات المختلفة: الخطة الأساسية للشركات الصغيرة، والخطة المتقدمة للشركات المتوسطة، وخطة المؤسسات للشركات الكبيرة والمؤسسات الحكومية.',
+    'Are there discounts for intensive use?' => 'هل توجد خصومات للاستخدام المكثف؟',
+    'Yes, we offer progressive discounts for companies that use the platform intensively. The more resumes screened monthly, the lower the price per screening.' => 'نعم، نوفر خصومات تدريجية للشركات التي تستخدم المنصة بكثافة. كلما زاد عدد السير الذاتية المفحوصة شهرياً، قل السعر للفحص الواحد.',
+    'Can I cancel the subscription at any time?' => 'هل يمكنني إلغاء الاشتراك في أي وقت؟',
+    'Yes, you can cancel the subscription at any time without any additional fees. The subscription will remain active until the end of the paid period then will be automatically stopped.' => 'نعم، يمكنك إلغاء الاشتراك في أي وقت دون أي رسوم إضافية. سيبقى الاشتراك نشطاً حتى نهاية الفترة المدفوعة ثم يتوقف تلقائياً.',
+    'Do you keep copies of resumes?' => 'هل تحتفظون بنسخ من السير الذاتية؟',
+    'No, we do not keep any copies of resumes after the analysis process is completed. All files are immediately deleted from servers after producing the final report.' => 'لا، نحن لا نحتفظ بأي نسخ من السير الذاتية بعد انتهاء عملية التحليل. جميع الملفات تُحذف فوراً من الخوادم بعد إنتاج التقرير النهائي.',
+    'Do you share data with third parties?' => 'هل تشاركون البيانات مع أطراف ثالثة؟',
+    'No, we do not share any data with third parties for commercial or marketing purposes. Data is used only to provide the requested service and remains completely confidential.' => 'لا، نحن لا نشارك أي بيانات مع أطراف ثالثة لأغراض تجارية أو تسويقية. البيانات تُستخدم فقط لتقديم الخدمة المطلوبة وتبقى سرية تماماً.',
+    'What security guarantees are applied?' => 'ما هي ضمانات الأمان المطبقة؟',
+    'We apply several security layers: data encryption, advanced firewalls, continuous system monitoring, secure backup, and strict access control to data.' => 'نطبق عدة طبقات أمان: تشفير البيانات، جدران حماية متقدمة، مراقبة مستمرة للأنظمة، نسخ احتياطي آمن، وتحكم صارم في الوصول للبيانات.',
+    'Additional Questions' => 'أسئلة إضافية',
+    'How can results be exported?' => 'كيف يمكن تصدير النتائج؟',
+    'Reports can be exported in different formats: PDF for viewing and printing, Excel for additional analysis, or JSON for integration with other systems.' => 'يمكن تصدير التقارير بصيغ مختلفة: PDF للعرض والطباعة، Excel للتحليل الإضافي، أو JSON للتكامل مع الأنظمة الأخرى.',
+    'Can the platform be integrated with HR management systems?' => 'هل يمكن دمج المنصة مع أنظمة إدارة الموارد البشرية؟',
+    'Yes, we provide APIs for integration with popular HR management systems. Companies can connect the platform with their existing systems.' => 'نعم، نوفر واجهات برمجة للتكامل مع أنظمة إدارة الموارد البشرية الشائعة. الشركات يمكنها ربط المنصة مع أنظمتها الموجودة.',
+    'What type of technical support is provided?' => 'ما نوع الدعم التقني المقدم؟',
+    'We provide comprehensive technical support via email, phone and live chat. The support team is available during official working hours and responds to inquiries within 24 hours.' => 'نوفر دعماً تقنياً شاملاً عبر البريد الإلكتروني والهاتف والدردشة المباشرة. فريق الدعم متاح خلال ساعات العمل الرسمية ويستجيب للاستفسارات خلال 24 ساعة.',
+    'Didn\'t find the answer to your question?' => 'لم تجد إجابة سؤالك؟',
+    'Contact us and we will be happy to help' => 'تواصل معنا وسنكون سعداء بالمساعدة',
+
+    // Privacy Page
+    'Privacy Policy' => 'سياسة الخصوصية',
+    'We are committed to protecting your privacy and data security on Masar platform' => 'نحن ملتزمون بحماية خصوصيتك وأمان بياناتك على منصة مسار',
+    'Last updated: January 2025' => 'آخر تحديث: يناير 2025',
+    'Core Commitments' => 'الالتزامات الأساسية',
+    'Data Protection' => 'حماية البيانات',
+    'Advanced encryption for all data' => 'تشفير متقدم لجميع البيانات',
+    'No Storage' => 'عدم التخزين',
+    'We do not keep resumes' => 'لا نحتفظ بالسير الذاتية',
+    'No Sharing' => 'عدم المشاركة',
+    'We do not share data with others' => 'لا نشارك البيانات مع الآخرين',
+    '1. Information We Collect' => '1. المعلومات التي نجمعها',
+    '1.1 Uploaded Data' => '1.1 البيانات المرفوعة',
+    'Resume files (PDF, DOC, DOCX)' => 'ملفات السير الذاتية (PDF, DOC, DOCX)',
+    'Information extracted from resumes for analysis' => 'المعلومات المستخرجة من السير الذاتية للتحليل',
+    'Job criteria specified by the user' => 'معايير الوظيفة المحددة من قبل المستخدم',
+    '1.2 Usage Information' => '1.2 معلومات الاستخدام',
+    'Login data (in case of account creation)' => 'بيانات تسجيل الدخول (في حالة إنشاء حساب)',
+    'Technical information about device and browser' => 'معلومات تقنية حول الجهاز والمتصفح',
+    'Usage statistics to improve the service' => 'إحصائيات الاستخدام لتحسين الخدمة',
+    'IP address (temporarily for security purposes)' => 'عنوان IP (مؤقتاً لأغراض أمنية)',
+    '2. How We Use Information' => '2. كيف نستخدم المعلومات',
+    'Smart Analysis' => 'التحليل الذكي',
+    'Processing resumes using artificial intelligence to provide accurate and detailed analysis' => 'معالجة السير الذاتية باستخدام الذكاء الاصطناعي لتقديم تحليل دقيق ومفصل',
+    'Report Generation' => 'إنتاج التقارير',
+    'Creating comprehensive reports that include candidate evaluation and ranking by suitability' => 'إنشاء تقارير شاملة تتضمن تقييم المرشحين وترتيبهم حسب المناسبة',
+    'Service Improvement' => 'تحسين الخدمة',
+    'Using anonymous usage data to develop and improve analysis algorithms' => 'استخدام بيانات الاستخدام المجهولة لتطوير وتحسين خوارزميات التحليل',
+    'Providing assistance and technical support when needed and solving technical problems' => 'تقديم المساعدة والدعم التقني عند الحاجة وحل المشاكل التقنية',
+    '3. Data Protection' => '3. حماية البيانات',
+    '🔐 Advanced Encryption' => '🔐 التشفير المتقدم',
+    'All data is protected with AES-256 encryption during transmission and processing' => 'جميع البيانات محمية بتشفير AES-256 أثناء النقل والمعالجة',
+    '🏢 Secure Servers' => '🏢 خوادم آمنة',
+    'Data hosting on protected and certified servers with latest security technologies' => 'استضافة البيانات على خوادم محمية ومعتمدة بأحدث التقنيات الأمنية',
+    '🚪 Access Control' => '🚪 التحكم في الوصول',
+    'Limited data access only to authorized employees according to "need to know" principle' => 'وصول محدود للبيانات فقط للموظفين المخولين وفقاً لمبدأ "الحاجة للمعرفة"',
+    '🔍 Continuous Monitoring' => '🔍 المراقبة المستمرة',
+    'Continuous monitoring of systems and networks to detect any hacking attempts' => 'مراقبة مستمرة للأنظمة والشبكات لاكتشاف أي محاولات اختراق',
+    '4. Data Retention' => '4. الاحتفاظ بالبيانات',
+    '⚡ During Processing' => '⚡ أثناء المعالجة',
+    'Data is protected in temporary memory only during the analysis process' => 'البيانات محمية في الذاكرة المؤقتة فقط أثناء عملية التحليل',
+    '🗑️ After Analysis' => '🗑️ بعد التحليل',
+    'Immediate deletion of all resume files after report generation' => 'حذف فوري لجميع ملفات السير الذاتية بعد إنتاج التقرير',
+    '📊 Reports' => '📊 التقارير',
+    'Reports are available to the user for a limited time then permanently deleted' => 'التقارير متاحة للمستخدم لفترة محدودة ثم تُحذف نهائياً',
+    '5. Information Sharing' => '5. مشاركة المعلومات',
+    '❌ We do not share data with:' => '❌ لا نشارك البيانات مع:',
+    'Marketing or advertising companies' => 'شركات التسويق أو الإعلان',
+    'Data brokers or information selling companies' => 'وسطاء البيانات أو شركات بيع المعلومات',
+    'Social media networks' => 'شبكات التواصل الاجتماعي',
+    'Any third party for commercial purposes' => 'أي طرف ثالث لأغراض تجارية',
+    '⚖️ Limited sharing only in case of:' => '⚖️ مشاركة محدودة فقط في حالة:',
+    'Legal obligation or court order' => 'التزام قانوني أو أمر محكمة',
+    'Protecting our rights or users\' rights' => 'حماية حقوقنا أو حقوق المستخدمين',
+    'Dealing with technical service providers (with strict confidentiality agreements)' => 'التعامل مع مزودي الخدمات التقنية (مع اتفاقيات سرية صارمة)',
+    '6. User Rights' => '6. حقوق المستخدم',
+    '🔍 Access to Information' => '🔍 الوصول للمعلومات',
+    'The right to know what data is collected about you and how it is used' => 'الحق في معرفة البيانات المجمعة عنك وكيفية استخدامها',
+    '✏️ Edit and Correct' => '✏️ التعديل والتصحيح',
+    'The right to edit or correct any incorrect information' => 'الحق في تعديل أو تصحيح أي معلومات غير صحيحة',
+    '🗑️ Deletion' => '🗑️ الحذف',
+    'The right to request deletion of all your data from our systems' => 'الحق في طلب حذف جميع بياناتك من أنظمتنا',
+    '📤 Transfer' => '📤 النقل',
+    'The right to transfer your data to another service in a readable format' => 'الحق في نقل بياناتك لخدمة أخرى بصيغة قابلة للقراءة',
+    '7. Cookies' => '7. ملفات الكوكيز',
+    'We use cookies to improve user experience and ensure security:' => 'نستخدم ملفات الكوكيز لتحسين تجربة المستخدم وضمان الأمان:',
+    'Necessary cookies: to ensure the platform works properly' => 'كوكيز ضرورية: لضمان عمل المنصة بشكل صحيح',
+    'Analytical cookies: to understand how the platform is used and improve it' => 'كوكيز تحليلية: لفهم كيفية استخدام المنصة وتحسينها',
+    'Security cookies: to protect the platform from security threats' => 'كوكيز أمنية: لحماية المنصة من التهديدات الأمنية',
+    '8. Policy Updates' => '8. تحديثات السياسة',
+    'We may update this policy from time to time. We will notify users of any important changes via:' => 'قد نحدث هذه السياسة من وقت لآخر. سنخطر المستخدمين بأي تغييرات مهمة عبر:',
+    'Notification on the platform when logging in' => 'إشعار على المنصة عند تسجيل الدخول',
+    'Email message (for registered users)' => 'رسالة بريد إلكتروني (للمستخدمين المسجلين)',
+    'Announcement on the website' => 'إعلان على الموقع الإلكتروني',
+    '9. Privacy Communication' => '9. التواصل حول الخصوصية',
+    'For any questions or concerns regarding the privacy policy, please contact us:' => 'لأي أسئلة أو مخاوف حول سياسة الخصوصية، يرجى التواصل معنا:',
+    '📧 Email: privacy@masar.com' => '📧 البريد الإلكتروني: privacy@masar.com',
+    '📞 Phone: +966 11 234 5678' => '📞 الهاتف: +966 11 234 5678',
+    '⏰ Response time: 24-48 hours' => '⏰ وقت الاستجابة: 24-48 ساعة',
+
+    // Services Page
+    'Our Services' => 'خدماتنا',
+    'Smart and advanced solutions for all recruitment and resume screening needs' => 'حلول ذكية ومتقدمة لجميع احتياجات التوظيف وفحص السير الذاتية',
+    'analysis accuracy' => 'دقة التحليل',
+    'companies trust us' => 'شركة تثق بنا',
+    '10x faster recruitment process' => 'عملية توظيف أسرع 10 مرات',
+    'Our Main Services' => 'خدماتنا الرئيسية',
+    'Smart Resume Screening' => 'فحص السير الذاتية الذكي',
+    'Advanced resume analysis using artificial intelligence with detailed reports and accurate evaluation scores' => 'تحليل متقدم للسير الذاتية باستخدام الذكاء الاصطناعي مع تقارير مفصلة ونقاط تقييم دقيقة',
+    'Screen hundreds of resumes in minutes' => 'فحص مئات السير الذاتية في دقائق',
+    'Skills and experience analysis' => 'تحليل المهارات والخبرات',
+    'Rank candidates by suitability' => 'ترتيب المرشحين حسب المناسبة',
+    'Detailed exportable reports' => 'تقارير مفصلة قابلة للتصدير',
+    'Starting from 0.5 SAR per resume' => 'بدءاً من 0.5 ريال للسيرة الواحدة',
+    'Start Now' => 'ابدأ الآن',
+    'Advanced Analytics' => 'التحليلات المتقدمة',
+    'Deep analysis of the recruitment market and matching job needs with available skills in the market' => 'تحليل عميق لسوق التوظيف ومطابقة احتياجات الوظائف مع المهارات المتاحة في السوق',
+    'Market trend analysis' => 'تحليل اتجاهات السوق',
+    'Expected salary rates' => 'معدلات الراتب المتوقعة',
+    'Rare skills analysis' => 'تحليل المهارات النادرة',
+    'Market comparison reports' => 'تقارير مقارنة السوق',
+    'Custom packages' => 'حزم مخصصة',
+    'Inquire Now' => 'استفسر الآن',
+    'Smart Specialized Filter' => 'الفلتر المتخصص الذكي',
+    'Precise candidate filtering using custom criteria and job requirements specific to your company' => 'فلترة دقيقة للمرشحين باستخدام معايير مخصصة ومتطلبات وظيفية خاصة بشركتك',
+    'Custom evaluation criteria' => 'معايير تقييم مخصصة',
+    'Multi-level filtering' => 'فلترة متعددة المستويات',
+    'Automatic exclusion of unsuitable candidates' => 'استبعاد تلقائي للمرشحين غير المناسبين',
+    'Recommend best candidates' => 'ترشيح أفضل المرشحين',
+    'According to requirements' => 'حسب المتطلبات',
+    'Specialized Services' => 'الخدمات المتخصصة',
+    'For Large Companies' => 'للشركات الكبيرة',
+    'Enterprise solutions with full integration with HR management systems' => 'حلول مؤسسية مع تكامل كامل مع أنظمة إدارة الموارد البشرية',
+    'Integration with HR systems' => 'التكامل مع أنظمة الموارد البشرية',
+    'Custom APIs' => 'واجهات برمجة مخصصة',
+    'Dedicated technical support' => 'دعم تقني مخصص',
+    'Team training' => 'تدريب الفريق',
+    'For Universities and Training Centers' => 'للجامعات ومراكز التدريب',
+    'Comprehensive assessment for university graduates and trainees to help them in the job market' => 'تقييم شامل لخريجي الجامعات والمتدربين لمساعدتهم في سوق العمل',
+    'Strengths and weaknesses analysis' => 'تحليل نقاط القوة والضعف',
+    'Development guidance' => 'إرشادات التطوير',
+    'Comparison with market requirements' => 'مقارنة مع متطلبات السوق',
+    'Reports for educational institutions' => 'تقارير للمؤسسات التعليمية',
+    'For Recruitment Companies' => 'لشركات التوظيف',
+    'Advanced tools for recruitment companies to speed up search and selection processes' => 'أدوات متقدمة لشركات التوظيف لتسريع عمليات البحث والاختيار',
+    'Batch processing for resumes' => 'معالجة مجمعة للسير الذاتية',
+    'Specialized evaluation templates' => 'قوالب تقييم متخصصة',
+    'Classification by sectors' => 'التصنيف حسب القطاعات',
+    'Preferential prices for quantities' => 'أسعار تفضيلية للكميات',
+    'For Government Sector' => 'للقطاع الحكومي',
+    'Solutions compliant with government sector requirements and high security standards' => 'حلول متوافقة مع متطلبات القطاع الحكومي ومعايير الأمان العالية',
+    'Full compliance with regulations' => 'امتثال كامل للأنظمة',
+    'Enhanced security and privacy' => 'أمان وخصوصية معززة',
+    'Detailed reports for hiring committees' => 'تقارير مفصلة للجان التوظيف',
+    'Full Arabic language support' => 'دعم كامل للغة العربية',
+    'How We Work' => 'كيف نعمل',
+    'Define Requirements' => 'تحديد المتطلبات',
+    'We understand your needs and specific job requirements' => 'نفهم احتياجاتك ومتطلبات الوظيفة المحددة',
+    'Upload Resumes' => 'رفع السير الذاتية',
+    'Upload the collection of resumes in different formats' => 'رفع مجموعة السير الذاتية بصيغ مختلفة',
+    'Advanced processing using artificial intelligence' => 'معالجة متقدمة باستخدام الذكاء الاصطناعي',
+    'Results and Reports' => 'النتائج والتقارير',
+    'Comprehensive reports with candidate ranking and recommendations' => 'تقارير شاملة مع ترتيب المرشحين والتوصيات',
+    'Why Choose Masar?' => 'لماذا تختار مسار؟',
+    'Super Speed' => 'السرعة الفائقة',
+    'Save 80% of time spent manually screening resumes' => 'توفير 80% من الوقت المستغرق في فحص السير الذاتية يدوياً',
+    'High Accuracy' => 'الدقة العالية',
+    'Advanced algorithms ensuring analysis accuracy up to 95%' => 'خوارزميات متقدمة تضمن دقة تحليل تصل إلى 95%',
+    'Cost Savings' => 'توفير التكاليف',
+    'Reduce recruitment costs by up to 60%' => 'تقليل تكاليف التوظيف بنسبة تصل إلى 60%',
+    'Advanced Security' => 'الأمان المتقدم',
+    'Comprehensive data protection with no file retention' => 'حماية شاملة للبيانات بدون الاحتفاظ بالملفات',
+    'Multi-language Support' => 'الدعم متعدد اللغات',
+    'Process resumes in both Arabic and English' => 'معالجة السير الذاتية باللغتين العربية والإنجليزية',
+    'Ease of Use' => 'سهولة الاستخدام',
+    'Simple and easy interface suitable for all user levels' => 'واجهة بسيطة وسهلة تناسب جميع مستويات المستخدمين',
+    'Pricing Plans' => 'خطط الأسعار',
+    'Basic Plan' => 'الخطة الأساسية',
+    'SAR' => 'ريال',
+    '/monthly' => '/شهرياً',
+    'Up to 500 resumes monthly' => 'حتى 500 سيرة ذاتية شهرياً',
+    'Basic reports' => 'تقارير أساسية',
+    'Email support' => 'دعم بريد إلكتروني',
+    'PDF export' => 'تصدير PDF',
+    'Choose Plan' => 'اختر الخطة',
+    'Advanced Plan' => 'الخطة المتقدمة',
+    'Most Popular' => 'الأكثر شعبية',
+    'Up to 2000 resumes monthly' => 'حتى 2000 سيرة ذاتية شهرياً',
+    'Detailed reports' => 'تقارير مفصلة',
+    'Phone and email support' => 'دعم هاتفي وبريد إلكتروني',
+    'Multi-format export' => 'تصدير متعدد الصيغ',
+    'Advanced analytics' => 'تحليلات متقدمة',
+    'Enterprise Plan' => 'خطة المؤسسات',
+    'Unlimited resumes' => 'سير ذاتية غير محدودة',
+    'Dedicated 24/7 support' => 'دعم مخصص 24/7',
+    'All plans include a 14-day free trial' => 'جميع الخطط تتضمن تجربة مجانية لمدة 14 يوماً',
+    'Ready to try Masar?' => 'مستعد لتجربة مسار؟',
+    'Start now and discover how Masar can improve the recruitment process in your company' => 'ابدأ الآن واكتشف كيف يمكن لمسار تحسين عملية التوظيف في شركتك',
+    'Talk to Expert' => 'تحدث مع خبير',
+    'Resume screened' => 'سيرة ذاتية تم فحصها',
+    'Analysis accuracy' => 'دقة التحليل',
+    'Companies trust us' => 'شركة تثق بنا',
+    'Recruitment process acceleration' => 'تسريع عملية التوظيف',
+    'Advanced analysis of resumes using artificial intelligence with detailed reports and accurate evaluation scores' => 'تحليل متقدم للسير الذاتية باستخدام الذكاء الاصطناعي مع تقارير مفصلة ونقاط تقييم دقيقة',
+    'Analyze skills and experiences' => 'تحليل المهارات والخبرات',
+    'Deep analysis of the job market and matching job requirements with available skills in the market' => 'تحليل عميق لسوق العمل ومطابقة متطلبات الوظائف مع المهارات المتاحة في السوق',
+    'Specialized Smart Filter' => 'مرشح ذكي متخصص',
+    'Precise filtering of candidates using custom criteria and specific job requirements for your company' => 'تصفية دقيقة للمرشحين باستخدام معايير مخصصة ومتطلبات وظيفية محددة لشركتك',
+    'Recommendation of best candidates' => 'ترشيح أفضل المرشحين',
+    'Based on requirements' => 'حسب المتطلبات',
+    'Enterprise solutions with full integration with human resource management systems' => 'حلول مؤسسية مع تكامل كامل مع أنظمة إدارة الموارد البشرية',
+    'Custom programming interfaces' => 'واجهات برمجة مخصصة',
+    'Analyze strengths and weaknesses' => 'تحليل نقاط القوة والضعف',
+    'Advanced tools for recruitment companies to accelerate search and selection processes' => 'أدوات متقدمة لشركات التوظيف لتسريع عمليات البحث والاختيار',
+    'Batch resume processing' => 'معالجة السير الذاتية بالدفعات',
+    'Detailed reports for recruitment committees' => 'تقارير مفصلة للجان التوظيف',
+    'Upload resume collection in different formats' => 'رفع مجموعة السير الذاتية بصيغ مختلفة',
+    'Superior Speed' => 'سرعة فائقة',
+    'Advanced algorithms ensure analysis accuracy up to 95%' => 'خوارزميات متقدمة تضمن دقة التحليل حتى 95%',
+    'Process resumes in Arabic and English' => 'معالجة السير الذاتية بالعربية والإنجليزية',
+    'Dedicated support 24/7' => 'دعم مخصص 24/7',
+    'All plans include a free 14-day trial' => 'جميع الخطط تشمل تجربة مجانية لمدة 14 يوم',
+
+    // Terms Page - Continuing from where the existing translations left off
+    '3.1 Permitted Use' => '3.1 الاستخدام المسموح',
+    'Using the platform for legitimate recruitment and professional selection purposes' => 'استخدام المنصة لأغراض التوظيف والاختيار المهني المشروعة',
+    'Uploading resumes in supported formats (PDF, DOC, DOCX)' => 'رفع السير الذاتية بصيغ مدعومة (PDF, DOC, DOCX)',
+    'Getting reports and candidate analytics' => 'الحصول على تقارير وتحليلات المرشحين',
+    'Exporting results and using them in recruitment processes' => 'تصدير النتائج واستخدامها في عمليات التوظيف',
+    '3.2 Prohibited Use' => '3.2 الاستخدام المحظور',
+    'Uploading inappropriate or illegal content' => 'رفع محتوى غير مناسب أو مخالف للقانون',
+    'Attempting to hack or disrupt the platform' => 'محاولة اختراق أو تعطيل المنصة',
+    'Using the platform for unlawful discrimination purposes' => 'استخدام المنصة لأغراض التمييز غير المشروع',
+    'Selling or distributing data obtained from the platform' => 'بيع أو توزيع البيانات المحصلة من المنصة',
+    '4. Intellectual Property Rights' => '4. حقوق الملكية الفكرية',
+    'All intellectual property rights for the platform are reserved to Masar company. Users are not allowed to copy, distribute or modify any part of the platform without prior written permission.' => 'جميع حقوق الملكية الفكرية للمنصة محفوظة لشركة مسار. لا يحق للمستخدمين نسخ أو توزيع أو تعديل أي جزء من المنصة دون إذن كتابي مسبق.',
+    '5. Data Protection' => '5. حماية البيانات',
+    'We are committed to protecting privacy and security of uploaded data' => 'نلتزم بحماية خصوصية وأمان البيانات المرفوعة',
+    'We do not keep copies of resumes after the analysis session ends' => 'لا نحتفظ بنسخ من السير الذاتية بعد انتهاء جلسة التحليل',
+    'All data is protected with advanced encryption technologies' => 'جميع البيانات محمية بتقنيات التشفير المتقدمة',
+    'We do not share data with third parties without explicit consent' => 'لا نشارك البيانات مع أطراف ثالثة دون موافقة صريحة',
+    '6. Liability' => '6. المسؤولية',
+    '6.1 User Responsibility' => '6.1 مسؤولية المستخدم',
+    'The user is responsible for the accuracy and correctness of uploaded data and for using results in an appropriate and lawful manner.' => 'المستخدم مسؤول عن صحة ودقة البيانات المرفوعة وعن استخدام النتائج بطريقة مناسبة ومشروعة.',
+    '6.2 Platform Responsibility' => '6.2 مسؤولية المنصة',
+    'We do our best to ensure accuracy of results, but we do not guarantee 100% accuracy and do not bear responsibility for decisions based on the results.' => 'نبذل قصارى جهدنا لضمان دقة النتائج، لكننا لا نضمن دقة 100% ولا نتحمل مسؤولية القرارات المبنية على النتائج.',
+    '7. Billing and Payment' => '7. الفوترة والدفع',
+    'Service prices advertised on the website at time of use apply' => 'تطبق أسعار الخدمة المعلنة على الموقع وقت الاستخدام',
+    'Payment is required before providing service for paid plans' => 'الدفع مطلوب قبل تقديم الخدمة للخطط المدفوعة',
+    'No refunds for completed services' => 'لا توجد استردادات للخدمات المكتملة',
+    'Prices may change with advance notice' => 'قد تتغير الأسعار مع إشعار مسبق',
+    '8. Service Termination' => '8. إنهاء الخدمة',
+    'We reserve the right to terminate or suspend service in case of violation of these terms or for any other reason we deem appropriate.' => 'نحتفظ بالحق في إنهاء أو تعليق الخدمة في حالة انتهاك هذه الشروط أو لأي سبب آخر نراه مناسباً.',
+    '9. Terms Modification' => '9. تعديل الشروط',
+    'We may modify these terms from time to time. Users will be notified of any material changes with adequate time given for review.' => 'قد نقوم بتعديل هذه الشروط من وقت لآخر. سيتم إشعار المستخدمين بأي تغييرات جوهرية مع إعطاء مهلة مناسبة للمراجعة.',
+    '10. Applicable Law' => '10. القانون المطبق',
+    'These terms are subject to the laws of Saudi Arabia, and any dispute arising therefrom will be resolved in accordance with Saudi law.' => 'تخضع هذه الشروط لقوانين المملكة العربية السعودية، وأي نزاع ينشأ بخصوصها سيتم حله وفقاً للقانون السعودي.',
+    '11. Communication' => '11. التواصل',
+    'For any inquiries about these terms and conditions, please contact us via:' => 'لأي استفسارات حول هذه الشروط والأحكام، يرجى التواصل معنا عبر:',
+    'Email: legal@masar.com' => 'البريد الإلكتروني: legal@masar.com',
+    'Phone: +966 11 234 5678' => 'الهاتف: +966 11 234 5678',
+    'Terms and Conditions' => 'الشروط والأحكام',
+    'Read the terms and conditions for using Masar resume screening platform' => 'اقرأ الشروط والأحكام لاستخدام منصة مسار لفحص السير الذاتية',
+    '1. Acceptance of Terms' => '1. قبول الشروط',
+    'By using Masar platform, you agree to comply with these terms and conditions. If you do not agree to any of these terms, please do not use the platform.' => 'باستخدام منصة مسار، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، فيرجى عدم استخدام المنصة.',
+    '2. Service Definition' => '2. تعريف الخدمة',
+    'Masar is a smart platform for screening and analyzing resumes using artificial intelligence technologies. The platform provides resume analysis services and detailed reports about candidates.' => 'مسار هي منصة ذكية لفحص وتحليل السير الذاتية باستخدام تقنيات الذكاء الاصطناعي. توفر المنصة خدمات تحليل السير الذاتية وتقارير مفصلة عن المرشحين.',
+    '3. Platform Usage' => '3. استخدام المنصة',
+    'Obtaining reports and candidate analytics' => 'الحصول على التقارير وتحليلات المرشحين',
+    'Attempting to hack or disable the platform' => 'محاولة اختراق أو تعطيل المنصة',
+    'All intellectual property rights of the platform are reserved to Masar company. Users may not copy, distribute or modify any part of the platform without prior written permission.' => 'جميع حقوق الملكية الفكرية للمنصة محفوظة لشركة مسار. لا يجوز للمستخدمين نسخ أو توزيع أو تعديل أي جزء من المنصة دون إذن كتابي مسبق.',
+    'We are committed to protecting the privacy and security of uploaded data' => 'نحن ملتزمون بحماية خصوصية وأمان البيانات المرفوعة',
+    '6. Responsibility' => '6. المسؤولية',
+    'The user is responsible for the accuracy of uploaded data and for using results appropriately and lawfully.' => 'المستخدم مسؤول عن دقة البيانات المرفوعة وعن استخدام النتائج بشكل مناسب وقانوني.',
+    'We do our best to ensure accuracy of results, but we do not guarantee 100% accuracy and do not take responsibility for decisions based on results.' => 'نبذل قصارى جهدنا لضمان دقة النتائج، لكننا لا نضمن الدقة 100% ولا نتحمل المسؤولية عن القرارات المبنية على النتائج.',
+    'Service prices advertised on the website apply at the time of use' => 'أسعار الخدمة المعلنة على الموقع تطبق وقت الاستخدام',
+    'Payment is required before providing the service for paid plans' => 'الدفع مطلوب قبل تقديم الخدمة للخطط المدفوعة',
+    'Prices may change with prior notice' => 'قد تتغير الأسعار مع إشعار مسبق',
+    'We reserve the right to terminate or suspend the service in case of violation of these terms or for any other reason we deem appropriate.' => 'نحتفظ بالحق في إنهاء أو تعليق الخدمة في حالة انتهاك هذه الشروط أو لأي سبب آخر نراه مناسباً.',
+    'We may modify these terms from time to time. Users will be notified of any material changes with adequate time for review.' => 'قد نعدل هذه الشروط من وقت لآخر. سيتم إشعار المستخدمين بأي تغييرات جوهرية مع وقت كافٍ للمراجعة.',
+    'These terms are subject to the laws of Saudi Arabia, and any dispute arising in connection with them will be resolved according to Saudi law.' => 'تخضع هذه الشروط لقوانين المملكة العربية السعودية، وأي نزاع ينشأ فيما يتعلق بها سيتم حله وفقاً للقانون السعودي.',
+    'Sending' => 'إرسال',
+    'Please fix the following errors:' => 'يرجى تصحيح الأخطاء التالية:',
+    'Thank you for your message. We will get back to you soon!' => 'شكرًا لرسالتك. سنتواصل معك قريبًا!',
+    'Sorry, there was an error sending your message. Please try again.' => 'عذرًا، حدث خطأ أثناء إرسال رسالتك. يُرجى المحاولة مرة أخرى.',
+];
