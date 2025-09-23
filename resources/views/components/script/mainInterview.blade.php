@@ -507,75 +507,50 @@
     }
 
     // Camera setup
-    async function setupCamera() {
-        const cameraToggle = document.getElementById('cameraToggle');
-        const status = document.getElementById('status-0');
+    function setupCameraForAllSteps() {
+        if (!cameraEnabled || !videoStream) return;
 
-        // Skip camera if qs=1 parameter is present
-        if (skipCamera) {
-            console.log('Skipping camera due to qs=1 parameter');
-            cameraEnabled = false;
+        // Setup video stream for all video elements but keep them hidden
+        for (let i = 0; i < questions.length; i++) {
+            const video = document.getElementById(`video-${i}`);
+            const container = document.getElementById(`camera-${i}`);
 
-            // Hide all camera containers
-            document.querySelectorAll('.camera-container').forEach(container => {
-                container.style.display = 'none';
-            });
+            if (video && container) {
+                video.srcObject = videoStream;
+                // Remove this line: container.classList.add('show');
+                // Camera visibility will be controlled by showStep function
 
-            // Update status message
-            if (status) {
-                status.textContent = getTranslatedMessage('camera_skipped') || 'Camera disabled - you can start the interview';
+                video.onerror = function() {
+                    console.error(`Video error on step ${i}`);
+                    handleCameraError();
+                };
             }
-
-            return true; // Allow session to continue without camera
         }
+    }
 
-        // Original camera setup logic for normal cases
-        cameraEnabled = true;
-
-        if (status) {
-            status.textContent = getTranslatedMessage('requesting-camera') || 'Requesting camera access...';
-        }
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 640 },
-                    height: { ideal: 480 },
-                    facingMode: 'user'
-                },
-                audio: false
-            });
-
-            videoStream = stream;
-            cameraEnabled = true;
-            setupCameraForAllSteps();
-
-            if (status) {
-                status.textContent = getTranslatedMessage('camera_ready') || 'Camera ready - you can start the interview';
+    function setupCameraForStep(stepIndex) {
+        // Since we're setting up all cameras at once, this function just ensures visibility
+        if (cameraEnabled && videoStream) {
+            const container = document.getElementById(`camera-${stepIndex}`);
+            if (container) {
+                container.classList.add('show');
             }
-
-            console.log('Camera initialized successfully');
-            return true;
-
-        } catch (error) {
-            console.error('Camera access denied:', error);
-            cameraEnabled = false;
-
-            const errorMessage = getTranslatedMessage('camera_required') || 'Camera access is required for this interview. The session will now close.';
-
-            swal({
-                title: getTranslatedMessage('camera_access_denied') || 'Camera Access Denied',
-                text: errorMessage,
-                icon: "error",
-                button: "OK",
-                closeOnClickOutside: false,
-                closeOnEsc: false
-            }).then(() => {
-                terminateSession();
-            });
-
-            return false;
         }
+    }
+
+    function handleCameraError() {
+        const errorMessage = getTranslatedMessage('camera_error_session') || 'Camera connection lost. Interview session must be terminated.';
+
+        swal({
+            title: getTranslatedMessage('camera_error') || 'Camera Error',
+            text: errorMessage,
+            icon: "error",
+            button: "OK",
+            closeOnClickOutside: false,
+            closeOnEsc: false
+        }).then(() => {
+            terminateSession();
+        });
     }
 
     // Start session
