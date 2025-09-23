@@ -69,8 +69,11 @@ body {
     -moz-appearance: none;
 }
 #interviewForm{
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 15px;
+    & button{
+        display: flex;
+    }
 }
 .warning-box {
     background: #fef3c7;

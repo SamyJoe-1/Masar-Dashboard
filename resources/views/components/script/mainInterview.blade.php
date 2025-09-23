@@ -111,7 +111,7 @@
             recordingStatus.style.color = '#10b981';
             recordingTimer.style.display = 'none';
             recordingControls.style.display = 'flex';
-            recordingControls.style.flexWrap = 'nowrap';
+            recordingControls.style.flexWrap = 'wrap';
             recordingControls.style.justifyContent = 'center';
             recordingControls.style.gap = '10px';
         } else {
