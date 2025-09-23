@@ -126,7 +126,8 @@
             recordingStatus.textContent = getTranslatedMessage('answer-recorded') || 'Answer recorded';
             recordingStatus.style.color = '#10b981';
             recordingTimer.style.display = 'none';
-            recordingControls.style.display = 'flex';
+            recordingControls.style.display = 'grid';
+            recordingControls.style.gap = '5px';
         } else {
             // Ready to record
             recordingStatus.textContent = getTranslatedMessage('click-record') || 'Click to Record';

@@ -659,11 +659,6 @@ body {
         padding: 12px 20px;
         font-size: 14px;
     }
-
-    #recordingControls{
-        display: grid !important;
-        gap: 5px;
-    }
 }
 
 /* Translation animations */

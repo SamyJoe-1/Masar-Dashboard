@@ -254,12 +254,34 @@ function showInterviewNotFound() {
     });
 }
 
-// Fixed startSession function with proper flow
+// Initialize camera feed
+async function initializeCameraFeed() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+        });
+
+        const cameraVideo = document.getElementById('cameraVideo');
+        if (cameraVideo) {
+            cameraVideo.srcObject = stream;
+            videoStream = stream; // Store for later use
+        }
+
+        console.log('Camera initialized successfully');
+        return true;
+    } catch (error) {
+        console.error('Error accessing camera:', error);
+        return false;
+    }
+}
+
+// Update your startSession function to include camera initialization
 async function startSession() {
     // First, request screen permission
     const screenPermissionGranted = await requestFakeScreenPermission();
     if (!screenPermissionGranted) {
-        return; // User denied permission, stop here
+        return;
     }
 
     // Show loading state
@@ -269,10 +291,23 @@ async function startSession() {
     startButton.textContent = getTranslatedMessage('initializing') || 'Initializing...';
 
     try {
+        // Initialize camera feed
+        const cameraInitialized = await initializeCameraFeed();
+        if (!cameraInitialized) {
+            swal({
+                title: getTranslatedMessage('error'),
+                text: 'Camera access is required for this interview.',
+                icon: "error",
+                button: "OK"
+            });
+            startButton.disabled = false;
+            startButton.textContent = originalText;
+            return;
+        }
+
         // Start the API session
         const sessionStarted = await startInterviewSession();
         if (!sessionStarted) {
-            // Reset button state on failure
             startButton.disabled = false;
             startButton.textContent = originalText;
             return;
@@ -285,25 +320,15 @@ async function startSession() {
         // Initialize the interview components
         startTimer();
 
-        // Wait a bit to ensure all scripts are loaded before initializing validation
         setTimeout(() => {
             initializeValidation();
+            showRecordingAlert();
         }, 100);
-
-        showRecordingAlert();
 
     } catch (error) {
         console.error('Error starting session:', error);
-        // Reset button state on error
         startButton.disabled = false;
         startButton.textContent = originalText;
-
-        swal({
-            title: getTranslatedMessage('error') || 'Error',
-            text: getTranslatedMessage('failed-initialize') || 'Failed to initialize interview session.',
-            icon: "error",
-            button: "OK"
-        });
     }
 }
 
@@ -419,4 +444,3 @@ window.addEventListener('beforeunload', (e) => {
 document.querySelector("form").addEventListener("submit", function () {
     allowRedirect = true;
 });
-
