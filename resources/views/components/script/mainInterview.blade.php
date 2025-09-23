@@ -689,4 +689,151 @@
         // Implementation from your screenshot.js
         return true;
     }
+
+// Camera logic (ported & hardened)
+function getCameraVideoEl() {
+    return document.querySelector('[data-camera-preview], #cameraPreview, #camera, video#camera, video.camera');
+}
+
+function getCameraContainerEl() {
+    return document.querySelector('[data-camera-container], .camera-container, .camera-wrapper, .camera-wrap');
+}
+
+function getCameraStatusEl() {
+    return document.querySelector('[data-camera-status]');
+}
+
+async function startCamera() {
+    if (skipCamera) return;
+    if (cameraEnabled) return;
+
+    try {
+        const constraints = {
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: 'user'
+            },
+            audio: false
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const videoEl = getCameraVideoEl();
+
+        if (videoEl) {
+            // Some browsers need play() to be awaited, but don't break if it rejects
+            videoEl.srcObject = stream;
+            try { await videoEl.play(); } catch (_) {}
+        }
+
+        videoStream = stream;
+        cameraEnabled = true;
+        updateCameraUI(true);
+        console.log('[Camera] started');
+    } catch (err) {
+        cameraEnabled = false;
+        videoStream = null;
+        updateCameraUI(false);
+        showCameraError(err);
+        console.error('[Camera] failed to start:', err);
+    }
+}
+
+function stopCamera() {
+    if (!videoStream) {
+        updateCameraUI(false);
+        return;
+    }
+
+    try {
+        videoStream.getTracks().forEach(t => t.stop());
+    } catch (_) {}
+
+    const videoEl = getCameraVideoEl();
+    if (videoEl) {
+        try { videoEl.pause(); } catch (_) {}
+        videoEl.srcObject = null;
+        videoEl.removeAttribute('src');
+    }
+
+    videoStream = null;
+    cameraEnabled = false;
+    updateCameraUI(false);
+    console.log('[Camera] stopped');
+}
+
+function updateCameraUI(isOn) {
+    const container = getCameraContainerEl();
+    if (container) {
+        container.classList.toggle('is-on', !!isOn);
+        container.classList.toggle('is-off', !isOn);
+    }
+
+    const statusEl = getCameraStatusEl();
+    if (statusEl) {
+        statusEl.textContent = isOn
+            ? (defaultLanguage === 'ar' ? 'الكاميرا قيد التشغيل' : 'Camera is on')
+            : (defaultLanguage === 'ar' ? 'الكاميرا متوقفة' : 'Camera is off');
+    }
+}
+
+function showCameraError(err) {
+    const msg =
+        err && err.name === 'NotAllowedError'
+            ? (defaultLanguage === 'ar'
+                ? 'تم رفض إذن الكاميرا. يرجى السماح بالوصول من المتصفح.'
+                : 'Camera permission denied. Please allow access in your browser.')
+            : err && err.name === 'NotFoundError'
+                ? (defaultLanguage === 'ar'
+                    ? 'لم يتم العثور على كاميرا. تحقق من توصيل الجهاز.'
+                    : 'No camera found. Please check your device.')
+                : (defaultLanguage === 'ar'
+                    ? 'تعذر تشغيل الكاميرا. حاول مجددًا أو تحقق من إعدادات المتصفح.'
+                    : 'Unable to start the camera. Try again or check your browser settings.');
+
+    const statusEl = getCameraStatusEl();
+    if (statusEl) statusEl.textContent = msg;
+
+    // Optionally hide UI if camera is required but not available
+    updateCameraUI(false);
+}
+
+// Auto-init and wiring
+document.addEventListener('DOMContentLoaded', function() {
+    // Hide the camera toggle checkbox if you want it mandatory (keeps existing behavior)
+    const cameraToggleWrapper = document.querySelector('.camera-toggle');
+    if (cameraToggleWrapper) {
+        // If you still want to show it, remove the next line
+        cameraToggleWrapper.style.display = 'none';
+    }
+
+    // Start camera automatically unless explicitly skipped via ?qs=1
+    if (!skipCamera) {
+        startCamera();
+    } else {
+        updateCameraUI(false);
+    }
+
+    // Optional: if you have a dedicated input toggle
+    const cameraToggleInput =
+        document.querySelector('.camera-toggle input[type="checkbox"], .camera-toggle input[type="switch"]');
+
+    if (cameraToggleInput) {
+        cameraToggleInput.checked = !skipCamera;
+        cameraToggleInput.addEventListener('change', (e) => {
+            if (e.target.checked) startCamera();
+            else stopCamera();
+        });
+    }
+
+    // Optional: if you have explicit start/stop buttons
+    const startBtn = document.querySelector('[data-camera-action="start"]');
+    const stopBtn = document.querySelector('[data-camera-action="stop"]');
+    if (startBtn) startBtn.addEventListener('click', startCamera);
+    if (stopBtn) stopBtn.addEventListener('click', stopCamera);
+});
+
+// Always clean up camera tracks when leaving the page
+window.addEventListener('beforeunload', stopCamera);
+window.addEventListener('pagehide', stopCamera);
 </script>
