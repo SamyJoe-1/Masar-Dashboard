@@ -113,6 +113,7 @@
             recordingControls.style.display = 'flex';
             recordingControls.style.flexWrap = 'nowrap';
             recordingControls.style.justifyContent = 'center';
+            recordingControls.style.gap = '10px';
         } else {
             // Ready to record
             recordingStatus.textContent = getTranslatedMessage('click-record') || 'Click to Record';
