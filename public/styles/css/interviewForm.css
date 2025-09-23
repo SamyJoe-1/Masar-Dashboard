@@ -68,7 +68,10 @@ body {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
-
+#interviewForm{
+    flex-wrap: nowrap;
+    gap: 15px;
+}
 .warning-box {
     background: #fef3c7;
     border: 2px solid #f59e0b;
