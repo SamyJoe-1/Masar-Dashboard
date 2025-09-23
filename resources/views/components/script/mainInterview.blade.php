@@ -28,6 +28,9 @@
     let questionAnswers = {};
     let answerDurations = {};
 
+    let currentStream = null;
+    let cameraPreview = null;
+
     // API config
     const apiUrl = '{{ config("app.evaluate_url") }}';
     const urlParams = new URLSearchParams(window.location.search);
@@ -557,70 +560,159 @@
     }
 
     // Start session
-    async function startSession() {
-        const startButton = document.querySelector('.start-button');
-        const originalText = startButton.textContent;
-        startButton.disabled = true;
-        startButton.textContent = getTranslatedMessage('initializing') || 'Initializing...';
+
+    // Add these camera-related functions to your main.js file
+
+    // Check if we should skip camera (backdoor parameter)
+    function shouldSkipCamera() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('qs') === '1';
+    }
+
+    // Request camera permission and setup preview
+    async function requestCameraPermission() {
+        // Skip camera if backdoor parameter is present
+        if (shouldSkipCamera()) {
+            console.log('Skipping camera due to qs=1 parameter');
+            return true;
+        }
 
         try {
-            // Force show camera container first
-            const cameraContainer = document.getElementById('cameraContainer');
-            if (cameraContainer) {
-                cameraContainer.style.display = 'block';
-                cameraContainer.classList.add('show');
-            }
+            // Request camera access
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: 'user'
+                },
+                audio: false
+            });
 
-            // Request permissions
-            const screenPermissionGranted = await requestFakeScreenPermission();
-            if (!screenPermissionGranted) {
-                startButton.disabled = false;
-                startButton.textContent = originalText;
-                return;
-            }
+            console.log('Camera permission granted');
 
-            // Setup camera
-            const cameraSetupSuccess = await setupCamera();
-            if (!cameraSetupSuccess) {
-                return;
-            }
+            // Store the stream
+            currentStream = stream;
 
-            // Start API session
-            const response = await fetch(`${apiUrl}/api/session/start/{{ $interview->id }}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            // Setup camera preview
+            setupCameraPreview(stream);
+
+            return true;
+        } catch (error) {
+            console.error('Camera permission denied or failed:', error);
+
+            // Show error message
+            swal({
+                title: getTranslatedMessage('camera-required') || 'Camera Required',
+                text: getTranslatedMessage('camera-required-text') || 'Camera access is mandatory for this interview. Please allow camera permission and refresh the page.',
+                icon: "error",
+                buttons: {
+                    refresh: {
+                        text: "Refresh Page",
+                        value: "refresh",
+                        visible: true
+                    },
+                    cancel: {
+                        text: "Cancel",
+                        value: false,
+                        visible: true
+                    }
+                }
+            }).then((value) => {
+                if (value === "refresh") {
+                    location.reload();
                 }
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to start session');
-            }
-
-            // Success - show interview
-            document.getElementById('welcomeCard').style.display = 'none';
-            document.getElementById('formContainer').style.display = 'block';
-
-            initializeProgressCircles();
-            updateQuestionDisplay();
-            updateNavigationButtons();
-            startTimer();
-            showRecordingAlert();
-
-        } catch (error) {
-            console.error('Session start error:', error);
-            startButton.disabled = false;
-            startButton.textContent = originalText;
-
-            swal({
-                title: getTranslatedMessage('error') || 'Error',
-                text: getTranslatedMessage('failed_initialize') || 'Failed to initialize',
-                icon: "error",
-                button: "OK"
-            });
+            return false;
         }
+    }
+
+    // Setup camera preview in the avatar section
+    function setupCameraPreview(stream) {
+        // Find the avatar container
+        const avatarContainer = document.querySelector('.avatar-container');
+        if (!avatarContainer) {
+            console.error('Avatar container not found');
+            return;
+        }
+
+        // Remove existing avatar content
+        avatarContainer.innerHTML = '';
+
+        // Create video element for camera preview
+        const videoElement = document.createElement('video');
+        videoElement.id = 'cameraPreview';
+        videoElement.autoplay = true;
+        videoElement.muted = true;
+        videoElement.playsInline = true;
+        videoElement.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 3px solid #3464b0;
+        box-shadow: 0 5px 15px rgba(52, 100, 176, 0.3);
+    `;
+
+        // Set the stream
+        videoElement.srcObject = stream;
+
+        // Add to container
+        avatarContainer.appendChild(videoElement);
+
+        // Store reference
+        cameraPreview = videoElement;
+
+        console.log('Camera preview setup complete');
+    }
+
+    // Stop camera stream
+    function stopCameraStream() {
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => {
+                track.stop();
+            });
+            currentStream = null;
+        }
+
+        if (cameraPreview) {
+            cameraPreview.srcObject = null;
+            cameraPreview = null;
+        }
+    }
+
+    // Modified startSession function to include camera check
+    async function startSession() {
+        console.log('Starting interview session...');
+
+        // First check camera permission (unless backdoor is used)
+        if (!shouldSkipCamera()) {
+            const cameraGranted = await requestCameraPermission();
+            if (!cameraGranted) {
+                console.log('Camera permission denied, cannot start interview');
+                return;
+            }
+        }
+
+        // Start the session API call
+        const sessionStarted = await startInterviewSession();
+        if (!sessionStarted) {
+            return;
+        }
+
+        // Hide welcome card and show form
+        document.getElementById('welcomeCard').style.display = 'none';
+        document.getElementById('formContainer').style.display = 'block';
+
+        // Initialize other components
+        initializeForm();
+        initializeSpeechToText();
+        initializeValidation();
+        loadQuestions();
+        startTimer();
+        showRecordingAlert();
+
+        console.log('Session started successfully');
     }
 
     // Terminate session

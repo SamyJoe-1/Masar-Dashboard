@@ -8,6 +8,95 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <title>{{ $lang == 'ar' ? 'جلسة المقابلة' : 'Interview Session' }}</title>
 
+
+    <style>/* Add these styles for the camera preview in the avatar section */
+
+        .avatar-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        .avatar-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: none;
+        }
+
+        .avatar-container.no-camera {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        /* Camera permission styles */
+        .camera-permission-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .camera-permission-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+        }
+
+        .camera-permission-content h3 {
+            color: #1a202c;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .camera-permission-content p {
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .permission-button {
+            background: #3464b0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .permission-button:hover {
+            background: #2d5aa0;
+        }
+
+        .permission-button.cancel {
+            background: #ef4444;
+        }
+
+        .permission-button.cancel:hover {
+            background: #dc2626;
+        }
+    </style>
 </head>
 <body>
 
@@ -131,6 +220,15 @@
                     <div class="camera-container" id="cameraContainer">
                         <video class="camera-preview" id="cameraPreview" autoplay muted></video>
                     </div>
+                    <hr>
+
+                    <div class="camera-status" id="cameraStatus" style="display: none;">
+                        <div class="camera-indicator">
+                            <div class="camera-dot"></div>
+                            <span data-translate="camera-active">{{ $lang == 'ar' ? 'الكاميرا نشطة' : 'Camera Active' }}</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

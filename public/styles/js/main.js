@@ -1,6 +1,7 @@
 // API Integration for Interview Form
 // Add this to your main.js or create a new api.js file
 
+
 // Get interview ID from the form or URL
 function getInterviewId() {
     const slugInput = document.querySelector('input[name="interview_slug"]');
