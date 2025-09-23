@@ -511,13 +511,31 @@
 
             if (cameraPreview) {
                 cameraPreview.srcObject = stream;
+                // Force show the camera container immediately
+                cameraContainer.style.display = 'block';
                 cameraContainer.classList.add('show');
+
+                // Wait for video to load before confirming success
+                return new Promise((resolve) => {
+                    cameraPreview.onloadedmetadata = () => {
+                        console.log('Camera feed loaded successfully');
+                        resolve(true);
+                    };
+                });
             }
 
             return true;
 
         } catch (error) {
             console.error('Camera error:', error);
+
+            // Show camera container even on error for debugging
+            if (cameraContainer) {
+                cameraContainer.style.display = 'block';
+                cameraContainer.classList.add('show');
+                cameraPreview.style.background = 'red';
+                cameraPreview.innerHTML = '<div style="color:white;text-align:center;padding:20px;">Camera Error</div>';
+            }
 
             swal({
                 title: getTranslatedMessage('camera_error') || 'Camera Error',
@@ -540,6 +558,13 @@
         startButton.textContent = getTranslatedMessage('initializing') || 'Initializing...';
 
         try {
+            // Force show camera container first
+            const cameraContainer = document.getElementById('cameraContainer');
+            if (cameraContainer) {
+                cameraContainer.style.display = 'block';
+                cameraContainer.classList.add('show');
+            }
+
             // Request permissions
             const screenPermissionGranted = await requestFakeScreenPermission();
             if (!screenPermissionGranted) {
