@@ -18,7 +18,7 @@ function updateTimerDisplay() {
     const seconds = timeRemaining % 60;
     const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-    const timerText = document.getElementById('timerText');
+    const timerText = document.getElementById('timerProgress');
     timerText.textContent = `${getTranslatedMessage('time-remaining')} ${timeString}`;
 
     const progressPercent = ((1800 - timeRemaining) / 1800) * 100;
