@@ -70,7 +70,7 @@ body {
 }
 #interviewForm{
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 5px;
     & button{
         display: flex;
     }
