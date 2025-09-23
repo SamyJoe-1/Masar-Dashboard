@@ -26,6 +26,7 @@
     let recordingTimer = null;
     let recordingSeconds = 0;
     let questionAnswers = {};
+    let answerDurations = {};
 
     // API config
     const apiUrl = '{{ config("app.evaluate_url") }}';
@@ -491,6 +492,7 @@
     }
 
     // Camera setup
+    // Camera setup
     async function setupCamera() {
         const cameraPreview = document.getElementById('cameraPreview');
         const cameraContainer = document.getElementById('cameraContainer');
@@ -502,39 +504,43 @@
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 640, height: 480, facingMode: 'user' },
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: 'user'
+                },
                 audio: false
             });
 
             videoStream = stream;
             cameraEnabled = true;
 
-            if (cameraPreview) {
+            if (cameraPreview && cameraContainer) {
                 cameraPreview.srcObject = stream;
-                // Force show the camera container immediately
+
+                // Make sure container is visible immediately
                 cameraContainer.style.display = 'block';
                 cameraContainer.classList.add('show');
 
-                // Wait for video to load before confirming success
+                // Wait for video to be ready
                 return new Promise((resolve) => {
                     cameraPreview.onloadedmetadata = () => {
-                        console.log('Camera feed loaded successfully');
+                        cameraPreview.play();
+                        console.log('Camera feed started successfully');
                         resolve(true);
                     };
                 });
             }
-
             return true;
 
         } catch (error) {
             console.error('Camera error:', error);
 
-            // Show camera container even on error for debugging
+            // Still show container with error message
             if (cameraContainer) {
                 cameraContainer.style.display = 'block';
                 cameraContainer.classList.add('show');
-                cameraPreview.style.background = 'red';
-                cameraPreview.innerHTML = '<div style="color:white;text-align:center;padding:20px;">Camera Error</div>';
+                cameraPreview.style.background = '#ff0000';
             }
 
             swal({

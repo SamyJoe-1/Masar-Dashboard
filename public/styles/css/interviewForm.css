@@ -231,8 +231,8 @@ body {
 /* Avatar Whirlpool Container */
 .avatar-whirlpool {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     margin: 30px auto;
     display: none;
 }
@@ -256,15 +256,15 @@ body {
 }
 
 .avatar-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+    position: relative;
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+    width: 300px;
+    height: 300px;
+    border-radius: 15px;
     object-fit: cover;
-    border: 4px solid #3464b0;
+    /*border: 4px solid #3464b0;*/
     z-index: 2;
 }
 
@@ -407,69 +407,29 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Camera Container - Fixed positioning */
+/* Camera Container - MOVED TO RECORDING COLUMN */
 .camera-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 200px;
-    height: 150px;
-    background: #000;
-    border-radius: 8px;
-    border: 2px solid #3b82f6;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    z-index: 1000;
-    display: none; /* Hidden by default */
-    transition: all 0.3s ease;
+    width: 280px;
+    height: 280px;
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: none;
+    margin-top: 20px;
+    border: 3px solid #3464b0;
 }
 
 .camera-container.show {
-    display: block;
-    opacity: 1;
+    display: block !important;
 }
 
 .camera-preview {
     width: 100%;
     height: 100%;
+    border-radius: 15px;
     object-fit: cover;
-    border-radius: 6px;
-}
-
-/* Alternative positioning - you can choose one */
-.camera-container.top-right {
-    top: 20px;
-    right: 20px;
-    bottom: auto;
-}
-
-.camera-container.top-left {
-    top: 20px;
-    left: 20px;
-    right: auto;
-    bottom: auto;
-}
-
-.camera-container.bottom-left {
-    bottom: 20px;
-    left: 20px;
-    right: auto;
-}
-
-/* Make it draggable visually */
-.camera-container:hover {
-    cursor: move;
-    border-color: #60a5fa;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-    .camera-container {
-        width: 120px;
-        height: 90px;
-        bottom: 80px;
-        right: 10px;
-    }
+    background: #000;
 }
 
 /* Navigation Row */

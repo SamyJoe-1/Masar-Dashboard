@@ -111,6 +111,12 @@
 
                         <div class="recording-timer" id="recordingTimer">0:00</div>
 
+                        <!-- ADD THIS: Answer Duration Display -->
+                        <div class="answer-duration" id="answerDuration" style="display: none;">
+                            <span data-translate="answer-duration">{{ $lang == 'ar' ? 'مدة الإجابة:' : 'Answer Duration:' }}</span>
+                            <span id="durationValue"></span>
+                        </div>
+
                         <div class="recording-controls" id="recordingControls" style="display: none;">
                             <button class="control-button retry" onclick="retryRecording()" data-translate="retry">
                                 {{ $lang == 'ar' ? 'إعادة التسجيل' : 'Record Again' }}
@@ -119,6 +125,11 @@
                                 {{ $lang == 'ar' ? 'تم' : 'Done' }}
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Camera Container - MOVED HERE -->
+                    <div class="camera-container" id="cameraContainer">
+                        <video class="camera-preview" id="cameraPreview" autoplay muted></video>
                     </div>
                 </div>
             </div>
