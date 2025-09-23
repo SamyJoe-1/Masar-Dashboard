@@ -69,6 +69,7 @@ body {
     -moz-appearance: none;
 }
 #interviewForm{
+    justify-content: center;
     flex-wrap: wrap;
     gap: 5px;
     & button{
