@@ -5,206 +5,363 @@
         @endforeach
     ];
 
-    // Store dynamic questions for translation
+    // Store dynamic questions for translation with proper indexing
     const dynamicQuestions = {
         @foreach($interview->questions as $key => $question)
         'question-{{ $loop->index }}': {!! json_encode($question) !!},
         @endforeach
     };
 
+    console.log('Dynamic questions:', dynamicQuestions);
+
     // Pass the controller language to JavaScript
     const defaultLanguage = '{{ $lang }}';
 
-    // Core variables
-    let currentQuestionIndex = 0;
+    // Voice and step functionality
+    let currentStep = 0;
+    let voiceAnswers = {};
     let isRecording = false;
     let mediaRecorder = null;
     let audioChunks = [];
     let currentAudio = null;
     let videoStream = null;
     let cameraEnabled = false;
-    let recordingTimer = null;
-    let recordingSeconds = 0;
-    let questionAnswers = {};
-    let answerDurations = {};
-
-    let currentStream = null;
-    let cameraPreview = null;
 
     // API config
     const apiUrl = '{{ config("app.evaluate_url") }}';
     const urlParams = new URLSearchParams(window.location.search);
     const skipCamera = urlParams.get('qs') === '1';
 
-    // Initialize on DOM ready
+    // Add this to your existing DOMContentLoaded event listener
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, initializing interview components...');
-        initializeProgressCircles();
-        updateQuestionDisplay();
-        updateNavigationButtons();
+        // Hide the camera toggle checkbox since camera is now mandatory
+        const cameraToggle = document.querySelector('.camera-toggle');
+        if (cameraToggle) {
+            cameraToggle.style.display = 'none';
+        }
+
+        // Update warning text to mention mandatory camera
+        const warningText = document.querySelector('[data-translate="warning-text"]');
+        if (warningText) {
+            const mandatoryCameraText = '{{ $lang == "ar" ? "Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§ Ù…Ø·Ù„ÙˆØ¨Ø© Ù„Ù‡Ø°Ù‡ Ø§Ù„Ù…Ù‚Ø§Ø¨Ù„Ø©. " : "Camera access is required for this interview. " }}';
+            warningText.textContent = mandatoryCameraText + warningText.textContent;
+        }
     });
 
-    // Initialize progress circles
-    function initializeProgressCircles() {
-        const progressCircles = document.getElementById('progressCircles');
-        if (!progressCircles) return;
+    // Clean up resources when page unloads
+    window.addEventListener('beforeunload', function() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+        }
+        if (window.userMediaStream) {
+            window.userMediaStream.getTracks().forEach(track => track.stop());
+        }
+    });
 
-        progressCircles.innerHTML = '';
-        questions.forEach((_, index) => {
-            const circle = document.createElement('div');
-            circle.className = 'progress-circle unanswered';
-            circle.textContent = index + 1;
-            circle.onclick = () => goToQuestion(index);
-            progressCircles.appendChild(circle);
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize all components after DOM is ready
+        console.log('DOM loaded, initializing components...');
+
+        // Verify questions are properly loaded
+        console.log('Questions count:', questions.length);
+        console.log('Step containers found:', document.querySelectorAll('.step-container').length);
+
+        // Make sure all question elements exist before validation
+        setTimeout(() => {
+            initializeSteps();
+            console.log('Steps initialized');
+        }, 100);
+    });
+
+    // Initialize steps on form container show
+    function initializeSteps() {
+        console.log('Initializing steps...');
+
+        // Hide all steps except first
+        document.querySelectorAll('.step-container').forEach((step, index) => {
+            step.classList.toggle('active', index === 0);
         });
 
-        updateProgressCircles();
+        // Create step indicators
+        const stepIndicators = document.getElementById('stepIndicators');
+        if (stepIndicators) {
+            stepIndicators.innerHTML = '';
+            questions.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'step-dot';
+                if (index === 0) dot.classList.add('active');
+                stepIndicators.appendChild(dot);
+            });
+        }
+
+        updateNavigation();
+        setupCamera();
+
+        console.log('Steps initialization complete');
     }
 
-    // Update progress circles display
-    function updateProgressCircles() {
-        const circles = document.querySelectorAll('.progress-circle');
-        circles.forEach((circle, index) => {
-            circle.classList.remove('current', 'answered', 'unanswered');
+    function showStep(stepIndex) {
+        console.log('Showing step:', stepIndex);
 
-            if (index === currentQuestionIndex) {
-                circle.classList.add('current');
-            } else if (questionAnswers[questions[index]]) {
-                circle.classList.add('answered');
+        // Hide all steps
+        document.querySelectorAll('.step-container').forEach(step => {
+            step.classList.remove('active');
+        });
+
+        // Hide all cameras (only if camera is enabled)
+        if (!skipCamera) {
+            document.querySelectorAll('.camera-container').forEach(camera => {
+                camera.classList.remove('show');
+            });
+        }
+
+        // Show current step
+        const currentStepElement = document.getElementById(`step-${stepIndex}`);
+        if (currentStepElement) {
+            currentStepElement.classList.add('active');
+        }
+
+        // Show current camera only if camera is enabled and not skipped
+        if (!skipCamera && cameraEnabled) {
+            const currentCamera = document.getElementById(`camera-${stepIndex}`);
+            if (currentCamera) {
+                currentCamera.classList.add('show');
+            }
+        }
+
+        // Update step indicators
+        document.querySelectorAll('.step-dot').forEach((dot, index) => {
+            dot.classList.remove('active');
+            if (index < stepIndex) {
+                dot.classList.add('completed');
+            } else if (index === stepIndex) {
+                dot.classList.add('active');
             } else {
-                circle.classList.add('unanswered');
+                dot.classList.remove('completed');
             }
         });
+
+        updateNavigation();
     }
 
-    // Update question display
-    function updateQuestionDisplay() {
-        const questionNumber = document.getElementById('questionNumber');
-        const questionText = document.getElementById('questionText');
-        const currentQuestion = questions[currentQuestionIndex];
-
-        if (questionNumber) {
-            const translatedQuestion = getTranslatedMessage('question') || 'Question';
-            const translatedOf = getTranslatedMessage('of') || 'of';
-            questionNumber.textContent = `${translatedQuestion} ${currentQuestionIndex + 1} ${translatedOf} ${questions.length}`;
-        }
-
-        if (questionText) {
-            questionText.textContent = currentQuestion;
-        }
-
-        // Update textarea if answer exists
-        const textarea = document.querySelector(`#answer-${currentQuestionIndex}`);
-        if (textarea && questionAnswers[currentQuestion]) {
-            textarea.value = questionAnswers[currentQuestion];
-        }
-
-        updateRecordingStatus();
-    }
-
-    // Update recording status display
-    function updateRecordingStatus() {
-        const recordingStatus = document.getElementById('recordingStatus');
-        const recordingTimer = document.getElementById('recordingTimer');
-        const recordingControls = document.getElementById('recordingControls');
-        const currentQuestion = questions[currentQuestionIndex];
-
-        if (questionAnswers[currentQuestion]) {
-            // Show answer exists
-            recordingStatus.textContent = getTranslatedMessage('answer-recorded') || 'Answer recorded';
-            recordingStatus.style.color = '#10b981';
-            recordingTimer.style.display = 'none';
-            recordingControls.style.display = 'flex';
-        } else {
-            // Ready to record
-            recordingStatus.textContent = getTranslatedMessage('click-record') || 'Click to Record';
-            recordingStatus.style.color = '#6b7280';
-            recordingTimer.style.display = 'none';
-            recordingControls.style.display = 'none';
-        }
-    }
-
-    // Navigate to specific question
-    function goToQuestion(index) {
-        if (index >= 0 && index < questions.length) {
-            currentQuestionIndex = index;
-            updateQuestionDisplay();
-            updateProgressCircles();
-            updateNavigationButtons();
-
-            // Stop any playing audio
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = null;
-                document.getElementById('listenButton').classList.remove('playing');
-                document.getElementById('avatarWhirlpool').classList.remove('active');
-            }
-        }
-    }
-
-    // Previous question
-    function previousQuestion() {
-        if (currentQuestionIndex > 0) {
-            goToQuestion(currentQuestionIndex - 1);
-        }
-    }
-
-    // Next question
-    function nextQuestion() {
-        if (currentQuestionIndex < questions.length - 1) {
-            goToQuestion(currentQuestionIndex + 1);
-        }
-    }
-
-    // Update navigation buttons
-    function updateNavigationButtons() {
+    function updateNavigation() {
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
-        const submitButton = document.getElementById('submitButton');
+        const submitButton = document.getElementById('submitBtn');
 
-        // Previous button
-        if (prevButton) {
-            prevButton.disabled = currentQuestionIndex === 0;
-        }
+        if (prevButton) prevButton.disabled = currentStep === 0;
 
-        // Show next or submit based on position
-        if (currentQuestionIndex === questions.length - 1) {
-            // Last question - show submit
+        const currentQuestionText = questions[currentStep];
+
+        if (currentStep === questions.length - 1) {
             if (nextButton) nextButton.classList.add('hidden');
-            if (submitButton) submitButton.classList.remove('hidden');
+            if (submitButton) {
+                submitButton.classList.remove('hidden');
+                submitButton.disabled = !voiceAnswers[currentQuestionText];
+            }
         } else {
-            // Not last question - show next
-            if (nextButton) nextButton.classList.remove('hidden');
+            if (nextButton) {
+                nextButton.classList.remove('hidden');
+                nextButton.disabled = !voiceAnswers[currentQuestionText];
+            }
             if (submitButton) submitButton.classList.add('hidden');
-        }
-
-        // Enable/disable next button based on answer
-        const currentQuestion = questions[currentQuestionIndex];
-        if (nextButton) {
-            nextButton.disabled = !questionAnswers[currentQuestion];
         }
     }
 
-    // Toggle avatar audio playback
-    async function toggleAvatarAudio() {
-        const listenButton = document.getElementById('listenButton');
-        const avatarWhirlpool = document.getElementById('avatarWhirlpool');
+    function previousStep() {
+        if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    }
 
-        // If audio is playing, stop it
-        if (currentAudio && !currentAudio.paused) {
-            currentAudio.pause();
-            currentAudio = null;
-            listenButton.classList.remove('playing');
-            avatarWhirlpool.classList.remove('active');
+    function nextStep() {
+        const currentQuestionText = questions[currentStep];
+        if (currentStep < questions.length - 1 && voiceAnswers[currentQuestionText]) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    }
+
+    // Update your setupCamera function:
+    async function setupCamera() {
+        const cameraToggle = document.getElementById('cameraToggle');
+        const status = document.getElementById('status-0');
+
+        // Skip camera if qs=1 parameter is present
+        if (skipCamera) {
+            console.log('Skipping camera due to qs=1 parameter');
+            cameraEnabled = false;
+
+            // Hide all camera containers
+            document.querySelectorAll('.camera-container').forEach(container => {
+                container.style.display = 'none';
+            });
+
+            // Update status message
+            if (status) {
+                status.textContent = getTranslatedMessage('camera_skipped') || 'Camera disabled - you can start the interview';
+            }
+
+            return true; // Allow session to continue without camera
+        }
+
+        // Original camera setup logic for normal cases
+        cameraEnabled = true;
+
+        if (status) {
+            status.textContent = getTranslatedMessage('requesting-camera') || 'Requesting camera access...';
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: 'user'
+                },
+                audio: false
+            });
+
+            videoStream = stream;
+            cameraEnabled = true;
+            setupCameraForAllSteps();
+
+            if (status) {
+                status.textContent = getTranslatedMessage('camera_ready') || 'Camera ready - you can start the interview';
+            }
+
+            console.log('Camera initialized successfully');
+            return true;
+
+        } catch (error) {
+            console.error('Camera access denied:', error);
+            cameraEnabled = false;
+
+            const errorMessage = getTranslatedMessage('camera_required') || 'Camera access is required for this interview. The session will now close.';
+
+            swal({
+                title: getTranslatedMessage('camera_access_denied') || 'Camera Access Denied',
+                text: errorMessage,
+                icon: "error",
+                button: "OK",
+                closeOnClickOutside: false,
+                closeOnEsc: false
+            }).then(() => {
+                terminateSession();
+            });
+
+            return false;
+        }
+    }
+
+    // Setup camera for all steps at once
+    function setupCameraForAllSteps() {
+        if (!cameraEnabled || !videoStream) return;
+
+        // Setup video stream for all video elements but keep them hidden
+        for (let i = 0; i < questions.length; i++) {
+            const video = document.getElementById(`video-${i}`);
+            const container = document.getElementById(`camera-${i}`);
+
+            if (video && container) {
+                video.srcObject = videoStream;
+                // Remove this line: container.classList.add('show');
+                // Camera visibility will be controlled by showStep function
+
+                video.onerror = function() {
+                    console.error(`Video error on step ${i}`);
+                    handleCameraError();
+                };
+            }
+        }
+    }
+
+    function setupCameraForStep(stepIndex) {
+        // Since we're setting up all cameras at once, this function just ensures visibility
+        if (cameraEnabled && videoStream) {
+            const container = document.getElementById(`camera-${stepIndex}`);
+            if (container) {
+                container.classList.add('show');
+            }
+        }
+    }
+
+    function handleCameraError() {
+        const errorMessage = getTranslatedMessage('camera_error_session') || 'Camera connection lost. Interview session must be terminated.';
+
+        swal({
+            title: getTranslatedMessage('camera_error') || 'Camera Error',
+            text: errorMessage,
+            icon: "error",
+            button: "OK",
+            closeOnClickOutside: false,
+            closeOnEsc: false
+        }).then(() => {
+            terminateSession();
+        });
+    }
+
+    // Terminate session function
+    function terminateSession() {
+        // Stop all media streams
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+
+        if (window.userMediaStream) {
+            window.userMediaStream.getTracks().forEach(track => track.stop());
+            window.userMediaStream = null;
+        }
+
+        // Show expired overlay or redirect
+        const expiredOverlay = document.getElementById('expiredOverlay');
+        if (expiredOverlay) {
+            expiredOverlay.style.display = 'flex';
+        } else {
+            // Fallback: redirect to home or interview list
+            window.location.href = '/'; // Adjust this URL as needed
+        }
+    }
+
+
+    async function playQuestion(stepIndex, questionText) {
+        const playButton = document.getElementById(`playButton-${stepIndex}`);
+        const avatarContainer = document.getElementById(`avatar-${stepIndex}`);
+
+        if (!playButton || !avatarContainer) {
+            console.error('Required elements not found for step:', stepIndex);
             return;
         }
 
-        // Start loading state
-        listenButton.disabled = true;
-        listenButton.innerHTML = '<span>⏳</span> <span>' + (defaultLanguage == 'ar' ? 'تحميل...':'Loading...') + '</span>';
+        // Stop any currently playing audio
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+            document.querySelectorAll('.voice-icon').forEach(btn => {
+                btn.className = 'voice-icon';
+                btn.innerHTML = '🔊';
+            });
+            document.querySelectorAll('.avatar-container').forEach(container => {
+                container.classList.remove('show');
+            });
+        }
+
+        // If this button is already playing, stop it
+        if (playButton.classList.contains('playing')) {
+            playButton.className = 'voice-icon';
+            playButton.innerHTML = '🔊';
+            avatarContainer.classList.remove('show');
+            return;
+        }
+
+        // Set loading state
+        playButton.className = 'voice-icon loading';
+        playButton.innerHTML = '🔊';
 
         try {
-            const currentQuestion = questions[currentQuestionIndex];
             const response = await fetch(`${apiUrl}/generate-speech`, {
                 method: 'POST',
                 headers: {
@@ -216,143 +373,129 @@
                     speed: '1',
                     voice: 'nova',
                     model: 'tts-1',
-                    text: currentQuestion
+                    text: questionText
                 })
             });
 
+            // console.log(response.text())
             const result = await response.json();
+            console.log(result);
 
-            if (result.url) {
-                const audioURL = `${apiUrl}${result.url}`;
+            audioURL = `${apiUrl}${result.url}`;
+            // audioURL = `https://api5.massar.biz/static/audio/7bbe46a7-a32d-47ea-9f15-5a5eef9c24c2.mp3`;
+
+            console.log(audioURL)
+            if (audioURL) {
+
                 currentAudio = new Audio(audioURL);
 
                 currentAudio.onloadeddata = () => {
-                    listenButton.disabled = false;
-                    listenButton.classList.add('playing');
-                    listenButton.innerHTML = '<span>🔊</span> <span>' + (defaultLanguage == 'ar' ? 'إيقاف':'Stop') + '</span>';
-                    avatarWhirlpool.classList.add('active');
+                    playButton.className = 'voice-icon playing';
+                    playButton.innerHTML = '🔊';
+                    avatarContainer.classList.add('show');
                     currentAudio.play();
                 };
 
                 currentAudio.onended = () => {
-                    listenButton.classList.remove('playing');
-                    listenButton.innerHTML = '<span>🔊</span> <span>' + (defaultLanguage == 'ar' ? 'إستماع للسؤال':'Listen to Question') + '</span>';
-                    avatarWhirlpool.classList.remove('active');
+                    playButton.className = 'voice-icon';
+                    playButton.innerHTML = '🔊';
+                    avatarContainer.classList.remove('show');
                     currentAudio = null;
                 };
 
                 currentAudio.onerror = () => {
-                    throw new Error('Audio playback failed');
+                    console.error('Error playing audio');
+                    playButton.className = 'voice-icon';
+                    playButton.innerHTML = '🔊';
+                    avatarContainer.classList.remove('show');
                 };
+            } else {
+                throw new Error('No audio URL received');
             }
-        } catch (error) {
-            console.error('TTS error:', error);
-            listenButton.disabled = false;
-            listenButton.innerHTML = '<span>🔊</span> <span>' + (defaultLanguage == 'ar' ? 'إستماع للسؤال':'Listen to Question') + '</span>';
 
+        } catch (error) {
+            console.error('Error with TTS:', error);
+            playButton.className = 'voice-icon';
+            playButton.innerHTML = '🔊';
+
+            // Use fallback message if translation not available
+            const errorMessage = getTranslatedMessage('tts_error') || 'Failed to load question audio. Please try again.';
             swal({
                 title: getTranslatedMessage('error') || 'Error',
-                text: getTranslatedMessage('tts_error') || 'Failed to load audio',
+                text: errorMessage,
                 icon: "error",
                 button: "OK"
             });
         }
     }
 
-    // Toggle recording
-    async function toggleRecording() {
-        if (isRecording) {
-            stopRecording();
+    async function toggleRecording(stepIndex) {
+        const micButton = document.getElementById(`micButton-${stepIndex}`);
+        const status = document.getElementById(`status-${stepIndex}`);
+        const textarea = document.querySelector(`#step-${stepIndex} .answer-textarea`);
+
+        if (!micButton || !status || !textarea) {
+            console.error('Required elements not found for recording step:', stepIndex);
+            return;
+        }
+
+        if (!isRecording) {
+            // Start recording
+            try {
+                if (!window.userMediaStream) {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    window.userMediaStream = stream;
+                }
+
+                mediaRecorder = new MediaRecorder(window.userMediaStream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await transcribeAudio(audioBlob, stepIndex);
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+
+                micButton.classList.add('recording');
+                status.textContent = getTranslatedMessage('recording_active') || 'Recording... Click to stop';
+                status.classList.add('recording');
+
+            } catch (error) {
+                console.error('Error starting recording:', error);
+                swal({
+                    title: getTranslatedMessage('error') || 'Error',
+                    text: getTranslatedMessage('mic_error') || 'Failed to start recording. Please check your microphone.',
+                    icon: "error",
+                    button: "OK"
+                });
+            }
         } else {
-            startRecording();
-        }
-    }
-
-    // Start recording
-    async function startRecording() {
-        const recordButton = document.getElementById('recordButton');
-        const recordingStatus = document.getElementById('recordingStatus');
-        const recordingTimerEl = document.getElementById('recordingTimer');
-
-        try {
-            if (!window.userMediaStream) {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                window.userMediaStream = stream;
+            // Stop recording
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
             }
+            isRecording = false;
 
-            mediaRecorder = new MediaRecorder(window.userMediaStream);
-            audioChunks = [];
-
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
-
-            mediaRecorder.onstop = async () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                await transcribeAudio(audioBlob);
-            };
-
-            mediaRecorder.start();
-            isRecording = true;
-            recordingSeconds = 0;
-
-            // Update UI
-            recordButton.classList.add('recording');
-            recordButton.innerHTML = '<span id="recordIcon">⏹️</span>';
-            recordingStatus.textContent = (defaultLanguage == 'ar' ? 'تسجيل...':'Recording...');
-            recordingStatus.style.color = '#ef4444';
-
-            // Start timer
-            recordingTimerEl.classList.add('active');
-            updateRecordingTimer();
-            recordingTimer = setInterval(updateRecordingTimer, 1000);
-
-        } catch (error) {
-            console.error('Recording error:', error);
-            swal({
-                title: getTranslatedMessage('error') || 'Error',
-                text: getTranslatedMessage('mic_error') || 'Microphone error',
-                icon: "error",
-                button: "OK"
-            });
+            micButton.classList.remove('recording');
+            micButton.classList.add('processing');
+            status.textContent = getTranslatedMessage('processing_answer') || 'Processing your answer...';
+            status.classList.remove('recording');
         }
     }
 
-    // Stop recording
-    function stopRecording() {
-        if (mediaRecorder && mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-        }
-
-        isRecording = false;
-        clearInterval(recordingTimer);
-
-        const recordButton = document.getElementById('recordButton');
-        const recordingStatus = document.getElementById('recordingStatus');
-
-        recordButton.classList.remove('recording');
-        recordButton.innerHTML = '<span id="recordIcon">🎤</span>';
-        recordingStatus.textContent = (defaultLanguage == 'ar' ? 'معالجة...':'Processing...');
-        recordingStatus.style.color = '#6b7280';
-    }
-
-    // Update recording timer display
-    function updateRecordingTimer() {
-        recordingSeconds++;
-        const minutes = Math.floor(recordingSeconds / 60);
-        const seconds = recordingSeconds % 60;
-        const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        document.getElementById('recordingTimer').textContent = display;
-    }
-
-    // Transcribe audio
-    async function transcribeAudio(audioBlob) {
-        const recordingStatus = document.getElementById('recordingStatus');
-        const recordingTimerEl = document.getElementById('recordingTimer');
-        const recordingControls = document.getElementById('recordingControls');
+    async function transcribeAudio(audioBlob, stepIndex) {
+        const micButton = document.getElementById(`micButton-${stepIndex}`);
+        const status = document.getElementById(`status-${stepIndex}`);
+        const textarea = document.querySelector(`#step-${stepIndex} .answer-textarea`);
 
         try {
-            // Convert to WAV
+            // Convert .webm to .wav
             const arrayBuffer = await audioBlob.arrayBuffer();
             const audioContext = new AudioContext();
             const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
@@ -360,98 +503,46 @@
 
             const formData = new FormData();
             formData.append("file", wavBlob, "recording.wav");
-            formData.append("language", defaultLanguage);
+            formData.append("language", "{{ $lang }}");
             formData.append("prompt", "using the same language of the rec");
             formData.append("response_format", "json");
-            formData.append("temperature", "0");
+            formData.append("temperature", 0);
 
             const response = await fetch(`${apiUrl}/transcribe-media`, {
                 method: "POST",
-                body: formData
+                body: formData,
             });
 
             const result = await response.json();
+            console.log(result);
 
             if (result.text) {
-                const currentQuestion = questions[currentQuestionIndex];
-                questionAnswers[currentQuestion] = result.text;
-
-                // Update textarea
-                const textarea = document.querySelector(`#answer-${currentQuestionIndex}`);
-                if (textarea) {
-                    textarea.value = result.text;
-                }
-
-                // Update UI
-                recordingStatus.textContent = getTranslatedMessage('answer_recorded') || 'Answer recorded!';
-                recordingStatus.style.color = '#10b981';
-                recordingTimerEl.classList.remove('active');
-                recordingControls.style.display = 'flex';
-
-                updateProgressCircles();
-                updateNavigationButtons();
-
+                const questionText = questions[stepIndex];
+                voiceAnswers[questionText] = result.text;
+                textarea.value = result.text;
+                textarea.classList.add('has-content');
+                status.textContent = getTranslatedMessage('answer_recorded') || 'Answer recorded successfully!';
+                updateNavigation();
+                console.log('Answer recorded for step:', stepIndex, result.text);
             } else {
                 throw new Error('No transcription received');
             }
 
         } catch (error) {
-            console.error('Transcription error:', error);
-            recordingStatus.textContent = getTranslatedMessage('transcribe_failed') || 'Failed to transcribe';
-            recordingStatus.style.color = '#ef4444';
-            recordingTimerEl.classList.remove('active');
-        }
-    }
-
-    // Retry recording
-    function retryRecording() {
-        const currentQuestion = questions[currentQuestionIndex];
-        delete questionAnswers[currentQuestion];
-
-        // Clear textarea
-        const textarea = document.querySelector(`#answer-${currentQuestionIndex}`);
-        if (textarea) {
-            textarea.value = '';
-        }
-
-        updateRecordingStatus();
-        updateProgressCircles();
-        updateNavigationButtons();
-    }
-
-    // Confirm recording
-    function confirmRecording() {
-        // Recording is already saved, just update UI
-        updateRecordingStatus();
-
-        // Auto-advance to next question if not last
-        if (currentQuestionIndex < questions.length - 1) {
-            setTimeout(() => {
-                nextQuestion();
-            }, 500);
-        }
-    }
-
-    // Submit interview
-    async function submitInterview() {
-        // Check all questions answered
-        const unanswered = questions.filter(q => !questionAnswers[q]);
-
-        if (unanswered.length > 0) {
+            console.error('Error transcribing audio:', error);
+            status.textContent = getTranslatedMessage('transcribe_failed') || 'Failed to transcribe. Please try recording again.';
             swal({
-                title: getTranslatedMessage('incomplete-form') || 'Incomplete',
-                text: `Please answer all questions. ${unanswered.length} remaining.`,
-                icon: "warning",
+                title: getTranslatedMessage('error') || 'Error',
+                text: getTranslatedMessage('transcribe_error') || 'Failed to transcribe audio. Please try again.',
+                icon: "error",
                 button: "OK"
             });
-            return;
+        } finally {
+            micButton.classList.remove('processing');
         }
-
-        // Submit form
-        document.getElementById('interviewForm').submit();
     }
 
-    // Audio buffer to WAV converter
+    // Helper: convert AudioBuffer to WAV
     function audioBufferToWav(buffer) {
         const numOfChan = buffer.numberOfChannels;
         const length = buffer.length * numOfChan * 2 + 44;
@@ -463,6 +554,7 @@
             for (let i = 0; i < s.length; i++) view.setUint8(offset++, s.charCodeAt(i));
         }
 
+        // WAV header
         writeString('RIFF');
         view.setUint32(offset, length - 8, true); offset += 4;
         writeString('WAVE');
@@ -477,6 +569,7 @@
         writeString('data');
         view.setUint32(offset, length - offset - 4, true); offset += 4;
 
+        // Write interleaved PCM samples
         const interleaved = new Float32Array(buffer.length * numOfChan);
         for (let ch = 0; ch < numOfChan; ch++) {
             const channelData = buffer.getChannelData(ch);
@@ -486,258 +579,109 @@
         }
 
         let index = 0;
+        const volume = 1;
         for (let i = 0; i < interleaved.length; i++, index += 2) {
-            const s = Math.max(-1, Math.min(1, interleaved[i]));
+            const s = Math.max(-1, Math.min(1, interleaved[i] * volume));
             view.setInt16(44 + index, s < 0 ? s * 0x8000 : s * 0x7fff, true);
         }
 
         return view;
     }
 
-    // Camera setup
-    // Camera setup
-    async function setupCamera() {
-        const cameraPreview = document.getElementById('cameraPreview');
-        const cameraContainer = document.getElementById('cameraContainer');
 
-        if (skipCamera) {
-            console.log('Camera skipped');
-            return true;
-        }
+    // Monitor camera stream throughout the interview
+    function monitorCameraStream() {
+        if (!videoStream) return;
 
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    facingMode: 'user'
-                },
-                audio: false
-            });
-
-            videoStream = stream;
-            cameraEnabled = true;
-
-            if (cameraPreview && cameraContainer) {
-                cameraPreview.srcObject = stream;
-
-                // Make sure container is visible immediately
-                cameraContainer.style.display = 'block';
-                cameraContainer.classList.add('show');
-
-                // Wait for video to be ready
-                return new Promise((resolve) => {
-                    cameraPreview.onloadedmetadata = () => {
-                        cameraPreview.play();
-                        console.log('Camera feed started successfully');
-                        resolve(true);
-                    };
-                });
-            }
-            return true;
-
-        } catch (error) {
-            console.error('Camera error:', error);
-
-            // Still show container with error message
-            if (cameraContainer) {
-                cameraContainer.style.display = 'block';
-                cameraContainer.classList.add('show');
-                cameraPreview.style.background = '#ff0000';
-            }
-
-            swal({
-                title: getTranslatedMessage('camera_error') || 'Camera Error',
-                text: getTranslatedMessage('camera_required') || 'Camera required',
-                icon: "error",
-                button: "OK"
-            }).then(() => {
-                terminateSession();
-            });
-
-            return false;
-        }
+        // Check if any track has ended
+        videoStream.getTracks().forEach(track => {
+            track.onended = function() {
+                console.error('Camera track ended unexpectedly');
+                handleCameraError();
+            };
+        });
     }
 
-    // Start session
-
-    // Add these camera-related functions to your main.js file
-
-    // Check if we should skip camera (backdoor parameter)
-    function shouldSkipCamera() {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('qs') === '1';
-    }
-
-    // Request camera permission and setup preview
-    async function requestCameraPermission() {
-        // Skip camera if backdoor parameter is present
-        if (shouldSkipCamera()) {
-            console.log('Skipping camera due to qs=1 parameter');
-            return true;
-        }
-
-        try {
-            // Request camera access
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 640 },
-                    height: { ideal: 480 },
-                    facingMode: 'user'
-                },
-                audio: false
-            });
-
-            console.log('Camera permission granted');
-
-            // Store the stream
-            currentStream = stream;
-
-            // Setup camera preview
-            setupCameraPreview(stream);
-
-            return true;
-        } catch (error) {
-            console.error('Camera permission denied or failed:', error);
-
-            // Show error message
-            swal({
-                title: getTranslatedMessage('camera-required') || 'Camera Required',
-                text: getTranslatedMessage('camera-required-text') || 'Camera access is mandatory for this interview. Please allow camera permission and refresh the page.',
-                icon: "error",
-                buttons: {
-                    refresh: {
-                        text: "Refresh Page",
-                        value: "refresh",
-                        visible: true
-                    },
-                    cancel: {
-                        text: "Cancel",
-                        value: false,
-                        visible: true
-                    }
-                }
-            }).then((value) => {
-                if (value === "refresh") {
-                    location.reload();
-                }
-            });
-
-            return false;
-        }
-    }
-
-    // Setup camera preview in the avatar section
-    function setupCameraPreview(stream) {
-        // Find the avatar container
-        const avatarContainer = document.querySelector('.avatar-container');
-        if (!avatarContainer) {
-            console.error('Avatar container not found');
-            return;
-        }
-
-        // Remove existing avatar content
-        avatarContainer.innerHTML = '';
-
-        // Create video element for camera preview
-        const videoElement = document.createElement('video');
-        videoElement.id = 'cameraPreview';
-        videoElement.autoplay = true;
-        videoElement.muted = true;
-        videoElement.playsInline = true;
-        videoElement.style.cssText = `
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 12px;
-        border: 3px solid #3464b0;
-        box-shadow: 0 5px 15px rgba(52, 100, 176, 0.3);
-    `;
-
-        // Set the stream
-        videoElement.srcObject = stream;
-
-        // Add to container
-        avatarContainer.appendChild(videoElement);
-
-        // Store reference
-        cameraPreview = videoElement;
-
-        console.log('Camera preview setup complete');
-    }
-
-    // Stop camera stream
-    function stopCameraStream() {
-        if (currentStream) {
-            currentStream.getTracks().forEach(track => {
-                track.stop();
-            });
-            currentStream = null;
-        }
-
-        if (cameraPreview) {
-            cameraPreview.srcObject = null;
-            cameraPreview = null;
-        }
-    }
-
-    // Modified startSession function to include camera check
+    // Enhanced session start function
+    // Enhanced startSession function with mandatory camera check
     async function startSession() {
-        console.log('Starting interview session...');
+        console.log('Starting session with mandatory camera...');
 
-        // First check camera permission (unless backdoor is used)
-        if (!shouldSkipCamera()) {
-            const cameraGranted = await requestCameraPermission();
-            if (!cameraGranted) {
-                console.log('Camera permission denied, cannot start interview');
+        // Show loading state
+        const startButton = document.querySelector('.start-button');
+        const originalText = startButton.textContent;
+        startButton.disabled = true;
+        startButton.textContent = getTranslatedMessage('initializing') || 'Initializing...';
+
+        try {
+            // First, request screen permission (your existing function)
+            const screenPermissionGranted = await requestFakeScreenPermission();
+            if (!screenPermissionGranted) {
+                startButton.disabled = false;
+                startButton.textContent = originalText;
                 return;
             }
+
+            // MANDATORY: Setup camera - session fails if this fails
+            const cameraSetupSuccess = await setupCamera();
+            if (!cameraSetupSuccess) {
+                // setupCamera() already handles the error and termination
+                return;
+            }
+
+            // Start the API session
+            const response = await fetch(`${apiUrl}/api/session/start/{{ $interview->id }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to start session');
+            }
+
+            console.log('Interview session started successfully');
+
+            // Success - hide welcome card and show form
+            document.getElementById('welcomeCard').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'block';
+
+            // Initialize steps and other components
+            initializeSteps();
+            startTimer();
+
+            // Initialize validation with delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof initializeValidation === 'function') {
+                    initializeValidation();
+                    console.log('Validation initialized');
+                }
+            }, 500);
+
+            showRecordingAlert();
+
+        } catch (error) {
+            console.error('Error starting session:', error);
+            startButton.disabled = false;
+            startButton.textContent = originalText;
+
+            swal({
+                title: getTranslatedMessage('error') || 'Error',
+                text: getTranslatedMessage('failed_initialize') || 'Failed to initialize interview session. Please try again.',
+                icon: "error",
+                button: "OK"
+            });
         }
-
-        // Start the session API call
-        const sessionStarted = await startInterviewSession();
-        if (!sessionStarted) {
-            return;
-        }
-
-        // Hide welcome card and show form
-        document.getElementById('welcomeCard').style.display = 'none';
-        document.getElementById('formContainer').style.display = 'block';
-
-        // Initialize other components
-        initializeForm();
-        initializeSpeechToText();
-        initializeValidation();
-        loadQuestions();
-        startTimer();
-        showRecordingAlert();
-
-        console.log('Session started successfully');
     }
 
-    // Terminate session
-    function terminateSession() {
-        if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
-            videoStream = null;
-        }
-
-        if (window.userMediaStream) {
-            window.userMediaStream.getTracks().forEach(track => track.stop());
-            window.userMediaStream = null;
-        }
-
-        const expiredOverlay = document.getElementById('expiredOverlay');
-        if (expiredOverlay) {
-            expiredOverlay.style.display = 'flex';
-        }
-    }
-
-    // Helper to get translated messages
+    // Helper function to get translated messages
+    // Helper function to get translated messages
     function getTranslatedMessage(key) {
         const translations = {
             'error': defaultLanguage === 'ar' ? 'خطأ' : 'Error',
-            'loading': defaultLanguage === 'ar' ? 'تحميل' : 'Loading',
             'camera_skipped': defaultLanguage === 'ar' ? 'تم تعطيل الكاميرا - يمكنك بدء المقابلة' : 'Camera disabled - you can start the interview',
             'initializing': '{{ $lang == "ar" ? "جاري التهيئة..." : "Initializing..." }}',
             'requesting-camera': '{{ $lang == "ar" ? "طلب إذن الكاميرا..." : "Requesting camera access..." }}',
@@ -770,18 +714,23 @@
 
         return translations[key] || null;
     }
+    // Request fake screen permission (placeholder function)
+    async function requestFakeScreenPermission() {
+        // This should be implemented based on your screenshot.js
+        return true; // For now, always return true
+    }
 
-    // Show recording alert
+    // Placeholder for timer function
+    function startTimer() {
+        // This should be implemented in your timer.js
+        console.log('Timer started');
+    }
+
+    // Placeholder for recording alert
     function showRecordingAlert() {
         const alert = document.getElementById('recordingAlert');
         if (alert) {
-            alert.classList.add('show');
+            alert.style.display = 'block';
         }
-    }
-
-    // Request fake screen permission
-    async function requestFakeScreenPermission() {
-        // Implementation from your screenshot.js
-        return true;
     }
 </script>
