@@ -407,28 +407,69 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Camera Container - Updated */
+/* Camera Container - Fixed positioning */
 .camera-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 100;
-    background: white;
-    padding: 10px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    display: none;
+    width: 200px;
+    height: 150px;
+    background: #000;
+    border-radius: 8px;
+    border: 2px solid #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 1000;
+    display: none; /* Hidden by default */
+    transition: all 0.3s ease;
 }
 
 .camera-container.show {
     display: block;
+    opacity: 1;
 }
 
 .camera-preview {
-    width: 150px;
-    height: 100px;
-    border-radius: 10px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    border-radius: 6px;
+}
+
+/* Alternative positioning - you can choose one */
+.camera-container.top-right {
+    top: 20px;
+    right: 20px;
+    bottom: auto;
+}
+
+.camera-container.top-left {
+    top: 20px;
+    left: 20px;
+    right: auto;
+    bottom: auto;
+}
+
+.camera-container.bottom-left {
+    bottom: 20px;
+    left: 20px;
+    right: auto;
+}
+
+/* Make it draggable visually */
+.camera-container:hover {
+    cursor: move;
+    border-color: #60a5fa;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .camera-container {
+        width: 120px;
+        height: 90px;
+        bottom: 80px;
+        right: 10px;
+    }
 }
 
 /* Navigation Row */
