@@ -606,7 +606,6 @@
             updateNavigationButtons();
             startTimer();
             showRecordingAlert();
-
         } catch (error) {
             console.error('Session start error:', error);
             startButton.disabled = false;

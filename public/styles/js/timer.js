@@ -1,8 +1,15 @@
 // Timer functionality with translation support
-let sessionTimer;
+let sessionTimer = null;
 let timeRemaining = 1800; // 30 minutes in seconds
 
+// Add this function after the existing functions (around line 400)
 function startTimer() {
+    if (sessionTimer) {
+        clearInterval(sessionTimer);
+    }
+
+    updateTimerDisplay();
+
     sessionTimer = setInterval(() => {
         timeRemaining--;
         updateTimerDisplay();
@@ -16,43 +23,56 @@ function startTimer() {
 function updateTimerDisplay() {
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
-    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-    const timerText = document.getElementById('timerProgress');
-    timerText.textContent = `${getTranslatedMessage('time-remaining')} ${timeString}`;
+    const timerDisplay = document.getElementById('timerDisplay');
+    if (timerDisplay) {
+        timerDisplay.textContent = display;
+    }
 
-    const progressPercent = ((1800 - timeRemaining) / 1800) * 100;
-    document.getElementById('timerProgress').style.width = progressPercent + '%';
+    // Update progress bar
+    const progress = ((1800 - timeRemaining) / 1800) * 100;
+    const timerProgress = document.getElementById('timerProgress');
+    if (timerProgress) {
+        timerProgress.style.width = `${progress}%`;
+    }
 
-    // Change color based on time remaining
-    const progressBar = document.getElementById('timerProgress');
-    if (timeRemaining < 300) { // Less than 5 minutes
-        progressBar.style.background = '#ef4444';
-    } else if (timeRemaining < 900) { // Less than 15 minutes
-        progressBar.style.background = '#f59e0b';
+    // Change color when time is running low
+    if (timerDisplay) {
+        if (timeRemaining <= 300) { // 5 minutes remaining
+            timerDisplay.style.color = '#ef4444'; // red
+        } else if (timeRemaining <= 600) { // 10 minutes remaining
+            timerDisplay.style.color = '#f59e0b'; // orange
+        } else {
+            timerDisplay.style.color = '#10b981'; // green
+        }
     }
 }
 
-async function expireSession() {
+function expireSession() {
     clearInterval(sessionTimer);
-    hideRecordingAlert();
+    if (stopStatusChecks && typeof stopStatusChecks === 'function') {
+        stopStatusChecks();
+    }
 
-    document.getElementById('expiredOverlay').style.display = 'flex';
+    // Stop camera and audio
+    if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+    }
+    if (window.userMediaStream) {
+        window.userMediaStream.getTracks().forEach(track => track.stop());
+    }
 
-    // Call Laravel API to close session
-    try {
-        const id = document.querySelector('input[name=interview_slug]')?.value;
+    // Show expired overlay
+    const expiredOverlay = document.getElementById('expiredOverlay');
+    if (expiredOverlay) {
+        expiredOverlay.style.display = 'flex';
+    }
 
-        await fetch(`/api/session/close/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        });
-        location.reload();
-    } catch (error) {
-        console.error('Error closing session:', error);
+    // Hide recording alert
+    const recordingAlert = document.getElementById('recordingAlert');
+    if (recordingAlert) {
+        recordingAlert.classList.remove('show');
     }
 }
 

@@ -7,63 +7,6 @@
     <link href="{{ asset('styles/css/interviewForm.css') }}" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <title>{{ $lang == 'ar' ? 'جلسة المقابلة' : 'Interview Session' }}</title>
-
-
-    <style>
-        /* Camera Preview Styles */
-        .camera-preview {
-            width: 200px;
-            height: 150px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid #e2e8f0;
-            background: #000;
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        #cameraVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scaleX(-1); /* Mirror effect */
-        }
-
-        .camera-overlay {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .camera-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .camera-indicator {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-    </style>
 </head>
 <body>
 
