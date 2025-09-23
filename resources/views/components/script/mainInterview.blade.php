@@ -447,6 +447,7 @@
 
     // Submit interview
     async function submitInterview() {
+        console.log('questionAnswers before submit:', questionAnswers);
         // Check all questions answered
         const unanswered = questions.filter(q => !questionAnswers[q]);
 
@@ -460,8 +461,56 @@
             return;
         }
 
-        // Submit form
-        document.getElementById('interviewForm').submit();
+        // Show submitting alert
+        swal({
+            title: getTranslatedMessage('submitting-interview') || 'Submitting Interview',
+            text: getTranslatedMessage('processing-responses') || 'Processing your responses...',
+            icon: "info",
+            buttons: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false
+        });
+
+        try {
+            // Finish the interview session via API
+            const sessionFinished = await finishInterviewSession();
+
+            if (sessionFinished) {
+                clearInterval(sessionTimer);
+                stopStatusChecks();
+                hideRecordingAlert();
+
+                // Show success message briefly before submitting
+                swal({
+                    title: getTranslatedMessage('success') || 'Success',
+                    text: getTranslatedMessage('interview-completed') || 'Interview completed successfully!',
+                    icon: "success",
+                    timer: 2000,
+                    buttons: false
+                });
+
+                // Submit the actual form data after a brief delay
+                setTimeout(() => {
+                    location.href = '/';
+                    // this.submit();
+                }, 2000);
+            } else {
+                swal({
+                    title: getTranslatedMessage('error') || 'Error',
+                    text: 'Failed to complete the interview session. Please try again.',
+                    icon: "error",
+                    button: "OK"
+                });
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            swal({
+                title: getTranslatedMessage('error') || 'Error',
+                text: getTranslatedMessage('submission-failed') || 'Failed to submit interview. Please try again.',
+                icon: "error",
+                button: "OK"
+            });
+        }
     }
 
     // Audio buffer to WAV converter
