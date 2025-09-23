@@ -111,9 +111,9 @@
             recordingStatus.style.color = '#10b981';
             recordingTimer.style.display = 'none';
             recordingControls.style.display = 'flex';
-            recordingControls.style.flexWrap = 'wrap';
-            recordingControls.style.justifyContent = 'center';
-            recordingControls.style.gap = '5px';
+            // recordingControls.style.flexWrap = 'wrap';
+            // recordingControls.style.justifyContent = 'center';
+            // recordingControls.style.gap = '5px';
         } else {
             // Ready to record
             recordingStatus.textContent = getTranslatedMessage('click-record') || 'Click to Record';

@@ -69,11 +69,13 @@ body {
     -moz-appearance: none;
 }
 #interviewForm{
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 5px;
+    box-sizing: border-box;
+    /*justify-content: center;*/
+    /*flex-wrap: wrap;*/
+    /*gap: 5px;*/
     & button{
-        display: flex;
+        text-wrap-mode: nowrap;
+        margin-top: 5px;
     }
 }
 .warning-box {
