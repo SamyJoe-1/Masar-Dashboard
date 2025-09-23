@@ -70,9 +70,6 @@ body {
 }
 #interviewForm{
     box-sizing: border-box;
-    /*justify-content: center;*/
-    /*flex-wrap: wrap;*/
-    /*gap: 5px;*/
     & button{
         text-wrap-mode: nowrap;
         margin-top: 5px;
@@ -667,6 +664,11 @@ body {
     .nav-button {
         padding: 12px 20px;
         font-size: 14px;
+    }
+
+    #interviewForm{
+        display: grid !important;
+        gap: 5px;
     }
 }
 
