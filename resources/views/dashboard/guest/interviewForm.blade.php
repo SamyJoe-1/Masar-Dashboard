@@ -9,7 +9,6 @@
     <title>{{ $lang == 'ar' ? 'جلسة المقابلة' : 'Interview Session' }}</title>
 </head>
 <body>
-
 <!-- Language Selector -->
 <div class="language-selector">
     <svg class="translate-icon" viewBox="0 0 24 24" fill="currentColor">
