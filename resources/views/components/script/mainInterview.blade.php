@@ -130,7 +130,7 @@
             recordingControls.style.gap = '5px';
         } else {
             // Ready to record
-            recordingStatus.textContent = {{ $lang == 'en' ? 'Click to Record':'إضغط للتسجيل' }};
+            recordingStatus.textContent = '{{ $lang == 'en' ? 'Click to Record':'إضغط للتسجيل' }}';
             recordingStatus.style.color = '#6b7280';
             recordingTimer.style.display = 'none';
             recordingControls.style.display = 'none';
