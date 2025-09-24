@@ -101,7 +101,7 @@
                     <div class="recording-area">
                         <!-- ADD THIS: Camera Preview -->
                         <div class="camera-preview" id="cameraPreview">
-                            <video id="cameraVideo" autoplay muted playsinline></video>
+                            <video id="video" autoplay muted playsinline style="width: 100%; height: auto;"></video>
                             <div class="camera-overlay">
                                 <div class="camera-status" id="cameraStatus">
                                     <span class="camera-indicator"></span>

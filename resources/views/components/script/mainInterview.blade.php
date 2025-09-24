@@ -130,7 +130,7 @@
             recordingControls.style.gap = '5px';
         } else {
             // Ready to record
-            recordingStatus.textContent = getTranslatedMessage('click-record') || 'Click to Record';
+            recordingStatus.textContent = {{ $lang == 'en' ? 'Click to Record':'إضغط للتسجيل' }};
             recordingStatus.style.color = '#6b7280';
             recordingTimer.style.display = 'none';
             recordingControls.style.display = 'none';
@@ -780,111 +780,65 @@ function getCameraStatusEl() {
     }
 
 
+
     async function startCamera() {
-        if (skipCamera) {
-            console.log('[Camera] Skipped due to qs=1 parameter');
-            return;
-        }
-        if (cameraEnabled) {
-            console.log('[Camera] Already enabled');
-            return;
-        }
-
-        console.log('[Camera] Starting camera for user agent:', navigator.userAgent);
-
         try {
-            // Check if getUserMedia is supported
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                throw new Error('getUserMedia not supported on this browser/device');
+            // Make sure we properly select the video element
+            const videoEl = document.getElementById('video') || document.querySelector('video');
+
+            // Check if videoEl exists and is a video element
+            if (!videoEl || videoEl.tagName.toLowerCase() !== 'video') {
+                console.error('Video element not found or invalid');
+                return;
             }
 
-            const constraints = {
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    facingMode: 'user'
-                },
+            // Get camera access
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
                 audio: false
-            };
-
-            console.log('[Camera] Requesting permissions with constraints:', constraints);
-
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            const videoEl = getCameraVideoEl();
-
-            console.log('[Camera] Stream obtained:', stream);
-            console.log('[Camera] Video tracks:', stream.getVideoTracks().length);
-
-            if (videoEl) {
-                videoEl.srcObject = stream;
-                console.log('[Camera] Video element found and stream assigned');
-
-                try {
-                    await videoEl.play();
-                    console.log('[Camera] Video playback started successfully');
-                } catch (playError) {
-                    console.warn('[Camera] Video play failed:', playError);
-                }
-            } else {
-                console.error('[Camera] Video element not found!');
-            }
-
-            videoStream = stream;
-            cameraEnabled = true;
-            updateCameraUI(true);
-            console.log('[Camera] Successfully started');
-
-            // Monitor stream for unexpected endings
-            stream.getVideoTracks().forEach(track => {
-                track.addEventListener('ended', () => {
-                    console.error('[Camera] Track ended unexpectedly');
-                    logCameraError('Camera track ended unexpectedly', 'track-ended');
-                });
             });
 
-        } catch (err) {
+            // Set the stream to the video element
+            videoEl.srcObject = stream;
+
+            // Store the stream for later cleanup
+            videoStream = stream;
+
+            // Play the video
+            await videoEl.play();
+
+            cameraEnabled = true;
+            console.log('Camera started successfully');
+
+        } catch (error) {
+            console.error('Camera start error:', error);
             cameraEnabled = false;
-            videoStream = null;
-            updateCameraUI(false);
 
-            const errorInfo = logCameraError(err, 'camera-start');
-
-            // Show appropriate error message based on error type
-            let errorMessage;
-            if (err.name === 'NotAllowedError') {
-                errorMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
-            } else if (err.name === 'NotFoundError') {
-                errorMessage = 'No camera found. Please ensure your device has a working camera.';
-            } else if (err.name === 'NotReadableError') {
-                errorMessage = 'Camera is already in use by another application.';
+            // Handle specific error cases
+            if (error.name === 'NotAllowedError') {
+                swal({
+                    title: getTranslatedMessage('error') || 'Error',
+                    text: getTranslatedMessage('camera_permission_denied') || 'Camera access denied',
+                    icon: "error",
+                    button: "OK"
+                });
+            } else if (error.name === 'NotFoundError') {
+                swal({
+                    title: getTranslatedMessage('error') || 'Error',
+                    text: getTranslatedMessage('no_camera_found') || 'No camera found',
+                    icon: "error",
+                    button: "OK"
+                });
             } else {
-                errorMessage = `Camera error: ${err.message}`;
-            }
-
-            showCameraError(err);
-            console.error('[Camera] Failed to start:', err);
-
-            // For mobile, also try with different constraints
-            if (errorInfo.isMobile) {
-                console.log('[Camera] Retrying with mobile-friendly constraints...');
-                try {
-                    const mobileStream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'user' },
-                        audio: false
-                    });
-
-                    videoStream = mobileStream;
-                    cameraEnabled = true;
-                    updateCameraUI(true);
-                    console.log('[Camera] Mobile fallback successful');
-                } catch (mobileErr) {
-                    logCameraError(mobileErr, 'mobile-fallback');
-                    console.error('[Camera] Mobile fallback also failed:', mobileErr);
-                }
+                swal({
+                    title: getTranslatedMessage('error') || 'Error',
+                    text: getTranslatedMessage('camera_error') || 'Camera error occurred',
+                    icon: "error",
+                    button: "OK"
+                });
             }
         }
     }
-
 function stopCamera() {
     if (!videoStream) {
         updateCameraUI(false);
