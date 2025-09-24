@@ -752,41 +752,138 @@ function getCameraStatusEl() {
     return document.querySelector('[data-camera-status]');
 }
 
-async function startCamera() {
-    if (skipCamera) return;
-    if (cameraEnabled) return;
-
-    try {
-        const constraints = {
-            video: {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-                facingMode: 'user'
-            },
-            audio: false
+    function logCameraError(error, context = '', userAgent = navigator.userAgent) {
+        const errorInfo = {
+            error: error.message || error,
+            context: context,
+            userAgent: userAgent,
+            isMobile: /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent),
+            timestamp: new Date().toISOString(),
+            cameraEnabled: cameraEnabled,
+            videoStream: !!videoStream,
+            skipCamera: skipCamera
         };
 
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        const videoEl = getCameraVideoEl();
+        console.error('[Camera Error]', errorInfo);
 
-        if (videoEl) {
-            // Some browsers need play() to be awaited, but don't break if it rejects
-            videoEl.srcObject = stream;
-            try { await videoEl.play(); } catch (_) {}
+        // Send error to server for logging
+        fetch('/api/log-camera-error', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify(errorInfo)
+        }).catch(err => console.log('Failed to send error to server:', err));
+
+        return errorInfo;
+    }
+
+
+    async function startCamera() {
+        if (skipCamera) {
+            console.log('[Camera] Skipped due to qs=1 parameter');
+            return;
+        }
+        if (cameraEnabled) {
+            console.log('[Camera] Already enabled');
+            return;
         }
 
-        videoStream = stream;
-        cameraEnabled = true;
-        updateCameraUI(true);
-        console.log('[Camera] started');
-    } catch (err) {
-        cameraEnabled = false;
-        videoStream = null;
-        updateCameraUI(false);
-        showCameraError(err);
-        console.error('[Camera] failed to start:', err);
+        console.log('[Camera] Starting camera for user agent:', navigator.userAgent);
+
+        try {
+            // Check if getUserMedia is supported
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('getUserMedia not supported on this browser/device');
+            }
+
+            const constraints = {
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: 'user'
+                },
+                audio: false
+            };
+
+            console.log('[Camera] Requesting permissions with constraints:', constraints);
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            const videoEl = getCameraVideoEl();
+
+            console.log('[Camera] Stream obtained:', stream);
+            console.log('[Camera] Video tracks:', stream.getVideoTracks().length);
+
+            if (videoEl) {
+                videoEl.srcObject = stream;
+                console.log('[Camera] Video element found and stream assigned');
+
+                try {
+                    await videoEl.play();
+                    console.log('[Camera] Video playback started successfully');
+                } catch (playError) {
+                    console.warn('[Camera] Video play failed:', playError);
+                }
+            } else {
+                console.error('[Camera] Video element not found!');
+            }
+
+            videoStream = stream;
+            cameraEnabled = true;
+            updateCameraUI(true);
+            console.log('[Camera] Successfully started');
+
+            // Monitor stream for unexpected endings
+            stream.getVideoTracks().forEach(track => {
+                track.addEventListener('ended', () => {
+                    console.error('[Camera] Track ended unexpectedly');
+                    logCameraError('Camera track ended unexpectedly', 'track-ended');
+                });
+            });
+
+        } catch (err) {
+            cameraEnabled = false;
+            videoStream = null;
+            updateCameraUI(false);
+
+            const errorInfo = logCameraError(err, 'camera-start');
+
+            // Show appropriate error message based on error type
+            let errorMessage;
+            if (err.name === 'NotAllowedError') {
+                errorMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
+            } else if (err.name === 'NotFoundError') {
+                errorMessage = 'No camera found. Please ensure your device has a working camera.';
+            } else if (err.name === 'NotReadableError') {
+                errorMessage = 'Camera is already in use by another application.';
+            } else {
+                errorMessage = `Camera error: ${err.message}`;
+            }
+
+            showCameraError(err);
+            console.error('[Camera] Failed to start:', err);
+
+            // For mobile, also try with different constraints
+            if (errorInfo.isMobile) {
+                console.log('[Camera] Retrying with mobile-friendly constraints...');
+                try {
+                    const mobileStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'user' },
+                        audio: false
+                    });
+
+                    videoStream = mobileStream;
+                    cameraEnabled = true;
+                    updateCameraUI(true);
+                    console.log('[Camera] Mobile fallback successful');
+                } catch (mobileErr) {
+                    logCameraError(mobileErr, 'mobile-fallback');
+                    console.error('[Camera] Mobile fallback also failed:', mobileErr);
+                }
+            }
+        }
     }
-}
 
 function stopCamera() {
     if (!videoStream) {
