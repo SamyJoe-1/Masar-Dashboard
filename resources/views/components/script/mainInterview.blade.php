@@ -373,7 +373,8 @@
 
             const formData = new FormData();
             formData.append("file", wavBlob, "recording.wav");
-            formData.append("language", defaultLanguage);
+            formData.append("language", "fable");
+            formData.append("voice", defaultLanguage);
             formData.append("prompt", "using the same language of the rec");
             formData.append("response_format", "json");
             formData.append("temperature", "0");
