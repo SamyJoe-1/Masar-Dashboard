@@ -227,7 +227,7 @@
                 },
                 body: new URLSearchParams({
                     speed: '1',
-                    voice: 'nova',
+                    voice: 'fable',
                     model: 'tts-1',
                     text: currentQuestion
                 })
@@ -373,7 +373,6 @@
 
             const formData = new FormData();
             formData.append("file", wavBlob, "recording.wav");
-            formData.append("voice", "fable");
             formData.append("language", defaultLanguage);
             formData.append("prompt", "using the same language of the rec");
             formData.append("response_format", "json");
