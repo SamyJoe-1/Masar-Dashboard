@@ -32,6 +32,22 @@
     </div>
 
     <div class="sidebar-section">
+        <div class="sidebar-title">{{ __('words.Smart Hiring') }}</div>
+        <a href="{{ route('dashboard.applicant.smart.cv.builder') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.smart.cv.builder') && !request()->has('status') ? 'active' : '' }}">
+            <i class="fa-regular fa-id-card"></i>
+            {{ __('words.Build your CV') }}
+        </a>
+        <a href="{{ route('dashboard.applicant.smart.cv.analyzer', 'status=approved') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.smart.cv.analyzer') && strtolower(request()->query('status')) === 'approved' ? 'active' : '' }}">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+            {{ __('words.CV Analyzer') }}
+        </a>
+        <a href="{{ route('dashboard.applicant.smart.cv.matcher', 'status=rejected') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.smart.cv.matcher') && strtolower(request()->query('status')) === 'rejected' ? 'active' : '' }}">
+            <i class="fa-solid fa-users-viewfinder"></i>
+            {{ __('words.Role Matcher') }}
+        </a>
+    </div>
+
+    <div class="sidebar-section">
         <div class="sidebar-title">{{ __('words.system') }}</div>
         <a href="{{ route('profile') }}" class="sidebar-item {{ request()->routeIs('profile') ? "active":"" }}">
             <i class="fa-solid fa-address-card"></i>

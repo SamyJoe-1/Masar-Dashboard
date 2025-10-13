@@ -406,4 +406,8 @@ return [
     'updating' => 'updating',
     'success' => 'success',
     'Role' => 'Role',
+    'Smart Hiring' => 'Smart hiring',
+    'Build your CV' => 'Build your CV',
+    'CV Analyzer' => 'CV Analyzer',
+    'Role Matcher' => 'Role Matcher',
 ];

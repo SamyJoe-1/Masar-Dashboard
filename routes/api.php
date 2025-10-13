@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Guest\ApplicantFormController;
 use App\Http\Controllers\Guest\SessionController;
+use App\Http\Controllers\API\CVController;
 
 // routes/api.php
 
@@ -32,4 +33,30 @@ Route::post('/api/log-camera-error', function (Request $request) {
     ]);
 
     return response()->json(['logged' => true]);
+});
+
+
+// Add these routes to routes/api.php
+
+// Templates
+Route::get('/templates', [CVController::class, 'getTemplates']);
+Route::get('/templates/{id}', [CVController::class, 'getTemplate']);
+
+// CV Management (requires authentication)
+Route::middleware('auth:sanctum')->group(function () {
+    // Drafts
+    Route::get('/cv/drafts', [CVController::class, 'getDrafts']);
+    Route::get('/cv/drafts/template/{templateId}', [CVController::class, 'getDraftByTemplate']);
+//    Route::post('/cv/draft', [CVController::class, 'saveDraft']);
+    Route::delete('/cv/draft/{id}', [CVController::class, 'deleteDraft']);
+
+    // Finalize CV
+//    Route::post('/cv/finalize', [CVController::class, 'finalize']);
+
+    // Completed CVs
+    Route::get('/cv/completed', [CVController::class, 'getCompletedCVs']);
+
+    Route::post('/cv/draft', [CVController::class, 'saveDraft']);
+    Route::post('/cv/finalize', [CVController::class, 'finalize']);
+
 });
