@@ -278,77 +278,30 @@ body {
     width: 100%;
     max-width: 794px;
     background: white;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: var(--shadow-lg);
     position: relative;
-
-    /* Maintain A4 aspect ratio: 210mm x 297mm = 1:1.414 */
-    aspect-ratio: 210 / 297;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
 }
 
-/* Ensure each CV page fits exactly */
 .cv-page {
-    width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: 210 / 297 !important;
+    width: 100%;
+    aspect-ratio: 210/297;
     background: white;
-    display: flex !important;
-    overflow: hidden !important;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px !important;
-    flex-shrink: 0;
-}
-
-/* Page navigation styling */
-#pageNavigation {
-    margin-top: 1.5rem;
     display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    overflow: hidden;
+    position: relative;
 }
 
-.page-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #e2e8f0;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 10px;
-}
-
-.page-dot.active {
-    background: #2563eb;
-    width: 30px;
-    border-radius: 5px;
-}
-
-/* Ensure sidebar and main maintain proportions */
 .cv-sidebar {
-    width: 30% !important;
-    height: 100% !important;
+    width: 30%;
     background: #2c3e50;
     color: white;
-    padding: 40px 30px;
-    overflow: hidden;
-    flex-shrink: 0;
-    box-sizing: border-box;
+    padding: 2rem 1.5rem;
 }
 
 .cv-main {
-    width: 70% !important;
-    height: 100% !important;
-    padding: 40px;
+    width: 70%;
+    padding: 2rem;
     background: white;
-    overflow: hidden;
-    flex-shrink: 0;
-    box-sizing: border-box;
 }
 
 .cv-avatar {
@@ -415,6 +368,12 @@ body {
     background: var(--border-color);
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.page-dot.active {
+    background: var(--primary-color);
+    width: 30px;
+    border-radius: 5px;
 }
 
 /* Customize Modal */

@@ -47,14 +47,8 @@
     function checkAuth() {
         const authToken = window.authToken || localStorage.getItem('auth_token');
         if (!authToken) {
-            Swal.fire({
-                title: 'Authentication Required',
-                text: 'Please log in to save your CV',
-                icon: 'warning',
-                confirmButtonColor: '#2563eb'
-            }).then(() => {
-                window.location.href = '/login';
-            });
+            alert('Please log in to save your CV');
+            window.location.href = '/login';
             return false;
         }
         return true;
@@ -117,26 +111,6 @@
         selectedTemplate = id;
     }
 
-    function initializeBuilder() {
-        if (templateData.data && templateData.data.colors) {
-            cvData.customize.color = templateData.data.colors[0];
-            initializeColorPicker(templateData.data.colors);
-        } else {
-            initializeColorPicker(['#2c3e50', '#34495e', '#1abc9c', '#3498db', '#9b59b6', '#e74c3c']);
-        }
-
-        document.getElementById('templateSelection').style.display = 'none';
-        document.getElementById('cvBuilder').style.display = 'flex';
-        document.getElementById('actionsBar').style.display = 'flex';
-
-        initializeEditors();
-        populateFormFromData();
-        renderPreview();
-        updateProgress();
-    }
-
-    // ALSO REPLACE THE confirmTemplate() function entirely with this:
-
     async function confirmTemplate() {
         if (!selectedTemplate) {
             showNotification('Please select a template first!', 'error');
@@ -157,23 +131,15 @@
             cvData.template_id = selectedTemplate;
             cvData.slug = generateUUID();
 
+            // Check localStorage first
             const localDraft = localStorage.getItem(`cv_draft_template_${selectedTemplate}`);
 
             if (localDraft) {
-                const result = await Swal.fire({
-                    title: 'Unfinished Draft Found',
-                    text: 'You have an unfinished draft for this template. Continue editing?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Continue',
-                    cancelButtonText: 'Start Fresh',
-                    confirmButtonColor: '#2563eb'
-                });
-
-                if (result.isConfirmed) {
+                if (confirm('You have an unfinished draft for this template. Continue editing?')) {
                     cvData = JSON.parse(localDraft);
                 }
             } else {
+                // Check database for draft
                 try {
                     const draftResponse = await fetch(`/api/cv/drafts/template/${selectedTemplate}`, {
                         headers: {
@@ -186,17 +152,7 @@
                     if (draftResponse.ok) {
                         const draft = await draftResponse.json();
                         if (draft && draft.id) {
-                            const result = await Swal.fire({
-                                title: 'Saved Draft Found',
-                                text: 'You have a saved draft for this template. Continue editing?',
-                                icon: 'question',
-                                showCancelButton: true,
-                                confirmButtonText: 'Continue',
-                                cancelButtonText: 'Start Fresh',
-                                confirmButtonColor: '#2563eb'
-                            });
-
-                            if (result.isConfirmed) {
+                            if (confirm('You have a saved draft for this template. Continue editing?')) {
                                 cvData = draft;
                             }
                         }
@@ -206,6 +162,7 @@
                 }
             }
 
+            // Initialize customize colors from template data
             if (templateData.data && templateData.data.colors) {
                 cvData.customize.color = templateData.data.colors[0];
                 initializeColorPicker(templateData.data.colors);
@@ -240,7 +197,9 @@
             return storedToken;
         }
 
-        // If no token, return empty string (don't redirect here, let the caller handle it)
+        // If no token, redirect to login
+        alert('Please log in to save your CV');
+        window.location.href = '/login';
         return '';
     }
 
@@ -624,38 +583,26 @@
 
     // ==================== RENDER A4 PREVIEW ====================
     function renderPreview() {
-        console.log('START renderPreview');
         collectData();
-        console.log('AFTER collectData');
 
         const container = document.getElementById('cvPreviewContainer');
-        console.log('GOT container');
         container.innerHTML = '';
-        console.log('CLEARED container');
 
         const primaryColor = cvData.customize.color;
         const fontFamily = cvData.customize.font_family;
         const fontSize = cvData.customize.font_size;
         const lineHeight = cvData.customize.spacing;
-        console.log('GOT customize values');
 
         const page = createA4Page(primaryColor, fontFamily, fontSize, lineHeight);
-        console.log('CREATED page');
         container.appendChild(page);
-        console.log('APPENDED page');
 
         const sidebar = page.querySelector('.cv-sidebar');
         const main = page.querySelector('.cv-main');
-        console.log('GOT sidebar and main');
 
         renderSidebar(sidebar, primaryColor);
-        console.log('AFTER renderSidebar');
-
         renderMainContent(main, primaryColor);
-        console.log('AFTER renderMainContent');
 
         handlePageOverflow(container, primaryColor, fontFamily, fontSize, lineHeight);
-        console.log('AFTER handlePageOverflow - DONE');
     }
 
     function createA4Page(color, font, size, spacing) {
@@ -701,8 +648,6 @@
     }
 
     function renderSidebar(sidebar, color) {
-        console.log('renderSidebar() - personal_details:', cvData.personal_details);
-
         const pd = cvData.personal_details;
 
         const avatar = document.createElement('div');
@@ -718,135 +663,79 @@
         justify-content: center;
         font-size: 3rem;
         color: white;
-        overflow: hidden;
-        flex-shrink: 0;
     `;
-
-        if (pd.avatar) {
-            avatar.innerHTML = `<img src="${pd.avatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
-        } else {
-            avatar.innerHTML = `<i class="fas fa-user"></i>`;
-        }
-
+        avatar.innerHTML = `<i class="fas fa-user"></i>`;
         sidebar.appendChild(avatar);
-        console.log('Avatar added');
 
-        // NAME
         const name = document.createElement('div');
-        name.className = 'cv-name';
-        name.style.cssText = 'font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; text-align: center; color: white;';
+        name.id = 'cvName';
+        name.style.cssText = 'font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; text-align: center;';
         name.textContent = `${pd.first_name || ''} ${pd.last_name || ''}`.trim() || 'Your Name';
         sidebar.appendChild(name);
-        console.log('Name added:', name.textContent);
 
-        // JOB TITLE
         const jobTitle = document.createElement('div');
-        jobTitle.className = 'cv-job-title';
-        jobTitle.style.cssText = 'text-align: center; opacity: 0.9; margin-bottom: 30px; font-size: 0.95rem; color: white;';
+        jobTitle.id = 'cvJobTitle';
+        jobTitle.style.cssText = 'text-align: center; opacity: 0.9; margin-bottom: 30px; font-size: 0.95rem;';
         jobTitle.textContent = pd.job_title || 'Your Job Title';
         sidebar.appendChild(jobTitle);
-        console.log('Job title added:', jobTitle.textContent);
 
-        // CONTACT SECTION
         if (pd.email || pd.phone || pd.city_state) {
             const contactSection = document.createElement('div');
             contactSection.className = 'cv-section';
-            contactSection.style.cssText = 'margin-bottom: 25px;';
-
-            const contactTitle = document.createElement('div');
-            contactTitle.className = 'cv-section-title';
-            contactTitle.style.cssText = 'font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.3); color: white;';
-            contactTitle.textContent = 'CONTACT';
-            contactSection.appendChild(contactTitle);
-
-            if (pd.email) {
-                const emailDiv = document.createElement('div');
-                emailDiv.style.cssText = 'margin-bottom: 10px; font-size: 0.85rem; color: white;';
-                emailDiv.innerHTML = `<i class="fas fa-envelope" style="width: 20px;"></i> ${pd.email}`;
-                contactSection.appendChild(emailDiv);
-            }
-
-            if (pd.phone) {
-                const phoneDiv = document.createElement('div');
-                phoneDiv.style.cssText = 'margin-bottom: 10px; font-size: 0.85rem; color: white;';
-                phoneDiv.innerHTML = `<i class="fas fa-phone" style="width: 20px;"></i> ${pd.phone}`;
-                contactSection.appendChild(phoneDiv);
-            }
-
-            if (pd.city_state && pd.country) {
-                const addressDiv = document.createElement('div');
-                addressDiv.style.cssText = 'margin-bottom: 10px; font-size: 0.85rem; color: white;';
-                addressDiv.innerHTML = `<i class="fas fa-map-marker-alt" style="width: 20px;"></i> ${pd.city_state}, ${pd.country}`;
-                contactSection.appendChild(addressDiv);
-            }
-
+            contactSection.innerHTML = `
+            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.3);">CONTACT</div>
+            <div id="cvEmail" style="margin-bottom: 10px; font-size: 0.85rem;">${pd.email ? `<i class="fas fa-envelope" style="width: 20px;"></i> ${pd.email}` : ''}</div>
+            <div id="cvPhone" style="margin-bottom: 10px; font-size: 0.85rem;">${pd.phone ? `<i class="fas fa-phone" style="width: 20px;"></i> ${pd.phone}` : ''}</div>
+            <div id="cvAddress" style="margin-bottom: 10px; font-size: 0.85rem;">${pd.city_state && pd.country ? `<i class="fas fa-map-marker-alt" style="width: 20px;"></i> ${pd.city_state}, ${pd.country}` : ''}</div>
+        `;
             sidebar.appendChild(contactSection);
-            console.log('Contact section added');
         }
 
-        // SKILLS SECTION
         if (cvData.skills && cvData.skills.length > 0) {
             const skillsSection = document.createElement('div');
             skillsSection.className = 'cv-section';
-            skillsSection.style.cssText = 'margin-bottom: 25px;';
+            skillsSection.innerHTML = `
+            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.3);">SKILLS</div>
+            <div id="cvSkills"></div>
+        `;
+            sidebar.appendChild(skillsSection);
 
-            const skillsTitle = document.createElement('div');
-            skillsTitle.className = 'cv-section-title';
-            skillsTitle.style.cssText = 'font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.3); color: white;';
-            skillsTitle.textContent = 'SKILLS';
-            skillsSection.appendChild(skillsTitle);
-
-            const skillsContainer = document.createElement('div');
-
+            const skillsContainer = skillsSection.querySelector('#cvSkills');
             cvData.skills.forEach(skill => {
                 if (skill.skill) {
                     const skillDiv = document.createElement('div');
                     skillDiv.style.cssText = 'margin-bottom: 12px;';
                     skillDiv.innerHTML = `
-                    <div style="font-size: 0.9rem; margin-bottom: 3px; color: white;">${skill.skill}</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; color: white;">${skill.level || 'Experienced'}</div>
+                    <div style="font-size: 0.9rem; margin-bottom: 3px;">${skill.skill}</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8;">${skill.level || 'Experienced'}</div>
                 `;
                     skillsContainer.appendChild(skillDiv);
                 }
             });
-
-            skillsSection.appendChild(skillsContainer);
-            sidebar.appendChild(skillsSection);
-            console.log('Skills section added');
         }
 
-        // LANGUAGES SECTION
         if (cvData.additional_sections.languages && cvData.additional_sections.languages.length > 0) {
             const langSection = document.createElement('div');
             langSection.className = 'cv-section';
-            langSection.style.cssText = 'margin-bottom: 25px;';
+            langSection.innerHTML = `
+            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.3);">LANGUAGES</div>
+            <div id="cvLanguages"></div>
+        `;
+            sidebar.appendChild(langSection);
 
-            const langTitle = document.createElement('div');
-            langTitle.className = 'cv-section-title';
-            langTitle.style.cssText = 'font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid rgba(255,255,255,0.3); color: white;';
-            langTitle.textContent = 'LANGUAGES';
-            langSection.appendChild(langTitle);
-
-            const langContainer = document.createElement('div');
-
+            const langContainer = langSection.querySelector('#cvLanguages');
             cvData.additional_sections.languages.forEach(lang => {
                 if (lang.language && lang.level && lang.level !== 'Select level') {
                     const langDiv = document.createElement('div');
                     langDiv.style.cssText = 'margin-bottom: 12px;';
                     langDiv.innerHTML = `
-                    <div style="font-size: 0.9rem; margin-bottom: 3px; color: white;">${lang.language}</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; color: white;">${lang.level}</div>
+                    <div style="font-size: 0.9rem; margin-bottom: 3px;">${lang.language}</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8;">${lang.level}</div>
                 `;
                     langContainer.appendChild(langDiv);
                 }
             });
-
-            langSection.appendChild(langContainer);
-            sidebar.appendChild(langSection);
-            console.log('Languages section added');
         }
-
-        console.log('renderSidebar() completed');
     }
 
     function renderMainContent(main, primaryColor) {
@@ -959,141 +848,19 @@
         }
     }
 
-    function addPageNavigation(container) {
-        const pages = container.querySelectorAll('.cv-page');
-        if (pages.length <= 1) return;
-
-        const navContainer = document.createElement('div');
-        navContainer.id = 'pageNavigation';
-        navContainer.style.cssText = `
-        margin-top: 1.5rem;
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-    `;
-
-        pages.forEach((page, i) => {
-            page.style.display = i === 0 ? 'flex' : 'none';
-
-            const dot = document.createElement('div');
-            dot.className = `page-dot ${i === 0 ? 'active' : ''}`;
-            dot.style.cssText = `
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: ${i === 0 ? '#2563eb' : '#e2e8f0'};
-            cursor: pointer;
-            transition: all 0.2s ease;
-            ${i === 0 ? 'width: 30px; border-radius: 5px;' : ''}
-        `;
-
-            dot.onclick = () => {
-                pages.forEach((p, idx) => {
-                    p.style.display = idx === i ? 'flex' : 'none';
-                });
-
-                document.querySelectorAll('.page-dot').forEach((d, idx) => {
-                    if (idx === i) {
-                        d.style.background = '#2563eb';
-                        d.style.width = '30px';
-                        d.style.borderRadius = '5px';
-                    } else {
-                        d.style.background = '#e2e8f0';
-                        d.style.width = '10px';
-                        d.style.borderRadius = '50%';
-                    }
-                });
-            };
-
-            navContainer.appendChild(dot);
-        });
-
-        container.parentElement.appendChild(navContainer);
-    }
-
-    function removePageNavigation() {
-        const oldNav = document.getElementById('pageNavigation');
-        if (oldNav) oldNav.remove();
-    }
-
-
     function handlePageOverflow(container, color, font, size, spacing) {
-        console.log('handlePageOverflow() checking for content overflow');
+        const pages = container.querySelectorAll('.cv-page');
+        if (pages.length === 0) return;
 
-        let pages = container.querySelectorAll('.cv-page');
+        const lastPage = pages[pages.length - 1];
+        const mainContent = lastPage.querySelector('.cv-main');
 
-        // Process each page to see if it overflows
-        let pageIndex = 0;
+        if (mainContent.scrollHeight > mainContent.clientHeight) {
+            const newPage = createA4Page(color, font, size, spacing);
+            container.appendChild(newPage);
 
-        while (pageIndex < pages.length) {
-            const currentPage = pages[pageIndex];
-            const mainContent = currentPage.querySelector('.cv-main');
-
-            // Get the actual scrollHeight (content height)
-            const contentHeight = mainContent.scrollHeight;
-            const maxHeight = 1000; // Leave room for padding
-
-            console.log(`Page ${pageIndex + 1} - contentHeight: ${contentHeight}, maxHeight: ${maxHeight}`);
-
-            // If content doesn't overflow, move to next page
-            if (contentHeight <= maxHeight) {
-                pageIndex++;
-                continue;
-            }
-
-            // Content overflows - we need to move overflow to a new page
-            console.log(`Page ${pageIndex + 1} overflows by ${contentHeight - maxHeight}px, creating new page`);
-
-            const overflowContainer = document.createElement('div');
-            let movedElements = 0;
-
-            // Move sections one by one until it fits
-            while (mainContent.scrollHeight > maxHeight && mainContent.children.length > 0) {
-                const lastChild = mainContent.lastChild;
-                overflowContainer.insertBefore(lastChild, overflowContainer.firstChild);
-                movedElements++;
-
-                // Limit to prevent issues
-                if (movedElements > 50) {
-                    console.warn('Moved 50 elements, stopping to prevent issues');
-                    break;
-                }
-            }
-
-            console.log(`Moved ${movedElements} elements to overflow container`);
-
-            // If we have overflow content, create a new page for it
-            if (overflowContainer.children.length > 0) {
-                const newPage = createA4Page(color, font, size, spacing);
-                const newPageIndex = pageIndex + 1;
-
-                // Insert new page after current page
-                if (newPageIndex < container.children.length) {
-                    container.insertBefore(newPage, container.children[newPageIndex]);
-                } else {
-                    container.appendChild(newPage);
-                }
-
-                const newMain = newPage.querySelector('.cv-main');
-
-                // Move overflow content to new page
-                while (overflowContainer.children.length > 0) {
-                    newMain.appendChild(overflowContainer.firstChild);
-                }
-
-                // Refresh pages query since we added a new page
-                pages = container.querySelectorAll('.cv-page');
-                console.log(`Created new page, total pages now: ${pages.length}`);
-            }
-
-            pageIndex++;
+            currentPages++;
         }
-
-        console.log(`handlePageOverflow() completed, total pages: ${container.querySelectorAll('.cv-page').length}`);
-
-        // Add page navigation
-        removePageNavigation();
-        addPageNavigation(container);
     }
 
     function formatDate(dateString) {
@@ -1117,9 +884,7 @@
             driving_license: document.getElementById('drivingLicense')?.value || '',
             place_of_birth: document.getElementById('placeOfBirth')?.value || '',
             date_of_birth: document.getElementById('dateOfBirth')?.value || '',
-            nationality: document.getElementById('nationality')?.value || '',
-            avatar: cvData.personal_details?.avatar || ''
-
+            nationality: document.getElementById('nationality')?.value || ''
         };
 
         cvData.summary = summaryEditor ? summaryEditor.root.innerHTML : '';
@@ -1214,9 +979,6 @@
             if (pd.place_of_birth) document.getElementById('placeOfBirth').value = pd.place_of_birth;
             if (pd.date_of_birth) document.getElementById('dateOfBirth').value = pd.date_of_birth;
             if (pd.nationality) document.getElementById('nationality').value = pd.nationality;
-            if (pd.avatar && document.getElementById('avatarPreview')) {
-                document.getElementById('avatarPreview').innerHTML = `<img src="${pd.avatar}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-            }
         }
 
         if (cvData.summary && summaryEditor) {
@@ -1401,26 +1163,6 @@
         }, 30000); // Every 30 seconds
     }
 
-    function handleAvatarUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const base64 = e.target.result;
-            cvData.personal_details.avatar = base64;
-
-            const preview = document.getElementById('avatarPreview');
-            if (preview) {
-                preview.innerHTML = `<img src="${base64}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-            }
-
-            renderPreview();
-        };
-
-        reader.readAsDataURL(file);
-    }
-
     // ==================== SAVE TO DATABASE ====================
     async function saveToDatabase() {
         if (!checkAuth()) return;
@@ -1450,6 +1192,7 @@
                 })
             });
 
+            // Check if response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
@@ -1477,12 +1220,7 @@
         collectData();
 
         if (!cvData.personal_details.first_name || !cvData.personal_details.last_name) {
-            Swal.fire({
-                title: 'Missing Information',
-                text: 'Please fill in your first and last name',
-                icon: 'error',
-                confirmButtonColor: '#2563eb'
-            });
+            showNotification('Please fill in your first and last name', 'error');
             goToStep(1);
             return;
         }
@@ -1513,6 +1251,7 @@
                 })
             });
 
+            // Check if response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
@@ -1536,45 +1275,44 @@
         }
     }
 
-
-
     function showDownloadModal(cv) {
-        Swal.fire({
-            title: 'Your CV is Ready!',
-            text: 'What would you like to do?',
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonText: 'Download PDF',
-            denyButtonText: 'View on Profile',
-            cancelButtonText: 'View All CVs',
-            showDenyButton: true,
-            confirmButtonColor: '#2563eb',
-            denyButtonColor: '#64748b',
-            cancelButtonColor: '#ef4444'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                downloadPDF();
-            } else if (result.isDenied) {
-                const cvSlug = cv.slug || cv.id;
-                window.location.href = `/cv/${cvSlug}`;
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                window.location.href = '/my-cvs';
-            }
-        });
+        const modal = document.createElement('div');
+        modal.id = 'downloadModal';
+        modal.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    `;
+
+        modal.innerHTML = `
+        <div style="background: white; padding: 3rem; border-radius: 1rem; max-width: 500px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+            <h2 style="margin-bottom: 1rem; color: #10b981;">Your CV is Ready!</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Download your professional CV now</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem;">
+                <button class="btn btn-primary" onclick="downloadPDF()" style="padding: 0.75rem 1.5rem;">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <button class="btn btn-secondary" onclick="downloadImage()" style="padding: 0.75rem 1.5rem;">
+                    <i class="fas fa-file-image"></i> Download Image
+                </button>
+            </div>
+            <button class="btn btn-outline-secondary" onclick="closeDownloadModal()" style="padding: 0.5rem 1rem;">
+                Close
+            </button>
+        </div>
+    `;
+
+        document.body.appendChild(modal);
     }
 
     function closeDownloadModal() {
         const modal = document.getElementById('downloadModal');
         if (modal) modal.remove();
-    }
-
-    function hexToRgb(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : { r: 44, g: 62, b: 80 };
     }
 
     // ==================== DOWNLOAD FUNCTIONS ====================
@@ -1586,74 +1324,25 @@
 
         try {
             const pages = container.querySelectorAll('.cv-page');
-
             const pdf = new jsPDF({
                 orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
+                unit: 'px',
+                format: [A4_WIDTH, A4_HEIGHT]
             });
 
             for (let i = 0; i < pages.length; i++) {
                 if (i > 0) pdf.addPage();
 
-                const page = pages[i];
-                const sidebar = page.querySelector('.cv-sidebar');
-                const main = page.querySelector('.cv-main');
-
-                // Sidebar background color
-                const sidebarColor = cvData.customize.color;
-                const rgb = hexToRgb(sidebarColor);
-                pdf.setFillColor(rgb.r, rgb.g, rgb.b);
-                pdf.rect(0, 0, 63.5, 297, 'F');
-
-                // Sidebar text (white)
-                pdf.setTextColor(255, 255, 255);
-                pdf.setFont('Arial', 'bold');
-                pdf.setFontSize(14);
-
-                const nameEl = sidebar.querySelector('div');
-                if (nameEl) {
-                    const nameText = cvData.personal_details.first_name + ' ' + cvData.personal_details.last_name;
-                    const lines = pdf.splitTextToSize(nameText, 55);
-                    pdf.text(lines, 31.75, 30, { align: 'center' });
-                }
-
-                // Main content as text
-                pdf.setTextColor(0, 0, 0);
-                pdf.setFont('Arial', 'normal');
-                pdf.setFontSize(10);
-
-                let yPosition = 20;
-                const sections = main.querySelectorAll('.cv-section');
-
-                sections.forEach(section => {
-                    const titleEl = section.querySelector('.cv-section-title');
-                    if (titleEl && yPosition < 270) {
-                        pdf.setFont('Arial', 'bold');
-                        pdf.setFontSize(11);
-                        pdf.setTextColor(rgb.r, rgb.g, rgb.b);
-                        pdf.text(titleEl.textContent.toUpperCase(), 70, yPosition);
-                        yPosition += 7;
-                    }
-
-                    const text = section.textContent.replace(titleEl?.textContent || '', '').trim();
-                    if (text) {
-                        pdf.setFont('Arial', 'normal');
-                        pdf.setFontSize(9);
-                        pdf.setTextColor(0, 0, 0);
-
-                        const lines = pdf.splitTextToSize(text, 130);
-                        lines.forEach(line => {
-                            if (yPosition > 280) {
-                                yPosition = 20;
-                            }
-                            pdf.text(line, 70, yPosition);
-                            yPosition += 4;
-                        });
-                    }
-
-                    yPosition += 3;
+                const canvas = await html2canvas(pages[i], {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    width: A4_WIDTH,
+                    height: A4_HEIGHT
                 });
+
+                const imgData = canvas.toDataURL('image/png');
+                pdf.addImage(imgData, 'PNG', 0, 0, A4_WIDTH, A4_HEIGHT);
             }
 
             const fileName = `CV_${cvData.personal_details.first_name}_${cvData.personal_details.last_name}.pdf`;
@@ -1706,22 +1395,28 @@
 
     // ==================== NOTIFICATIONS ====================
     function showNotification(message, type = 'info') {
-        const iconMap = {
-            'success': 'success',
-            'error': 'error',
-            'info': 'info',
-            'warning': 'warning'
-        };
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        font-weight: 500;
+    `;
+        notification.textContent = message;
 
-        Swal.fire({
-            toast: true,
-            position: 'bottom-end',
-            icon: iconMap[type] || 'info',
-            title: message,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        });
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 
     const style = document.createElement('style');
