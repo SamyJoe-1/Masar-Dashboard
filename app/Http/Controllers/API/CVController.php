@@ -201,7 +201,7 @@ class CVController extends Controller
             'success' => true,
             'message' => 'CV finalized successfully',
             'cv' => $cv->load('template.file'),
-            'view_url' => route('cv.show', $cv->slug)
+            'view_url' => route('home', $cv->slug)
         ]);
     }
 

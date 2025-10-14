@@ -6,6 +6,7 @@ use App\Http\Middleware\IsHR;
 use App\Http\Middleware\IsApplicant;
 use App\Http\Middleware\Profile;
 use App\Providers\ObserverProvider;
+use Laravel\Sanctum\SanctumServiceProvider;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -27,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withProviders([
         ObserverProvider::class,
+        SanctumServiceProvider::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([

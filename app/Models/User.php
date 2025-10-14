@@ -10,10 +10,11 @@ use App\Traits\User\Memberships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasJobApps, HasProfile, HasApplicants, Memberships;
+    use HasApiTokens, HasFactory, Notifiable, HasJobApps, HasProfile, HasApplicants, Memberships;
 
     protected $fillable = [
         'name',
