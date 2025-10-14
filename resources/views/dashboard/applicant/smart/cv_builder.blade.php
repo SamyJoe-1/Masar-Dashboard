@@ -14,6 +14,7 @@
 {{--    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">--}}
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <link href="{{ asset('styles/css/cv_builder.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -21,6 +22,7 @@
 <!-- Template Selection Page -->
 <div id="templateSelection" class="templates-container">
     <div class="container">
+        <i class="fas fa-location-dot"></i>
         <h1 class="text-center mb-5">Choose Your CV Template</h1>
         <div class="row g-4" id="templatesGrid">
             <!-- Templates will be loaded dynamically from database -->
@@ -63,6 +65,7 @@
         </div>
 
         <!-- Form Sections -->
+
         <!-- Personal Details -->
         <div class="form-section active" id="section1">
             <h2 class="section-title">Personal Details</h2>
@@ -77,6 +80,13 @@
                     <div class="form-group">
                         <label class="form-label">Last Name</label>
                         <input type="text" class="form-control" id="lastName" placeholder="Doe">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="form-label">Profile Photo</label>
+                        <input type="file" class="form-control" id="avatarInput" accept="image/*">
+                        <small class="text-muted">Optional: Upload a profile photo</small>
                     </div>
                 </div>
             </div>

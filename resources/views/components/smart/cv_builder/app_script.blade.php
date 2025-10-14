@@ -12,7 +12,9 @@
     let cvData = {
         template_id: null,
         slug: null,
-        personal_details: {},
+        personal_details: {
+            avatar: null
+        },
         employment_history: [],
         education: [],
         skills: [],
@@ -82,17 +84,17 @@
                 const card = document.createElement('div');
                 card.className = 'col-md-4';
                 card.innerHTML = `
-                <div class="template-card" data-template-id="${template.id}" onclick="selectTemplate(${template.id})">
-                    <div class="template-preview">
-                        ${template.file ?
-                    `<img src="${template.file.fullpath}" alt="${template.name}" style="width: 100%; height: 100%; object-fit: cover;">` :
-                    `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f0f0f0;">
-                                <i class="fas fa-file-alt" style="font-size: 4rem; color: #ccc;"></i>
-                            </div>`
-                }
+                    <div class="template-card" data-template-id="${template.id}" onclick="selectTemplate(${template.id})">
+                        <div class="template-preview">
+                            ${template.image ?
+                                        `<img src="${template.file.fullpath}" alt="${template.name}" style="width: 100%; height: 100%; object-fit: cover;">` :
+                                        `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f0f0f0;">
+                                    <i class="fas fa-file-alt" style="font-size: 4rem; color: #ccc;"></i>
+                                </div>`
+                                    }
+                        </div>
+                        <div class="template-name">${template.name}</div>
                     </div>
-                    <div class="template-name">${template.name}</div>
-                </div>
             `;
                 grid.appendChild(card);
             });
@@ -131,15 +133,23 @@
             cvData.template_id = selectedTemplate;
             cvData.slug = generateUUID();
 
-            // Check localStorage first
             const localDraft = localStorage.getItem(`cv_draft_template_${selectedTemplate}`);
 
             if (localDraft) {
-                if (confirm('You have an unfinished draft for this template. Continue editing?')) {
+                const result = await Swal.fire({
+                    title: 'Unfinished Draft Found',
+                    text: 'You have an unfinished draft for this template. Continue editing?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continue',
+                    cancelButtonText: 'Start Fresh',
+                    confirmButtonColor: '#2563eb'
+                });
+
+                if (result.isConfirmed) {
                     cvData = JSON.parse(localDraft);
                 }
             } else {
-                // Check database for draft
                 try {
                     const draftResponse = await fetch(`/api/cv/drafts/template/${selectedTemplate}`, {
                         headers: {
@@ -152,7 +162,17 @@
                     if (draftResponse.ok) {
                         const draft = await draftResponse.json();
                         if (draft && draft.id) {
-                            if (confirm('You have a saved draft for this template. Continue editing?')) {
+                            const result = await Swal.fire({
+                                title: 'Saved Draft Found',
+                                text: 'You have a saved draft for this template. Continue editing?',
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonText: 'Continue',
+                                cancelButtonText: 'Start Fresh',
+                                confirmButtonColor: '#2563eb'
+                            });
+
+                            if (result.isConfirmed) {
                                 cvData = draft;
                             }
                         }
@@ -162,7 +182,6 @@
                 }
             }
 
-            // Initialize customize colors from template data
             if (templateData.data && templateData.data.colors) {
                 cvData.customize.color = templateData.data.colors[0];
                 initializeColorPicker(templateData.data.colors);
@@ -243,6 +262,20 @@
         if (firstEduEditor) {
             educationEditors[0] = initializeEducationEditor(firstEduEditor);
         }
+
+        // Handle avatar upload
+        document.getElementById('avatarInput')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    cvData.personal_details.avatar = event.target.result;
+                    renderPreview();
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         document.querySelectorAll('input, select, textarea').forEach(element => {
             element.addEventListener('input', () => {
@@ -653,18 +686,18 @@
         const avatar = document.createElement('div');
         avatar.className = 'cv-avatar';
         avatar.style.cssText = `
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.2);
-        margin: 0 auto 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        color: white;
-    `;
-        avatar.innerHTML = `<i class="fas fa-user"></i>`;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: ${pd.avatar ? `url(${pd.avatar}) center/cover` : 'rgba(255,255,255,0.2)'};
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+`;
+        avatar.innerHTML = pd.avatar ? '' : `<i class="fas fa-user"></i>`;
         sidebar.appendChild(avatar);
 
         const name = document.createElement('div');
@@ -874,6 +907,7 @@
         cvData.personal_details = {
             first_name: document.getElementById('firstName')?.value || '',
             last_name: document.getElementById('lastName')?.value || '',
+            avatar: cvData.personal_details.avatar || null,
             job_title: document.getElementById('jobTitle')?.value || '',
             email: document.getElementById('email')?.value || '',
             phone: document.getElementById('phone')?.value || '',
@@ -968,6 +1002,7 @@
             const pd = cvData.personal_details;
             if (pd.first_name) document.getElementById('firstName').value = pd.first_name;
             if (pd.last_name) document.getElementById('lastName').value = pd.last_name;
+            if (pd.avatar) {cvData.personal_details.avatar = pd.avatar;}
             if (pd.job_title) document.getElementById('jobTitle').value = pd.job_title;
             if (pd.email) document.getElementById('email').value = pd.email;
             if (pd.phone) document.getElementById('phone').value = pd.phone;
@@ -984,7 +1019,6 @@
         if (cvData.summary && summaryEditor) {
             summaryEditor.root.innerHTML = cvData.summary;
         }
-
         if (cvData.employment_history && cvData.employment_history.length > 0) {
             cvData.employment_history.forEach((emp, index) => {
                 if (index > 0) addEmployment();
@@ -1276,43 +1310,65 @@
     }
 
     function showDownloadModal(cv) {
-        const modal = document.createElement('div');
-        modal.id = 'downloadModal';
-        modal.style.cssText = `
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-    `;
-
-        modal.innerHTML = `
-        <div style="background: white; padding: 3rem; border-radius: 1rem; max-width: 500px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
-            <h2 style="margin-bottom: 1rem; color: #10b981;">Your CV is Ready!</h2>
-            <p style="color: #666; margin-bottom: 2rem;">Download your professional CV now</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem;">
-                <button class="btn btn-primary" onclick="downloadPDF()" style="padding: 0.75rem 1.5rem;">
-                    <i class="fas fa-file-pdf"></i> Download PDF
-                </button>
-                <button class="btn btn-secondary" onclick="downloadImage()" style="padding: 0.75rem 1.5rem;">
-                    <i class="fas fa-file-image"></i> Download Image
-                </button>
-            </div>
-            <button class="btn btn-outline-secondary" onclick="closeDownloadModal()" style="padding: 0.5rem 1rem;">
-                Close
-            </button>
-        </div>
-    `;
-
-        document.body.appendChild(modal);
+        Swal.fire({
+            title: 'Your CV is Ready!',
+            text: 'What would you like to do?',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: 'Download PDF',
+            denyButtonText: 'View on Profile',
+            cancelButtonText: 'View All CVs',
+            showDenyButton: true,
+            confirmButtonColor: '#2563eb',
+            denyButtonColor: '#64748b',
+            cancelButtonColor: '#ef4444'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                downloadPDF();
+            } else if (result.isDenied) {
+                const cvSlug = cv.slug || cv.id;
+                window.location.href = `/cv/${cvSlug}`;
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = '/my-cvs';
+            }
+        });
     }
+
 
     function closeDownloadModal() {
         const modal = document.getElementById('downloadModal');
         if (modal) modal.remove();
+    }
+
+    function getIconAsBase64(iconType) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 40;
+        canvas.height = 40;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '30px "Font Awesome 6 Free"';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        let iconCode = '';
+        switch(iconType) {
+            case 'email': iconCode = '\uf0e0'; break;
+            case 'phone': iconCode = '\uf879'; break;
+            case 'location': iconCode = '\uf041'; break;
+        }
+
+        ctx.fillText(iconCode, 20, 20);
+        return canvas.toDataURL('image/png');
+    }
+
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : { r: 44, g: 62, b: 80 };
     }
 
     // ==================== DOWNLOAD FUNCTIONS ====================
@@ -1323,26 +1379,460 @@
         document.getElementById('loadingOverlay').classList.add('show');
 
         try {
-            const pages = container.querySelectorAll('.cv-page');
             const pdf = new jsPDF({
                 orientation: 'portrait',
-                unit: 'px',
-                format: [A4_WIDTH, A4_HEIGHT]
+                unit: 'mm',
+                format: 'a4',
+                compress: true
             });
 
-            for (let i = 0; i < pages.length; i++) {
-                if (i > 0) pdf.addPage();
+            const sidebarColor = cvData.customize.color;
+            const rgb = hexToRgb(sidebarColor);
+            const fontFamily = 'helvetica'; // Closest to Inter
+            const baseFontSize = cvData.customize.font_size || 14;
+            const lineSpacing = cvData.customize.spacing || 1.5;
 
-                const canvas = await html2canvas(pages[i], {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    width: A4_WIDTH,
-                    height: A4_HEIGHT
+            // Sidebar background (30% width = 63mm)
+            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+            pdf.rect(0, 0, 63, 297, 'F');
+
+            // ========== SIDEBAR ==========
+            pdf.setTextColor(255, 255, 255);
+            let sidebarY = 40;
+
+            // Avatar
+// Avatar
+            if (cvData.personal_details.avatar) {
+                try {
+                    const x = 16.5;
+                    const y = 15;
+                    const size = 30;
+
+                    const img = cvData.personal_details.avatar;
+
+                    const image = new Image();
+                    image.crossOrigin = 'Anonymous';
+                    image.src = img;
+                    await new Promise((resolve, reject) => {
+                        image.onload = resolve;
+                        image.onerror = reject;
+                    });
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size * 4;
+                    canvas.height = size * 4;
+                    const ctx = canvas.getContext('2d');
+
+                    // clear the canvas (ensures transparency)
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // draw circular clip
+                    ctx.beginPath();
+                    ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+
+                    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                    // ✅ Export as PNG (preserves transparency)
+                    const roundedImg = canvas.toDataURL('image/png');
+
+                    pdf.addImage(roundedImg, 'PNG', x, y, size, size, undefined, 'FAST');
+                    sidebarY = 55;
+                } catch (e) {
+                    console.log('Could not add avatar');
+                }
+            } else {
+                sidebarY = 30;
+            }
+
+
+
+            // Name - font-size: 1.5rem (24px preview) = 18pt PDF
+            pdf.setFont(fontFamily, 'bold');
+            pdf.setFontSize(18);
+            const nameText = `${cvData.personal_details.first_name || ''} ${cvData.personal_details.last_name || ''}`.trim();
+            if (nameText) {
+                const nameLines = pdf.splitTextToSize(nameText, 55);
+                nameLines.forEach(line => {
+                    pdf.text(line, 31.5, sidebarY, { align: 'center' });
+                    sidebarY += 6;
+                });
+            }
+
+            // Job Title - font-size: 0.95rem (15px preview) = 11pt PDF
+            if (cvData.personal_details.job_title) {
+                pdf.setFont(fontFamily, 'normal');
+                pdf.setFontSize(11);
+                const jobLines = pdf.splitTextToSize(cvData.personal_details.job_title, 55);
+                jobLines.forEach(line => {
+                    pdf.text(line, 31.5, sidebarY, { align: 'center' });
+                    sidebarY += 5;
+                });
+            }
+
+            sidebarY += 10;
+
+            // Contact Section
+            if (cvData.personal_details.email || cvData.personal_details.phone || cvData.personal_details.city_state) {
+                // Section title - font-size: 1rem (16px) = 12pt, uppercase, letter-spacing: 1px
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.text('CONTACT', 10, sidebarY);
+
+                // Border line - border-bottom: 2px
+                pdf.setDrawColor(255, 255, 255);
+                pdf.setLineWidth(0.5);
+                pdf.line(10, sidebarY + 2, 53, sidebarY + 2);
+                sidebarY += 10;
+
+                pdf.setFont(fontFamily, 'normal');
+                pdf.setFontSize(9);
+
+                // Email with icon
+                if (cvData.personal_details.email) {
+                    try {
+                        const emailIcon = getIconAsBase64('email');
+                        pdf.addImage(emailIcon, 'PNG', 9, sidebarY - 2.5, 3, 3);
+                    } catch(e) {}
+
+                    const emailLines = pdf.splitTextToSize(cvData.personal_details.email, 40);
+                    pdf.text(emailLines, 14, sidebarY);
+                    sidebarY += (emailLines.length * 4) + 2;
+                }
+
+                // Phone with icon
+                if (cvData.personal_details.phone) {
+                    try {
+                        const phoneIcon = getIconAsBase64('phone');
+                        pdf.addImage(phoneIcon, 'PNG', 9, sidebarY - 2.5, 3, 3);
+                    } catch(e) {}
+
+                    pdf.text(cvData.personal_details.phone, 14, sidebarY);
+                    sidebarY += 6;
+                }
+
+                // Address with icon
+                if (cvData.personal_details.city_state && cvData.personal_details.country) {
+                    try {
+                        const locationIcon = getIconAsBase64('location');
+                        pdf.addImage(locationIcon, 'PNG', 9, sidebarY - 2.5, 3, 3);
+                    } catch(e) {}
+
+                    const addressText = `${cvData.personal_details.city_state}, ${cvData.personal_details.country}`;
+                    const addressLines = pdf.splitTextToSize(addressText, 40);
+                    pdf.text(addressLines, 14, sidebarY);
+                    sidebarY += (addressLines.length * 4) + 2;
+                }
+
+                sidebarY += 8;
+            }
+
+            // Skills Section
+            if (cvData.skills && cvData.skills.length > 0 && cvData.skills.some(s => s.skill)) {
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.text('SKILLS', 10, sidebarY);
+                pdf.setLineWidth(0.5);
+                pdf.line(10, sidebarY + 2, 53, sidebarY + 2);
+                sidebarY += 10;
+
+                cvData.skills.forEach(skill => {
+                    if (skill.skill && sidebarY < 275) {
+                        // Skill name - font-size: 0.9rem = 10pt, bold
+                        pdf.setFont(fontFamily, 'bold');
+                        pdf.setFontSize(10);
+                        const skillLines = pdf.splitTextToSize(skill.skill, 43);
+                        pdf.text(skillLines, 10, sidebarY);
+                        sidebarY += (skillLines.length * 4.5);
+
+                        // Skill level - font-size: 0.75rem = 8pt, normal
+                        if (skill.level) {
+                            pdf.setFont(fontFamily, 'normal');
+                            pdf.setFontSize(8);
+                            pdf.text(skill.level, 10, sidebarY);
+                            sidebarY += 5;
+                        }
+                        sidebarY += 2;
+                    }
                 });
 
-                const imgData = canvas.toDataURL('image/png');
-                pdf.addImage(imgData, 'PNG', 0, 0, A4_WIDTH, A4_HEIGHT);
+                sidebarY += 5;
+            }
+
+            // Languages Section
+            if (cvData.additional_sections.languages && cvData.additional_sections.languages.length > 0 &&
+                cvData.additional_sections.languages.some(l => l.language && l.level && l.level !== 'Select level')) {
+
+                if (sidebarY < 270) {
+                    pdf.setFont(fontFamily, 'bold');
+                    pdf.setFontSize(12);
+                    pdf.text('LANGUAGES', 10, sidebarY);
+                    pdf.setLineWidth(0.5);
+                    pdf.line(10, sidebarY + 2, 53, sidebarY + 2);
+                    sidebarY += 10;
+
+                    cvData.additional_sections.languages.forEach(lang => {
+                        if (lang.language && lang.level && lang.level !== 'Select level' && sidebarY < 275) {
+                            pdf.setFont(fontFamily, 'bold');
+                            pdf.setFontSize(10);
+                            const langLines = pdf.splitTextToSize(lang.language, 43);
+                            pdf.text(langLines, 10, sidebarY);
+                            sidebarY += (langLines.length * 4.5);
+
+                            pdf.setFont(fontFamily, 'normal');
+                            pdf.setFontSize(8);
+                            pdf.text(lang.level, 10, sidebarY);
+                            sidebarY += 6;
+                        }
+                    });
+                }
+            }
+
+            // ========== MAIN CONTENT (70% = 147mm width, starts at 63mm) ==========
+            pdf.setTextColor(0, 0, 0);
+            let mainY = 20;
+            const mainX = 70;
+            const mainWidth = 130;
+
+            // Professional Summary
+            if (cvData.summary && cvData.summary.trim()) {
+                // Section title - font-size: 1rem = 12pt, uppercase, bold
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                pdf.text('PROFESSIONAL SUMMARY', mainX, mainY);
+
+                pdf.setDrawColor(rgb.r, rgb.g, rgb.b);
+                pdf.setLineWidth(0.5);
+                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                mainY += 9;
+
+                // Content - font-size: 0.9rem = 10pt, line-height: 1.6
+                pdf.setFont(fontFamily, 'normal');
+                pdf.setFontSize(10);
+                pdf.setTextColor(51, 51, 51);
+
+                const summaryText = cvData.summary.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                const summaryLines = pdf.splitTextToSize(summaryText, mainWidth);
+                summaryLines.forEach(line => {
+                    pdf.text(line, mainX, mainY);
+                    mainY += 5;
+                });
+                mainY += 6;
+            }
+
+            // Employment History
+            if (cvData.employment_history && cvData.employment_history.length > 0 &&
+                cvData.employment_history.some(e => e.job_title || e.company)) {
+
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                pdf.text('EXPERIENCE', mainX, mainY);
+                pdf.setLineWidth(0.5);
+                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                mainY += 9;
+
+                cvData.employment_history.forEach(emp => {
+                    if ((emp.job_title || emp.company) && mainY < 270) {
+                        // Job Title - font-size: 1rem = 11pt, bold
+                        pdf.setFont(fontFamily, 'bold');
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(34, 34, 34);
+                        pdf.text(emp.job_title || 'Position', mainX, mainY);
+                        mainY += 5;
+
+                        // Company & City - font-size: 0.9rem = 10pt, normal
+                        pdf.setFont(fontFamily, 'normal');
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(102, 102, 102);
+                        let companyText = emp.company || 'Company';
+                        if (emp.city) companyText += ` • ${emp.city}`;
+                        pdf.text(companyText, mainX, mainY);
+                        mainY += 5;
+
+                        // Dates - font-size: 0.85rem = 9pt
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(136, 136, 136);
+                        const startDate = emp.start_date ? formatDateForPDF(emp.start_date) : '';
+                        const endDate = emp.end_date ? formatDateForPDF(emp.end_date) : 'Present';
+                        if (startDate || endDate) {
+                            pdf.text(`${startDate} - ${endDate}`, mainX, mainY);
+                            mainY += 5;
+                        }
+
+                        // Description - font-size: 0.9rem = 10pt, line-height: 1.6
+                        if (emp.description) {
+                            pdf.setFont(fontFamily, 'normal');
+                            pdf.setFontSize(9);
+                            pdf.setTextColor(68, 68, 68);
+                            const descText = emp.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                            const descLines = pdf.splitTextToSize(descText, mainWidth);
+                            descLines.forEach(line => {
+                                if (mainY > 280) {
+                                    pdf.addPage();
+                                    pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                                    pdf.rect(0, 0, 63, 297, 'F');
+                                    mainY = 20;
+                                }
+                                pdf.text(line, mainX, mainY);
+                                mainY += 4.5;
+                            });
+                        }
+
+                        mainY += 6;
+                    }
+                });
+
+                mainY += 3;
+            }
+
+            // Education
+            if (cvData.education && cvData.education.length > 0 &&
+                cvData.education.some(e => e.school || e.degree)) {
+
+                if (mainY > 250) {
+                    pdf.addPage();
+                    pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                    pdf.rect(0, 0, 63, 297, 'F');
+                    mainY = 20;
+                }
+
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                pdf.text('EDUCATION', mainX, mainY);
+                pdf.setLineWidth(0.5);
+                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                mainY += 9;
+
+                cvData.education.forEach(edu => {
+                    if ((edu.school || edu.degree) && mainY < 270) {
+                        pdf.setFont(fontFamily, 'bold');
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(34, 34, 34);
+                        pdf.text(edu.degree || 'Degree', mainX, mainY);
+                        mainY += 5;
+
+                        pdf.setFont(fontFamily, 'normal');
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(102, 102, 102);
+                        let schoolText = edu.school || 'School';
+                        if (edu.city) schoolText += ` • ${edu.city}`;
+                        pdf.text(schoolText, mainX, mainY);
+                        mainY += 5;
+
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(136, 136, 136);
+                        const startDate = edu.start_date ? formatDateForPDF(edu.start_date) : '';
+                        const endDate = edu.end_date ? formatDateForPDF(edu.end_date) : '';
+                        if (startDate || endDate) {
+                            pdf.text(`${startDate} - ${endDate}`, mainX, mainY);
+                            mainY += 5;
+                        }
+
+                        if (edu.description) {
+                            pdf.setFont(fontFamily, 'normal');
+                            pdf.setFontSize(9);
+                            pdf.setTextColor(68, 68, 68);
+                            const descText = edu.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                            const descLines = pdf.splitTextToSize(descText, mainWidth);
+                            descLines.forEach(line => {
+                                if (mainY > 280) {
+                                    pdf.addPage();
+                                    pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                                    pdf.rect(0, 0, 63, 297, 'F');
+                                    mainY = 20;
+                                }
+                                pdf.text(line, mainX, mainY);
+                                mainY += 4.5;
+                            });
+                        }
+
+                        mainY += 6;
+                    }
+                });
+
+                mainY += 3;
+            }
+
+            // Courses
+            if (cvData.additional_sections.courses && cvData.additional_sections.courses.length > 0 &&
+                cvData.additional_sections.courses.some(c => c.course || c.institution)) {
+
+                if (mainY > 250) {
+                    pdf.addPage();
+                    pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                    pdf.rect(0, 0, 63, 297, 'F');
+                    mainY = 20;
+                }
+
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                pdf.text('COURSES', mainX, mainY);
+                pdf.setLineWidth(0.5);
+                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                mainY += 9;
+
+                cvData.additional_sections.courses.forEach(course => {
+                    if ((course.course || course.institution) && mainY < 270) {
+                        pdf.setFont(fontFamily, 'bold');
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(34, 34, 34);
+                        pdf.text(course.course || 'Course', mainX, mainY);
+                        mainY += 5;
+
+                        if (course.institution) {
+                            pdf.setFont(fontFamily, 'normal');
+                            pdf.setFontSize(9);
+                            pdf.setTextColor(102, 102, 102);
+                            pdf.text(course.institution, mainX, mainY);
+                            mainY += 4;
+                        }
+
+                        const startDate = course.start_date ? formatDateForPDF(course.start_date) : '';
+                        const endDate = course.end_date ? formatDateForPDF(course.end_date) : '';
+                        if (startDate || endDate) {
+                            pdf.setFontSize(8);
+                            pdf.setTextColor(136, 136, 136);
+                            pdf.text(`${startDate} - ${endDate}`, mainX, mainY);
+                            mainY += 5;
+                        }
+
+                        mainY += 3;
+                    }
+                });
+
+                mainY += 3;
+            }
+
+            // Hobbies
+            if (cvData.additional_sections.hobbies && cvData.additional_sections.hobbies.trim()) {
+                if (mainY > 260) {
+                    pdf.addPage();
+                    pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                    pdf.rect(0, 0, 63, 297, 'F');
+                    mainY = 20;
+                }
+
+                pdf.setFont(fontFamily, 'bold');
+                pdf.setFontSize(12);
+                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                pdf.text('HOBBIES', mainX, mainY);
+                pdf.setLineWidth(0.5);
+                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                mainY += 9;
+
+                pdf.setFont(fontFamily, 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(68, 68, 68);
+                const hobbiesLines = pdf.splitTextToSize(cvData.additional_sections.hobbies, mainWidth);
+                hobbiesLines.forEach(line => {
+                    pdf.text(line, mainX, mainY);
+                    mainY += 4.5;
+                });
             }
 
             const fileName = `CV_${cvData.personal_details.first_name}_${cvData.personal_details.last_name}.pdf`;
@@ -1356,6 +1846,12 @@
             document.getElementById('loadingOverlay').classList.remove('show');
             showNotification('Failed to generate PDF', 'error');
         }
+    }
+
+    function formatDateForPDF(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString + '-01');
+        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     }
 
     async function downloadImage() {

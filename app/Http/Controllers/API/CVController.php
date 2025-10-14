@@ -19,12 +19,7 @@ class CVController extends Controller
             return [
                 'id' => $template->id,
                 'name' => $template->name,
-                'file' => $template->file ? [
-                    'id' => $template->file->id,
-                    'fullpath' => $template->file->fullpath,
-                    'path' => $template->file->path,
-                    'name' => $template->file->name
-                ] : null,
+                'image' => asset($template->file->fullpath ?? null),
                 'data' => $template->data,
                 'created_at' => $template->created_at,
             ];
