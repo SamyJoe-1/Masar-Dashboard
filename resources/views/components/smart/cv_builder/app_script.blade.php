@@ -885,56 +885,82 @@
     }
 
     function handlePageOverflow(container, color, font, size, spacing) {
-        const MAX_PAGES = 10;
+        let iterations = 0;
         let pageIndex = 0;
 
-        while (pageIndex < MAX_PAGES) {
+        while (pageIndex < 20 && iterations < 100) {
+            iterations++;
+
             const pages = container.querySelectorAll('.cv-page');
             if (pageIndex >= pages.length) break;
 
             const currentPage = pages[pageIndex];
             const mainContent = currentPage.querySelector('.cv-main');
 
-            // Check if content overflows
-            if (mainContent.scrollHeight > mainContent.clientHeight + 10) {
-                const sections = Array.from(mainContent.children);
-
-                if (sections.length === 0) break;
-
-                // Find which section is overflowing
-                let overflowingSectionIndex = -1;
-                let accumulatedHeight = 0;
-
-                for (let i = 0; i < sections.length; i++) {
-                    accumulatedHeight += sections[i].offsetHeight;
-                    if (accumulatedHeight > mainContent.clientHeight) {
-                        overflowingSectionIndex = i;
-                        break;
-                    }
-                }
-
-                // If we found an overflowing section
-                if (overflowingSectionIndex === -1) {
-                    overflowingSectionIndex = sections.length - 1;
-                }
-
-                // Get or create next page
-                let nextPage = pages[pageIndex + 1];
-                if (!nextPage) {
-                    nextPage = createA4Page(color, font, size, spacing);
-                    container.appendChild(nextPage);
-                    nextPage.querySelector('.cv-sidebar').innerHTML = '';
-                    currentPages++;
-                }
-
-                const nextMain = nextPage.querySelector('.cv-main');
-
-                // Move all overflowing sections to next page
-                for (let i = sections.length - 1; i >= overflowingSectionIndex; i--) {
-                    nextMain.insertBefore(sections[i], nextMain.firstChild);
-                }
-            } else {
+            // If doesn't overflow, move to next page
+            if (mainContent.scrollHeight <= mainContent.clientHeight + 50) {
                 pageIndex++;
+                continue;
+            }
+
+            const sections = Array.from(mainContent.children);
+            if (sections.length === 0) {
+                pageIndex++;
+                continue;
+            }
+
+            // Create next page
+            let nextPage = pages[pageIndex + 1];
+            if (!nextPage) {
+                nextPage = createA4Page(color, font, size, spacing);
+                container.appendChild(nextPage);
+                nextPage.querySelector('.cv-sidebar').innerHTML = '';
+                currentPages++;
+            }
+
+            const nextMain = nextPage.querySelector('.cv-main');
+
+            // Get the last section
+            const lastSection = sections[sections.length - 1];
+
+            // Find items container inside this section
+            const itemsContainer = lastSection.querySelector('#cvEmployment, #cvEducation, #cvCourses');
+
+            if (itemsContainer && itemsContainer.children.length > 0) {
+                // MOVE ONE ITEM from current page to next page
+                const lastItem = itemsContainer.children[itemsContainer.children.length - 1];
+
+                // Find matching section on next page OR create it
+                let nextItemsContainer = nextMain.querySelector(`#${itemsContainer.id}`);
+
+                if (!nextItemsContainer) {
+                    // Create new section with same structure
+                    const newSection = document.createElement('div');
+                    newSection.className = 'cv-section';
+
+                    // Clone only the title
+                    const title = lastSection.querySelector('.cv-section-title');
+                    if (title) {
+                        newSection.appendChild(title.cloneNode(true));
+                    }
+
+                    // Create empty items container
+                    const newItemsContainer = document.createElement('div');
+                    newItemsContainer.id = itemsContainer.id;
+                    newSection.appendChild(newItemsContainer);
+
+                    nextMain.insertBefore(newSection, nextMain.firstChild);
+                    nextItemsContainer = newItemsContainer;
+                }
+
+                // MOVE the item to next page
+                nextItemsContainer.insertBefore(lastItem, nextItemsContainer.firstChild);
+
+                // DON'T increment pageIndex - check this page again
+
+            } else {
+                // No items to split, move entire section
+                nextMain.insertBefore(lastSection, nextMain.firstChild);
             }
         }
     }
