@@ -18,63 +18,7 @@
     <link href="{{ asset('styles/css/cv_builder.css') }}" rel="stylesheet">
 
     <style>
-        /* Page Navigation Controls */
-        .page-navigation-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
 
-        .page-nav-arrow {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-secondary);
-        }
-
-        .page-nav-arrow:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .page-nav-arrow:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .page-dots-container {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .page-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .page-dot.active {
-            background: var(--primary-color);
-            width: 25px;
-            border-radius: 5px;
-        }
-
-        .page-dot:hover {
-            background: #94a3b8;
-        }
     </style>
 </head>
 <body>
@@ -588,10 +532,6 @@
 {{--<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>--}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-    window.authToken = @json(auth()->check() ? auth()->user()->createToken('cv-builder')->plainTextToken : '');
-    window.userId = @json(auth()->id());
-</script>
 <x-smart.cv_builder.app_script></x-smart.cv_builder.app_script>
 </body>
 </html>
