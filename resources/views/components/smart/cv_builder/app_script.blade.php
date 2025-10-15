@@ -775,12 +775,14 @@
     }
 
     function renderMainContent(main, primaryColor) {
+        stylesSectionTitle = `font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};`;
+        stylesSectionContent = `font-size: 10pt; line-height: 0.5; color: #333;`;
         if (cvData.summary && cvData.summary.trim()) {
             const summarySection = document.createElement('div');
             summarySection.className = 'cv-section';
             summarySection.innerHTML = `
-            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">PROFESSIONAL SUMMARY</div>
-            <div id="cvSummary" style="font-size: 0.9rem; line-height: 1.6; color: #333;">${cvData.summary}</div>
+            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 0.2pt;border-bottom: 2.8px solid ${primaryColor}; color: ${primaryColor};">PROFESSIONAL SUMMARY</div>
+            <div id="cvSummary" style="${stylesSectionContent}">${cvData.summary}</div>
         `;
             main.appendChild(summarySection);
         }
@@ -789,7 +791,7 @@
             const empSection = document.createElement('div');
             empSection.className = 'cv-section';
             empSection.innerHTML = `
-        <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">EXPERIENCE</div>
+        <div class="cv-section-title" style="${stylesSectionTitle}">EXPERIENCE</div>
         <div id="cvEmployment"></div>
     `;
             main.appendChild(empSection);
@@ -807,7 +809,7 @@
                 <div style="color: #888; font-size: 0.85rem; margin-bottom: 8px;">
                     ${formatDate(emp.start_date)} - ${emp.end_date ? formatDate(emp.end_date) : 'Present'}
                 </div>
-                <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">
+                <div style="${stylesSectionContent}">
                     ${emp.description || ''}
                 </div>
             `;
@@ -820,7 +822,7 @@
             const eduSection = document.createElement('div');
             eduSection.className = 'cv-section';
             eduSection.innerHTML = `
-            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">EDUCATION</div>
+            <div class="cv-section-title" style="${stylesSectionTitle}">EDUCATION</div>
             <div id="cvEducation"></div>
         `;
             main.appendChild(eduSection);
@@ -838,7 +840,7 @@
                     <div style="color: #888; font-size: 0.85rem; margin-bottom: 8px;">
                         ${formatDate(edu.start_date)} - ${formatDate(edu.end_date)}
                     </div>
-                    <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">
+                    <div style="${stylesSectionContent}">
                         ${edu.description || ''}
                     </div>
                 `;
@@ -851,7 +853,7 @@
             const coursesSection = document.createElement('div');
             coursesSection.className = 'cv-section';
             coursesSection.innerHTML = `
-            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">COURSES</div>
+            <div class="cv-section-title" style="${stylesSectionTitle}">COURSES</div>
             <div id="cvCourses"></div>
         `;
             main.appendChild(coursesSection);
@@ -877,8 +879,8 @@
             const hobbiesSection = document.createElement('div');
             hobbiesSection.className = 'cv-section';
             hobbiesSection.innerHTML = `
-            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">HOBBIES</div>
-            <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">${cvData.additional_sections.hobbies}</div>
+            <div class="cv-section-title" style="${stylesSectionTitle}">HOBBIES</div>
+            <div style="${stylesSectionContent}">${cvData.additional_sections.hobbies}</div>
         `;
             main.appendChild(hobbiesSection);
         }
@@ -1480,7 +1482,7 @@
             if (cvData.personal_details.avatar) {
                 try {
                     const x = 16.5;
-                    const y = 15;
+                    const y = 13.5;
                     const size = 30;
 
                     const img = cvData.personal_details.avatar;
@@ -1692,9 +1694,9 @@
                 const summaryLines = pdf.splitTextToSize(summaryText, mainWidth);
                 summaryLines.forEach(line => {
                     pdf.text(line, mainX, mainY);
-                    mainY += 5;
+                    mainY += 2.6;
                 });
-                mainY += 6;
+                mainY += 10;
             }
 
             // Employment History

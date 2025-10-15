@@ -91,7 +91,7 @@ body {
 .builder-right {
     width: 50%;
     background: #94a3b8;
-    display: flex;
+    /*display: flex;*/
     align-items: center;
     justify-content: center;
     padding: 2rem;
