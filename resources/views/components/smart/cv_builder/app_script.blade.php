@@ -789,9 +789,9 @@
             const empSection = document.createElement('div');
             empSection.className = 'cv-section';
             empSection.innerHTML = `
-            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">EXPERIENCE</div>
-            <div id="cvEmployment"></div>
-        `;
+        <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};">EXPERIENCE</div>
+        <div id="cvEmployment"></div>
+    `;
             main.appendChild(empSection);
 
             const empContainer = empSection.querySelector('#cvEmployment');
@@ -800,17 +800,17 @@
                     const empDiv = document.createElement('div');
                     empDiv.style.cssText = 'margin-bottom: 20px;';
                     empDiv.innerHTML = `
-                    <div style="font-weight: 600; color: #222; font-size: 1rem;">${emp.job_title || 'Position'}</div>
-                    <div style="color: #666; font-size: 0.9rem; margin-bottom: 3px;">
-                        ${emp.company || 'Company'} ${emp.city ? `• ${emp.city}` : ''}
-                    </div>
-                    <div style="color: #888; font-size: 0.85rem; margin-bottom: 8px;">
-                        ${formatDate(emp.start_date)} - ${emp.end_date ? formatDate(emp.end_date) : 'Present'}
-                    </div>
-                    <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">
-                        ${emp.description || ''}
-                    </div>
-                `;
+                <div style="font-weight: 600; color: #222; font-size: 1rem;">${emp.job_title || 'Position'}</div>
+                <div style="color: #666; font-size: 0.9rem; margin-bottom: 3px;">
+                    ${emp.company || 'Company'} ${emp.city ? `• ${emp.city}` : ''}
+                </div>
+                <div style="color: #888; font-size: 0.85rem; margin-bottom: 8px;">
+                    ${formatDate(emp.start_date)} - ${emp.end_date ? formatDate(emp.end_date) : 'Present'}
+                </div>
+                <div style="font-size: 0.9rem; line-height: 1.6; color: #444;">
+                    ${emp.description || ''}
+                </div>
+            `;
                     empContainer.appendChild(empDiv);
                 }
             });
@@ -924,6 +924,7 @@
             const lastSection = sections[sections.length - 1];
 
             // Find items container inside this section
+            // Find items container inside this section
             const itemsContainer = lastSection.querySelector('#cvEmployment, #cvEducation, #cvCourses');
 
             if (itemsContainer && itemsContainer.children.length > 0) {
@@ -955,6 +956,11 @@
 
                 // MOVE the item to next page
                 nextItemsContainer.insertBefore(lastItem, nextItemsContainer.firstChild);
+
+                // 🔥 NEW: Remove the section if the container is now empty
+                if (itemsContainer.children.length === 0) {
+                    lastSection.remove();
+                }
 
                 // DON'T increment pageIndex - check this page again
 
