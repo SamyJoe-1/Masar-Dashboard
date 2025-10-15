@@ -1695,24 +1695,45 @@
             if (cvData.employment_history && cvData.employment_history.length > 0 &&
                 cvData.employment_history.some(e => e.job_title || e.company)) {
 
-                pdf.setFont(fontFamily, 'bold');
-                pdf.setFontSize(12);
-                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
-                pdf.text('EXPERIENCE', mainX, mainY);
-                pdf.setLineWidth(0.5);
-                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
-                mainY += 9;
+                // Helper function to add section title
+                const addExperienceTitle = () => {
+                    pdf.setFont(fontFamily, 'bold');
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                    pdf.text('EXPERIENCE', mainX, mainY);
+                    pdf.setLineWidth(0.5);
+                    pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                    mainY += 9;
+                };
+
+                addExperienceTitle(); // First time
 
                 cvData.employment_history.forEach(emp => {
-                    if ((emp.job_title || emp.company) && mainY < 270) {
-                        // Job Title - font-size: 1rem = 11pt, bold
+                    if ((emp.job_title || emp.company)) {
+                        // Job Title
+                        if (mainY > 270) {
+                            pdf.addPage();
+                            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                            pdf.rect(0, 0, 63, 297, 'F');
+                            mainY = 20;
+                            addExperienceTitle();
+                        }
+
                         pdf.setFont(fontFamily, 'bold');
                         pdf.setFontSize(11);
                         pdf.setTextColor(34, 34, 34);
                         pdf.text(emp.job_title || 'Position', mainX, mainY);
                         mainY += 5;
 
-                        // Company & City - font-size: 0.9rem = 10pt, normal
+                        // Company & City
+                        if (mainY > 280) {
+                            pdf.addPage();
+                            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                            pdf.rect(0, 0, 63, 297, 'F');
+                            mainY = 20;
+                            addExperienceTitle();
+                        }
+
                         pdf.setFont(fontFamily, 'normal');
                         pdf.setFontSize(10);
                         pdf.setTextColor(102, 102, 102);
@@ -1721,7 +1742,15 @@
                         pdf.text(companyText, mainX, mainY);
                         mainY += 5;
 
-                        // Dates - font-size: 0.85rem = 9pt
+                        // Dates
+                        if (mainY > 280) {
+                            pdf.addPage();
+                            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                            pdf.rect(0, 0, 63, 297, 'F');
+                            mainY = 20;
+                            addExperienceTitle();
+                        }
+
                         pdf.setFontSize(9);
                         pdf.setTextColor(136, 136, 136);
                         const startDate = emp.start_date ? formatDateForPDF(emp.start_date) : '';
@@ -1731,14 +1760,20 @@
                             mainY += 5;
                         }
 
-                        // Description - font-size: 0.9rem = 10pt, line-height: 1.6
-                        // Description - font-size: 0.9rem = 10pt, line-height: 1.6
+                        // Description - THIS IS THE KEY PART
                         if (emp.description) {
+                            if (mainY > 280) {
+                                pdf.addPage();
+                                pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                                pdf.rect(0, 0, 63, 297, 'F');
+                                mainY = 20;
+                                addExperienceTitle();
+                            }
+
                             pdf.setFont(fontFamily, 'normal');
                             pdf.setFontSize(9);
                             pdf.setTextColor(68, 68, 68);
 
-                            // ✅ FIXED: Only break on actual <br>, <p>, or <li> tags
                             const descText = emp.description
                                 .replace(/<\/p>/g, '\n')
                                 .replace(/<br\s*\/?>/g, '\n')
@@ -1754,6 +1789,12 @@
                                     pdf.setFillColor(rgb.r, rgb.g, rgb.b);
                                     pdf.rect(0, 0, 63, 297, 'F');
                                     mainY = 20;
+                                    addExperienceTitle();
+
+                                    // Keep description formatting after page break
+                                    pdf.setFont(fontFamily, 'normal');
+                                    pdf.setFontSize(9);
+                                    pdf.setTextColor(68, 68, 68);
                                 }
                                 pdf.text(line, mainX, mainY);
                                 mainY += 4.5;
@@ -1771,6 +1812,7 @@
             if (cvData.education && cvData.education.length > 0 &&
                 cvData.education.some(e => e.school || e.degree)) {
 
+                // Check if need new page before starting
                 if (mainY > 250) {
                     pdf.addPage();
                     pdf.setFillColor(rgb.r, rgb.g, rgb.b);
@@ -1778,16 +1820,30 @@
                     mainY = 20;
                 }
 
-                pdf.setFont(fontFamily, 'bold');
-                pdf.setFontSize(12);
-                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
-                pdf.text('EDUCATION', mainX, mainY);
-                pdf.setLineWidth(0.5);
-                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
-                mainY += 9;
+                // Helper function to add section title
+                const addEducationTitle = () => {
+                    pdf.setFont(fontFamily, 'bold');
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                    pdf.text('EDUCATION', mainX, mainY);
+                    pdf.setLineWidth(0.5);
+                    pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                    mainY += 9;
+                };
+
+                addEducationTitle(); // First time
 
                 cvData.education.forEach(edu => {
                     if ((edu.school || edu.degree) && mainY < 270) {
+                        // Check if need new page BEFORE adding content
+                        if (mainY > 250) {
+                            pdf.addPage();
+                            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                            pdf.rect(0, 0, 63, 297, 'F');
+                            mainY = 20;
+                            addEducationTitle(); // Add title again
+                        }
+
                         pdf.setFont(fontFamily, 'bold');
                         pdf.setFontSize(11);
                         pdf.setTextColor(34, 34, 34);
@@ -1815,7 +1871,15 @@
                             pdf.setFont(fontFamily, 'normal');
                             pdf.setFontSize(9);
                             pdf.setTextColor(68, 68, 68);
-                            const descText = edu.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, '\n').trim();
+
+                            const descText = edu.description
+                                .replace(/<\/p>/g, '\n')
+                                .replace(/<br\s*\/?>/g, '\n')
+                                .replace(/<\/li>/g, '\n')
+                                .replace(/<[^>]*>/g, '')
+                                .replace(/&nbsp;/g, ' ')
+                                .trim();
+
                             const descLines = pdf.splitTextToSize(descText, mainWidth);
                             descLines.forEach(line => {
                                 if (mainY > 280) {
@@ -1823,6 +1887,7 @@
                                     pdf.setFillColor(rgb.r, rgb.g, rgb.b);
                                     pdf.rect(0, 0, 63, 297, 'F');
                                     mainY = 20;
+                                    addEducationTitle(); // Add title on overflow
                                 }
                                 pdf.text(line, mainX, mainY);
                                 mainY += 4.5;
@@ -1847,16 +1912,28 @@
                     mainY = 20;
                 }
 
-                pdf.setFont(fontFamily, 'bold');
-                pdf.setFontSize(12);
-                pdf.setTextColor(rgb.r, rgb.g, rgb.b);
-                pdf.text('COURSES', mainX, mainY);
-                pdf.setLineWidth(0.5);
-                pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
-                mainY += 9;
+                const addCoursesTitle = () => {
+                    pdf.setFont(fontFamily, 'bold');
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(rgb.r, rgb.g, rgb.b);
+                    pdf.text('COURSES', mainX, mainY);
+                    pdf.setLineWidth(0.5);
+                    pdf.line(mainX, mainY + 2, mainX + mainWidth, mainY + 2);
+                    mainY += 9;
+                };
+
+                addCoursesTitle();
 
                 cvData.additional_sections.courses.forEach(course => {
                     if ((course.course || course.institution) && mainY < 270) {
+                        if (mainY > 260) {
+                            pdf.addPage();
+                            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                            pdf.rect(0, 0, 63, 297, 'F');
+                            mainY = 20;
+                            addCoursesTitle();
+                        }
+
                         pdf.setFont(fontFamily, 'bold');
                         pdf.setFontSize(10);
                         pdf.setTextColor(34, 34, 34);
