@@ -885,43 +885,56 @@
     }
 
     function handlePageOverflow(container, color, font, size, spacing) {
-        const pages = container.querySelectorAll('.cv-page');
-        if (pages.length === 0) return;
-
-        // Safety limit to prevent infinite loops
         const MAX_PAGES = 10;
-        let iterations = 0;
+        let pageIndex = 0;
 
-        for (let pageIndex = 0; pageIndex < pages.length && pageIndex < MAX_PAGES; pageIndex++) {
-            iterations++;
-            if (iterations > MAX_PAGES) break; // Emergency brake
+        while (pageIndex < MAX_PAGES) {
+            const pages = container.querySelectorAll('.cv-page');
+            if (pageIndex >= pages.length) break;
 
             const currentPage = pages[pageIndex];
             const mainContent = currentPage.querySelector('.cv-main');
 
-            // Check if this page overflows
+            // Check if content overflows
             if (mainContent.scrollHeight > mainContent.clientHeight + 10) {
-                const sections = mainContent.querySelectorAll('.cv-section');
+                const sections = Array.from(mainContent.children);
 
-                if (sections.length === 0) break; // Nothing to move
+                if (sections.length === 0) break;
+
+                // Find which section is overflowing
+                let overflowingSectionIndex = -1;
+                let accumulatedHeight = 0;
+
+                for (let i = 0; i < sections.length; i++) {
+                    accumulatedHeight += sections[i].offsetHeight;
+                    if (accumulatedHeight > mainContent.clientHeight) {
+                        overflowingSectionIndex = i;
+                        break;
+                    }
+                }
+
+                // If we found an overflowing section
+                if (overflowingSectionIndex === -1) {
+                    overflowingSectionIndex = sections.length - 1;
+                }
 
                 // Get or create next page
                 let nextPage = pages[pageIndex + 1];
                 if (!nextPage) {
                     nextPage = createA4Page(color, font, size, spacing);
                     container.appendChild(nextPage);
-
-                    // Clear sidebar on continuation pages
                     nextPage.querySelector('.cv-sidebar').innerHTML = '';
                     currentPages++;
                 }
 
-                // Move the LAST section to next page
-                const lastSection = sections[sections.length - 1];
-                if (lastSection) {
-                    const nextMain = nextPage.querySelector('.cv-main');
-                    nextMain.insertBefore(lastSection, nextMain.firstChild);
+                const nextMain = nextPage.querySelector('.cv-main');
+
+                // Move all overflowing sections to next page
+                for (let i = sections.length - 1; i >= overflowingSectionIndex; i--) {
+                    nextMain.insertBefore(sections[i], nextMain.firstChild);
                 }
+            } else {
+                pageIndex++;
             }
         }
     }
@@ -1693,11 +1706,21 @@
                         }
 
                         // Description - font-size: 0.9rem = 10pt, line-height: 1.6
+                        // Description - font-size: 0.9rem = 10pt, line-height: 1.6
                         if (emp.description) {
                             pdf.setFont(fontFamily, 'normal');
                             pdf.setFontSize(9);
                             pdf.setTextColor(68, 68, 68);
-                            const descText = emp.description.replace(/<[^>]*>/g, '\n').replace(/\s+/g, '\n').trim();
+
+                            // ✅ FIXED: Only break on actual <br>, <p>, or <li> tags
+                            const descText = emp.description
+                                .replace(/<\/p>/g, '\n')
+                                .replace(/<br\s*\/?>/g, '\n')
+                                .replace(/<\/li>/g, '\n')
+                                .replace(/<[^>]*>/g, '')
+                                .replace(/&nbsp;/g, ' ')
+                                .trim();
+
                             const descLines = pdf.splitTextToSize(descText, mainWidth);
                             descLines.forEach(line => {
                                 if (mainY > 280) {
