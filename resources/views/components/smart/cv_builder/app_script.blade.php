@@ -671,7 +671,7 @@
         main.className = 'cv-main';
         main.style.cssText = `
         width: 70%;
-        padding: 40px;
+        padding: 55px 30px;
         background: white;
         overflow: hidden;
         line-height: ${spacing};
@@ -775,14 +775,16 @@
     }
 
     function renderMainContent(main, primaryColor) {
-        stylesSectionTitle = `font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid ${primaryColor}; color: ${primaryColor};`;
-        stylesSectionContent = `font-size: 10pt; line-height: 0.5; color: #333;`;
+        stylesSectionTitle = `font-size: 12pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 0.3pt; border-bottom: 3px solid ${primaryColor}; color: ${primaryColor};`;
+        stylesSectionContent = `font-size: 10pt; line-height: 1.5;color: #333;font-family: 'helvetica'`;
+        stylesSectionContentSm = `font-size: 9pt; color: #333;`;
         if (cvData.summary && cvData.summary.trim()) {
             const summarySection = document.createElement('div');
             summarySection.className = 'cv-section';
+            const processedSummary = cvData.summary
             summarySection.innerHTML = `
-            <div class="cv-section-title" style="font-size: 1rem; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 0.2pt;border-bottom: 2.8px solid ${primaryColor}; color: ${primaryColor};">PROFESSIONAL SUMMARY</div>
-            <div id="cvSummary" style="${stylesSectionContent}">${cvData.summary}</div>
+            <div class="cv-section-title" style="${stylesSectionTitle}">PROFESSIONAL SUMMARY</div>
+            <div id="cvSummary" style="${stylesSectionContent}">${processedSummary}</div>
         `;
             main.appendChild(summarySection);
         }
@@ -809,7 +811,7 @@
                 <div style="color: #888; font-size: 0.85rem; margin-bottom: 8px;">
                     ${formatDate(emp.start_date)} - ${emp.end_date ? formatDate(emp.end_date) : 'Present'}
                 </div>
-                <div style="${stylesSectionContent}">
+                <div style="${stylesSectionContentSm}">
                     ${emp.description || ''}
                 </div>
             `;
@@ -840,7 +842,7 @@
                     <div style="color: #888; font-size: 0.85rem; margin-bottom: 8px;">
                         ${formatDate(edu.start_date)} - ${formatDate(edu.end_date)}
                     </div>
-                    <div style="${stylesSectionContent}">
+                    <div style="${stylesSectionContentSm}">
                         ${edu.description || ''}
                     </div>
                 `;
@@ -1694,7 +1696,7 @@
                 const summaryLines = pdf.splitTextToSize(summaryText, mainWidth);
                 summaryLines.forEach(line => {
                     pdf.text(line, mainX, mainY);
-                    mainY += 2.6;
+                    mainY += 5;
                 });
                 mainY += 10;
             }
@@ -1728,7 +1730,7 @@
                         }
 
                         pdf.setFont(fontFamily, 'bold');
-                        pdf.setFontSize(11);
+                        pdf.setFontSize(12);
                         pdf.setTextColor(34, 34, 34);
                         pdf.text(emp.job_title || 'Position', mainX, mainY);
                         mainY += 5;
@@ -1779,7 +1781,7 @@
                             }
 
                             pdf.setFont(fontFamily, 'normal');
-                            pdf.setFontSize(9);
+                            pdf.setFontSize(10);
                             pdf.setTextColor(68, 68, 68);
 
                             const descText = emp.description
@@ -1805,11 +1807,11 @@
                                     pdf.setTextColor(68, 68, 68);
                                 }
                                 pdf.text(line, mainX, mainY);
-                                mainY += 4.5;
+                                mainY += 5;
                             });
                         }
 
-                        mainY += 6;
+                        mainY += 10;
                     }
                 });
 
@@ -1898,11 +1900,11 @@
                                     addEducationTitle(); // Add title on overflow
                                 }
                                 pdf.text(line, mainX, mainY);
-                                mainY += 4.5;
+                                mainY += 5;
                             });
                         }
 
-                        mainY += 6;
+                        mainY += 10;
                     }
                 });
 
@@ -1959,7 +1961,7 @@
                         const startDate = course.start_date ? formatDateForPDF(course.start_date) : '';
                         const endDate = course.end_date ? formatDateForPDF(course.end_date) : '';
                         if (startDate || endDate) {
-                            pdf.setFontSize(8);
+                            pdf.setFontSize(9);
                             pdf.setTextColor(136, 136, 136);
                             pdf.text(`${startDate} - ${endDate}`, mainX, mainY);
                             mainY += 5;
@@ -1995,7 +1997,7 @@
                 const hobbiesLines = pdf.splitTextToSize(cvData.additional_sections.hobbies, mainWidth);
                 hobbiesLines.forEach(line => {
                     pdf.text(line, mainX, mainY);
-                    mainY += 4.5;
+                    mainY += 5;
                 });
             }
 
