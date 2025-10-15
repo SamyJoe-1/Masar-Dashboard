@@ -16,13 +16,72 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <link href="{{ asset('styles/css/cv_builder.css') }}" rel="stylesheet">
+
+    <style>
+        /* Page Navigation Controls */
+        .page-navigation-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .page-nav-arrow {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .page-nav-arrow:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .page-nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .page-dots-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .page-dot.active {
+            background: var(--primary-color);
+            width: 25px;
+            border-radius: 5px;
+        }
+
+        .page-dot:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Template Selection Page -->
 <div id="templateSelection" class="templates-container">
     <div class="container">
-        <i class="fas fa-location-dot"></i>
         <h1 class="text-center mb-5">Choose Your CV Template</h1>
         <div class="row g-4" id="templatesGrid">
             <!-- Templates will be loaded dynamically from database -->
@@ -446,8 +505,20 @@
             </button>
 
             <!-- A4 Preview Container -->
+            <!-- A4 Preview Container -->
             <div class="cv-preview-container" id="cvPreviewContainer">
                 <!-- Pages will be dynamically generated -->
+            </div>
+
+            <!-- Page Navigation -->
+            <div class="page-navigation-controls" id="pageNavigationControls" style="display: none;">
+                <button class="page-nav-arrow" id="prevPageBtn" onclick="navigateToPage('prev')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="page-dots-container" id="pageDotsContainer"></div>
+                <button class="page-nav-arrow" id="nextPageBtn" onclick="navigateToPage('next')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>

@@ -87,7 +87,7 @@
                     <div class="template-card" data-template-id="${template.id}" onclick="selectTemplate(${template.id})">
                         <div class="template-preview">
                             ${template.image ?
-                                        `<img src="${template.file.fullpath}" alt="${template.name}" style="width: 100%; height: 100%; object-fit: cover;">` :
+                                        `<img src="${template.image}" alt="${template.name}" style="width: 100%; height: 100%; object-fit: cover;">` :
                                         `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f0f0f0;">
                                     <i class="fas fa-file-alt" style="font-size: 4rem; color: #ccc;"></i>
                                 </div>`
@@ -1613,7 +1613,7 @@
                 pdf.setFontSize(10);
                 pdf.setTextColor(51, 51, 51);
 
-                const summaryText = cvData.summary.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                const summaryText = cvData.summary.replace(/<[^>]*>/g, '\n').trim();
                 const summaryLines = pdf.splitTextToSize(summaryText, mainWidth);
                 summaryLines.forEach(line => {
                     pdf.text(line, mainX, mainY);
@@ -1667,7 +1667,7 @@
                             pdf.setFont(fontFamily, 'normal');
                             pdf.setFontSize(9);
                             pdf.setTextColor(68, 68, 68);
-                            const descText = emp.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                            const descText = emp.description.replace(/<[^>]*>/g, '\n').replace(/\s+/g, ' ').trim();
                             const descLines = pdf.splitTextToSize(descText, mainWidth);
                             descLines.forEach(line => {
                                 if (mainY > 280) {
@@ -1736,7 +1736,7 @@
                             pdf.setFont(fontFamily, 'normal');
                             pdf.setFontSize(9);
                             pdf.setTextColor(68, 68, 68);
-                            const descText = edu.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                            const descText = edu.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, '\n').trim();
                             const descLines = pdf.splitTextToSize(descText, mainWidth);
                             descLines.forEach(line => {
                                 if (mainY > 280) {
