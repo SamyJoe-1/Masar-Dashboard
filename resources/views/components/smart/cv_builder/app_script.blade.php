@@ -888,14 +888,41 @@
         const pages = container.querySelectorAll('.cv-page');
         if (pages.length === 0) return;
 
-        const lastPage = pages[pages.length - 1];
-        const mainContent = lastPage.querySelector('.cv-main');
+        // Safety limit to prevent infinite loops
+        const MAX_PAGES = 10;
+        let iterations = 0;
 
-        if (mainContent.scrollHeight > mainContent.clientHeight) {
-            const newPage = createA4Page(color, font, size, spacing);
-            container.appendChild(newPage);
+        for (let pageIndex = 0; pageIndex < pages.length && pageIndex < MAX_PAGES; pageIndex++) {
+            iterations++;
+            if (iterations > MAX_PAGES) break; // Emergency brake
 
-            currentPages++;
+            const currentPage = pages[pageIndex];
+            const mainContent = currentPage.querySelector('.cv-main');
+
+            // Check if this page overflows
+            if (mainContent.scrollHeight > mainContent.clientHeight + 10) {
+                const sections = mainContent.querySelectorAll('.cv-section');
+
+                if (sections.length === 0) break; // Nothing to move
+
+                // Get or create next page
+                let nextPage = pages[pageIndex + 1];
+                if (!nextPage) {
+                    nextPage = createA4Page(color, font, size, spacing);
+                    container.appendChild(nextPage);
+
+                    // Clear sidebar on continuation pages
+                    nextPage.querySelector('.cv-sidebar').innerHTML = '';
+                    currentPages++;
+                }
+
+                // Move the LAST section to next page
+                const lastSection = sections[sections.length - 1];
+                if (lastSection) {
+                    const nextMain = nextPage.querySelector('.cv-main');
+                    nextMain.insertBefore(lastSection, nextMain.firstChild);
+                }
+            }
         }
     }
 
@@ -1670,7 +1697,7 @@
                             pdf.setFont(fontFamily, 'normal');
                             pdf.setFontSize(9);
                             pdf.setTextColor(68, 68, 68);
-                            const descText = emp.description.replace(/<[^>]*>/g, '\n').replace(/\s+/g, ' ').trim();
+                            const descText = emp.description.replace(/<[^>]*>/g, '\n').replace(/\s+/g, '\n').trim();
                             const descLines = pdf.splitTextToSize(descText, mainWidth);
                             descLines.forEach(line => {
                                 if (mainY > 280) {
