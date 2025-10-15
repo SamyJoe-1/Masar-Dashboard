@@ -2,6 +2,16 @@
     window.authToken = @json(auth()->check() ? auth()->user()->createToken('cv-builder')->plainTextToken : '');
     window.userId = @json(auth()->id());
 
+    // Run on load and resize
+    window.addEventListener('load', scaleCV);
+    window.addEventListener('resize', scaleCV);
+
+    // Also run after rendering
+    const originalRenderPreview = window.renderPreview;
+    window.renderPreview = function() {
+        if (originalRenderPreview) originalRenderPreview();
+        setTimeout(scaleCV, 100);
+    };
     // A4 Configuration
     const A4_WIDTH = 794;
     const A4_HEIGHT = 1123;
@@ -57,6 +67,33 @@
             return false;
         }
         return true;
+    }
+
+    // PHOTOSHOP-STYLE CV SCALING
+    function scaleCV() {
+        const container = document.querySelector('.builder-right');
+        const cvContainer = document.getElementById('cvPreviewContainer');
+
+        if (!container || !cvContainer) return;
+
+        // Get available space with padding margin
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+
+        // A4 dimensions
+        const cvWidth = 794;
+        const cvHeight = 1123;
+
+        // Calculate scale to fit with margin (90% of available space)
+        const margin = 0.9;
+        const scaleX = (containerWidth * margin) / cvWidth;
+        const scaleY = (containerHeight * margin) / cvHeight;
+
+        // Use the smaller scale to ensure it fits both dimensions
+        const scale = Math.min(scaleX, scaleY);
+
+        // Apply the transform
+        cvContainer.style.transform = `scale(${scale})`;
     }
 
     function generateUUID() {
