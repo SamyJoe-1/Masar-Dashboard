@@ -915,7 +915,7 @@
         width: 30%;
         background: ${color};
         color: white;
-        padding: 40px 30px;
+        padding: 40px 25px;
         overflow: hidden;
     `;
 
@@ -1027,9 +1027,9 @@
     }
 
     function renderMainContent(main, primaryColor) {
-        stylesSectionTitle = `font-size: 12pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 0.3pt; border-bottom: 3px solid ${primaryColor}; color: ${primaryColor};`;
-        stylesSectionContent = `font-size: 10pt; line-height: 1.5;color: #333;font-family: 'helvetica'`;
-        stylesSectionContentSm = `font-size: 9pt; color: #333;`;
+        stylesSectionTitle = `font-size: 12pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; padding-bottom: 0.3pt; border-bottom: 3px solid ${primaryColor}; color: ${primaryColor};`;
+        stylesSectionContent = `font-size: 10pt; line-height: 1.35;color: #333;font-family: 'helvetica'`;
+        stylesSectionContentSm = `font-size: 10pt; color: #333;font-family: 'helvetica'`;
         if (cvData.summary && cvData.summary.trim()) {
             const summarySection = document.createElement('div');
             summarySection.className = 'cv-section';
@@ -1141,10 +1141,11 @@
     }
 
     function handlePageOverflow(container, color, font, size, spacing) {
-        let iterations = 0;
         let pageIndex = 0;
+        let iterations = 0;
+        const maxIterations = 100;
 
-        while (pageIndex < 20 && iterations < 100) {
+        while (pageIndex < 20 && iterations < maxIterations) {
             iterations++;
 
             const pages = container.querySelectorAll('.cv-page');
@@ -1153,19 +1154,23 @@
             const currentPage = pages[pageIndex];
             const mainContent = currentPage.querySelector('.cv-main');
 
-            // If doesn't overflow, move to next page
-            if (mainContent.scrollHeight <= mainContent.clientHeight + 50) {
+            // Check if page overflows
+            const overflowAmount = mainContent.scrollHeight - mainContent.clientHeight;
+
+            // If no overflow (with 50px tolerance), move to next page
+            if (overflowAmount <= 50) {
                 pageIndex++;
                 continue;
             }
 
+            // Page overflows - need to move content
             const sections = Array.from(mainContent.children);
             if (sections.length === 0) {
                 pageIndex++;
                 continue;
             }
 
-            // Create next page
+            // Get or create next page
             let nextPage = pages[pageIndex + 1];
             if (!nextPage) {
                 nextPage = createA4Page(color, font, size, spacing);
@@ -1179,15 +1184,17 @@
             // Get the last section
             const lastSection = sections[sections.length - 1];
 
-            // Find items container inside this section
-            // Find items container inside this section
+            // Check if this section has items (employment, education, courses)
             const itemsContainer = lastSection.querySelector('#cvEmployment, #cvEducation, #cvCourses');
 
             if (itemsContainer && itemsContainer.children.length > 0) {
-                // MOVE ONE ITEM from current page to next page
-                const lastItem = itemsContainer.children[itemsContainer.children.length - 1];
+                // Section with multiple items - move items one by one
+                const items = Array.from(itemsContainer.children);
 
-                // Find matching section on next page OR create it
+                // Get the LAST item
+                const lastItem = items[items.length - 1];
+
+                // Find or create matching section on next page
                 let nextItemsContainer = nextMain.querySelector(`#${itemsContainer.id}`);
 
                 if (!nextItemsContainer) {
@@ -1195,7 +1202,7 @@
                     const newSection = document.createElement('div');
                     newSection.className = 'cv-section';
 
-                    // Clone only the title
+                    // Clone the section title
                     const title = lastSection.querySelector('.cv-section-title');
                     if (title) {
                         newSection.appendChild(title.cloneNode(true));
@@ -1210,20 +1217,28 @@
                     nextItemsContainer = newItemsContainer;
                 }
 
-                // MOVE the item to next page
+                // Move the last item to next page (at the top)
                 nextItemsContainer.insertBefore(lastItem, nextItemsContainer.firstChild);
 
-                // 🔥 NEW: Remove the section if the container is now empty
+                // If container is now empty, remove the section
                 if (itemsContainer.children.length === 0) {
                     lastSection.remove();
                 }
 
-                // DON'T increment pageIndex - check this page again
+                // DON'T increment pageIndex - check current page again
 
             } else {
-                // No items to split, move entire section
+                // Section without items (summary, hobbies) OR non-splittable content
+                // Move entire section to next page
                 nextMain.insertBefore(lastSection, nextMain.firstChild);
+
+                // DON'T increment pageIndex - check current page again
             }
+        }
+
+        // Safety check - if we hit max iterations, log warning
+        if (iterations >= maxIterations) {
+            console.warn('⚠️ handlePageOverflow hit max iterations - possible infinite loop prevented');
         }
     }
 
@@ -2013,7 +2028,7 @@
                             addExperienceTitle();
                         }
 
-                        pdf.setFontSize(9);
+                        pdf.setFontSize(10);
                         pdf.setTextColor(136, 136, 136);
                         const startDate = emp.start_date ? formatDateForPDF(emp.start_date) : '';
                         const endDate = emp.end_date ? formatDateForPDF(emp.end_date) : 'Present';
@@ -2131,7 +2146,7 @@
 
                         if (edu.description) {
                             pdf.setFont(fontFamily, 'normal');
-                            pdf.setFontSize(9);
+                            pdf.setFontSize(10);
                             pdf.setTextColor(68, 68, 68);
 
                             const descText = edu.description
