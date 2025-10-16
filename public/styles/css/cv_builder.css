@@ -628,6 +628,96 @@ body {
     margin-bottom: 1rem;
 }
 
+/* CV Page Slider Controls */
+.cv-page-arrows {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 794px; /* match your A4 width */
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 1000;
+    padding: 0 20px;
+}
+
+.cv-arrow-btn {
+    pointer-events: all;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.9);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.cv-arrow-btn:hover {
+    background: rgba(37, 99, 235, 1);
+    transform: scale(1.1);
+}
+
+.cv-arrow-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.cv-page-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.cv-page-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.cv-page-dot.active {
+    background: #2563eb;
+    transform: scale(1.2);
+    border-color: white;
+}
+
+.cv-page-dot:hover {
+    background: rgba(37, 99, 235, 0.6);
+}
+/* Hide non-active pages */
+#cvPreviewContainer {
+    position: relative;
+    width: 794px;
+    height: 1123px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+#cvPreviewContainer {
+    position: relative;
+    width: 794px;
+    height: 1123px;
+    margin: 0 auto;
+    overflow: hidden;
+    display: block; /* ensure absolute positioning works properly */
+}
+
+#cvPreviewContainer{
+    display: flex;
+}
+
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-20px); }

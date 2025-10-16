@@ -16,10 +16,6 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <link href="{{ asset('styles/css/cv_builder.css') }}" rel="stylesheet">
-
-    <style>
-
-    </style>
 </head>
 <body>
 
@@ -449,20 +445,25 @@
             </button>
 
             <!-- A4 Preview Container -->
-            <!-- A4 Preview Container -->
-            <div class="cv-preview-container" id="cvPreviewContainer">
-                <!-- Pages will be dynamically generated -->
+            <div style="position: relative;">
+                <!-- Arrow Buttons -->
+                <div class="cv-page-arrows" id="cvPageArrows" style="display: none;">
+                    <button class="cv-arrow-btn" id="cvPrevArrow" onclick="prevPreviewPage()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="cv-arrow-btn" id="cvNextArrow" onclick="nextPreviewPage()">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="cv-preview-container" id="cvPreviewContainer">
+                    <!-- Pages will be dynamically generated -->
+                </div>
             </div>
 
-            <!-- Page Navigation -->
-            <div class="page-navigation-controls" id="pageNavigationControls" style="display: none;">
-                <button class="page-nav-arrow" id="prevPageBtn" onclick="navigateToPage('prev')">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <div class="page-dots-container" id="pageDotsContainer"></div>
-                <button class="page-nav-arrow" id="nextPageBtn" onclick="navigateToPage('next')">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+            <!-- Colored Dots Below CV -->
+            <div class="cv-page-dots" id="cvPageDots" style="display: none;">
+                <!-- Dots will be generated dynamically -->
             </div>
         </div>
     </div>
@@ -490,28 +491,28 @@
             </div>
         </div>
 
-        <div class="mb-4">
-            <h5>Font Family</h5>
-            <select class="form-select" id="fontSelect" onchange="changeFont(this.value)">
-                <option value="'Inter', sans-serif">Inter (Default)</option>
-                <option value="'Arial', sans-serif">Arial</option>
-                <option value="'Times New Roman', serif">Times New Roman</option>
-                <option value="'Georgia', serif">Georgia</option>
-                <option value="'Courier New', monospace">Courier New</option>
-            </select>
-        </div>
+{{--        <div class="mb-4">--}}
+{{--            <h5>Font Family</h5>--}}
+{{--            <select class="form-select" id="fontSelect" onchange="changeFont(this.value)">--}}
+{{--                <option value="'Inter', sans-serif">Inter (Default)</option>--}}
+{{--                <option value="'Arial', sans-serif">Arial</option>--}}
+{{--                <option value="'Times New Roman', serif">Times New Roman</option>--}}
+{{--                <option value="'Georgia', serif">Georgia</option>--}}
+{{--                <option value="'Courier New', monospace">Courier New</option>--}}
+{{--            </select>--}}
+{{--        </div>--}}
 
-        <div class="mb-4">
-            <h5>Font Size</h5>
-            <input type="range" class="form-range" id="fontSizeRange" min="12" max="18" value="14" onchange="changeFontSize(this.value)">
-            <div class="text-center"><span id="fontSizeValue">14px</span></div>
-        </div>
+{{--        <div class="mb-4">--}}
+{{--            <h5>Font Size</h5>--}}
+{{--            <input type="range" class="form-range" id="fontSizeRange" min="12" max="18" value="14" onchange="changeFontSize(this.value)">--}}
+{{--            <div class="text-center"><span id="fontSizeValue">14px</span></div>--}}
+{{--        </div>--}}
 
-        <div class="mb-4">
-            <h5>Line Spacing</h5>
-            <input type="range" class="form-range" id="spacingRange" min="1" max="2" step="0.1" value="1.5" onchange="changeSpacing(this.value)">
-            <div class="text-center"><span id="spacingValue">1.5</span></div>
-        </div>
+{{--        <div class="mb-4">--}}
+{{--            <h5>Line Spacing</h5>--}}
+{{--            <input type="range" class="form-range" id="spacingRange" min="1" max="2" step="0.1" value="1.5" onchange="changeSpacing(this.value)">--}}
+{{--            <div class="text-center"><span id="spacingValue">1.5</span></div>--}}
+{{--        </div>--}}
 
         <div class="d-flex justify-content-end gap-2">
             <button class="btn btn-secondary" onclick="closeCustomizeModal()">Cancel</button>
@@ -529,7 +530,6 @@
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-{{--<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>--}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>

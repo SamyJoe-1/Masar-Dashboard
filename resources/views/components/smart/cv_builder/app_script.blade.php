@@ -16,6 +16,7 @@
     const A4_WIDTH = 794;
     const A4_HEIGHT = 1123;
     const A4_RATIO = 210 / 297;
+    let currentPreviewPage = 0;
 
     // Global State
     let selectedTemplate = null;
@@ -94,6 +95,110 @@
 
         // Apply the transform
         cvContainer.style.transform = `scale(${scale})`;
+    }
+
+    function updatePageSlider() {
+        const container = document.getElementById('cvPreviewContainer');
+        const pages = Array.from(container.querySelectorAll('.cv-page'));
+        const totalPages = pages.length;
+
+        const arrows = document.getElementById('cvPageArrows');
+        const dotsContainer = document.getElementById('cvPageDots');
+        const prevArrow = document.getElementById('cvPrevArrow');
+        const nextArrow = document.getElementById('cvNextArrow');
+
+        if (totalPages <= 1) {
+            arrows.style.display = 'none';
+            dotsContainer.style.display = 'none';
+            if (pages[0]) pages[0].classList.add('active');
+            return;
+        }
+
+        arrows.style.display = 'flex';
+        dotsContainer.style.display = 'flex';
+
+        prevArrow.disabled = currentPreviewPage === 0;
+        nextArrow.disabled = currentPreviewPage === totalPages - 1;
+
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalPages; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'cv-page-dot' + (i === currentPreviewPage ? ' active' : '');
+            dot.onclick = () => goToPreviewPage(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        // 🔥 Re-ordering logic using flex order
+        pages.forEach((page, index) => {
+            if (index < currentPreviewPage) {
+                page.style.order = totalPages + index;   // move previous pages to the end
+            } else {
+                page.style.order = index - currentPreviewPage; // keep current first
+            }
+            page.classList.toggle('active', index === currentPreviewPage);
+        });
+
+        console.log('currentPreviewPage:', currentPreviewPage, 'total pages:', totalPages);
+    }
+
+
+    function changePreviewPage(direction) {
+        const container = document.getElementById('cvPreviewContainer');
+        const totalPages = container.querySelectorAll('.cv-page').length;
+
+        if (direction === 'prev' && currentPreviewPage > 0) currentPreviewPage--;
+        else if (direction === 'next' && currentPreviewPage < totalPages - 1) currentPreviewPage++;
+
+        updatePageSlider();
+    }
+
+    function nextPreviewPage() {
+        goToPreviewPage(currentPreviewPage + 1);
+    }
+
+    function prevPreviewPage() {
+        goToPreviewPage(currentPreviewPage - 1);
+    }
+
+    function goToPreviewPage(index) {
+        const container = document.getElementById('cvPreviewContainer');
+        const pages = container.querySelectorAll('.cv-page');
+        const totalPages = pages.length;
+        if (index < 0 || index >= totalPages) return;
+        currentPreviewPage = index;
+        updatePageSlider();
+    }
+
+
+    function changePreviewPage(direction) {
+        const container = document.getElementById('cvPreviewContainer');
+        const totalPages = container.querySelectorAll('.cv-page').length;
+
+        if (direction === 'prev' && currentPreviewPage > 0) {
+            currentPreviewPage--;
+        } else if (direction === 'next' && currentPreviewPage < totalPages - 1) {
+            currentPreviewPage++;
+        }
+
+        updatePageSlider();
+    }
+    function nextPreviewPage() {
+        goToPreviewPage(currentPreviewPage + 1);
+    }
+
+    function prevPreviewPage() {
+        goToPreviewPage(currentPreviewPage - 1);
+    }
+
+    function goToPreviewPage(index) {
+        const container = document.getElementById('cvPreviewContainer');
+        const pages = container.querySelectorAll('.cv-page');
+        const totalPages = pages.length;
+
+        if (index < 0 || index >= totalPages) return; // ignore invalid clicks
+
+        currentPreviewPage = index;
+        updatePageSlider();
     }
 
     function generateUUID() {
@@ -650,8 +755,113 @@
         container.appendChild(newItem);
     }
 
-    function improveWithAI(section, index) {
-        showNotification('AI improvement feature coming soon!', 'info');
+    async function improveWithAI(section, index) {
+        // Get the button that was clicked
+        const button = event.target.closest('.ai-improve-btn');
+        const originalHTML = button.innerHTML;
+
+        // Disable button and show loading
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Improving...';
+
+        try {
+            // Collect ALL current CV data
+            collectData();
+
+            // Get the specific content for this section
+            let currentContent = '';
+            if (section === 'summary') {
+                currentContent = summaryEditor ? summaryEditor.getText().trim() : '';
+            } else if (section === 'employment') {
+                currentContent = employmentEditors[index] ? employmentEditors[index].getText().trim() : '';
+            } else if (section === 'education') {
+                currentContent = educationEditors[index] ? educationEditors[index].getText().trim() : '';
+            }
+
+            // 🔥 MAP section names to what your API expects
+            const sectionMapping = {
+                'summary': 'summary',
+                'employment': 'experience',  // 👈 API might expect "experience" not "employment"
+                'education': 'education'
+            };
+
+            // Prepare CV data in the format your API expects
+            const cvFormatted = {
+                name: `${cvData.personal_details.first_name || ''} ${cvData.personal_details.last_name || ''}`.trim() || 'N/A',
+                title: cvData.personal_details.job_title || 'N/A',
+                location: cvData.personal_details.city_state && cvData.personal_details.country
+                    ? `${cvData.personal_details.city_state}, ${cvData.personal_details.country}`
+                    : 'N/A',
+                email: cvData.personal_details.email || 'N/A',
+                phone: cvData.personal_details.phone || 'N/A',
+                links: cvData.personal_details.linkedin || 'N/A',
+                skills: cvData.skills && cvData.skills.length > 0
+                    ? cvData.skills.map(s => s.skill).filter(Boolean)
+                    : ['N/A']
+            };
+
+            // Prepare the payload matching your API structure
+            const payload = {
+                section: sectionMapping[section] || section,  // 👈 Use mapped section name
+                content: currentContent,
+                job_description: cvData.personal_details.job_title || '',
+                target_role: cvData.personal_details.job_title || '',
+                language: 'en',
+                style: 'ats',
+                cv: cvFormatted,
+                max_items: 8,
+                sort_bullets_by_impact: true,
+                return_mode: 'raw',
+                group_skills: false,
+                force_llm: false
+            };
+
+            console.log('📤 Sending payload:', payload);  // 👈 Debug log
+
+            // Send request to your API
+            const response = await fetch('{{ config('app.smart_cv_url') }}/v1/improve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            console.log('📥 API Response:', result);  // 👈 Debug log
+
+            if (!response.ok) {
+                console.error('❌ API Error:', result);  // 👈 Debug log
+                throw new Error(result.message || result.error || 'Failed to improve content');
+            }
+
+            // Success - update the editor with improved content
+            if (result.improved) {
+                if (section === 'summary' && summaryEditor) {
+                    summaryEditor.root.innerHTML = result.improved;
+                } else if (section === 'employment' && employmentEditors[index]) {
+                    employmentEditors[index].root.innerHTML = result.improved;
+                } else if (section === 'education' && educationEditors[index]) {
+                    educationEditors[index].root.innerHTML = result.improved;
+                }
+
+                // Re-render preview
+                renderPreview();
+                updateProgress();
+            }
+
+            showNotification('Content improved successfully! 🎉', 'success');
+
+        } catch (error) {
+            console.error('Error improving with AI:', error);
+            showNotification('Failed to improve content: ' + error.message, 'error');
+        } finally {
+            // Re-enable button and restore original text
+            button.disabled = false;
+            button.innerHTML = originalHTML;
+        }
     }
 
     // ==================== RENDER A4 PREVIEW ====================
@@ -676,6 +886,11 @@
         renderMainContent(main, primaryColor);
 
         handlePageOverflow(container, primaryColor, fontFamily, fontSize, lineHeight);
+
+        setTimeout(() => {
+            currentPreviewPage = 0;
+            updatePageSlider();
+        }, 100);
     }
 
     function createA4Page(color, font, size, spacing) {

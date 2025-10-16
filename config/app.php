@@ -56,6 +56,7 @@ return [
     'match_cv_url' => env('APP_MATCH_CV_URL', '/'),
     'evaluate_url' => env('APP_EVALUATE_CV_URL', '/'),
     'law_url' => env('APP_LAW_URL', '/'),
+    'smart_cv_url' => env('APP_SMART_CV_URL', '/'),
 
     /*
     |--------------------------------------------------------------------------
