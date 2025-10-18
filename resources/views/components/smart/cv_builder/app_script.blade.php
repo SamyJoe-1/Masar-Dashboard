@@ -59,7 +59,6 @@
         setupAutoSaveInterval();
     });
 
-    // Check if user is authenticated
     function checkAuth() {
         const authToken = window.authToken || localStorage.getItem('auth_token');
         if (!authToken) {
@@ -70,7 +69,6 @@
         return true;
     }
 
-    // PHOTOSHOP-STYLE CV SCALING
     function scaleCV() {
         const container = document.querySelector('.builder-right');
         const cvContainer = document.getElementById('cvPreviewContainer');
@@ -169,7 +167,6 @@
         updatePageSlider();
     }
 
-
     function changePreviewPage(direction) {
         const container = document.getElementById('cvPreviewContainer');
         const totalPages = container.querySelectorAll('.cv-page').length;
@@ -182,6 +179,7 @@
 
         updatePageSlider();
     }
+
     function nextPreviewPage() {
         goToPreviewPage(currentPreviewPage + 1);
     }
@@ -209,7 +207,6 @@
         });
     }
 
-    // ==================== TEMPLATE LOADING ====================
     async function loadTemplates() {
         try {
             const response = await fetch('/api/templates', {
@@ -380,7 +377,6 @@
         });
     }
 
-    // ==================== QUILL EDITORS ====================
     function initializeEditors() {
         summaryEditor = new Quill('#summaryEditor', {
             theme: 'snow',
@@ -470,7 +466,6 @@
         return editor;
     }
 
-    // ==================== STEP NAVIGATION ====================
     function goToStep(step) {
         if (step >= 1 && step <= totalSteps) {
             currentStep = step;
@@ -518,7 +513,6 @@
         updateProgress();
     }
 
-    // ==================== ADD MORE ITEMS ====================
     function toggleAdditionalDetails() {
         const details = document.getElementById('additionalDetails');
         details.style.display = details.style.display === 'none' ? 'block' : 'none';
@@ -864,7 +858,6 @@
         }
     }
 
-    // ==================== RENDER A4 PREVIEW ====================
     function renderPreview() {
         collectData();
 
@@ -1248,7 +1241,6 @@
         return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     }
 
-    // ==================== DATA COLLECTION ====================
     function collectData() {
         cvData.personal_details = {
             first_name: document.getElementById('firstName')?.value || '',
@@ -1444,7 +1436,6 @@
         }
     }
 
-    // ==================== PROGRESS ====================
     function updateProgress() {
         let totalFields = 0;
         let filledFields = 0;
@@ -1496,7 +1487,6 @@
         document.getElementById('progressBar').style.width = `${percentage}%`;
     }
 
-    // ==================== CUSTOMIZATION ====================
     function openCustomizeModal() {
         document.getElementById('customizeModal').classList.add('show');
     }
@@ -1533,7 +1523,6 @@
         renderPreview();
     }
 
-    // ==================== AUTO SAVE ====================
     function setupAutoSaveInterval() {
         setInterval(() => {
             if (cvData.template_id) {
@@ -1543,7 +1532,6 @@
         }, 30000); // Every 30 seconds
     }
 
-    // ==================== SAVE TO DATABASE ====================
     async function saveToDatabase() {
         if (!checkAuth()) return;
         collectData();
@@ -1595,7 +1583,6 @@
         }
     }
 
-    // ==================== FINISH CV ====================
     async function finishCV() {
         collectData();
 
@@ -1680,7 +1667,6 @@
         });
     }
 
-
     function closeDownloadModal() {
         const modal = document.getElementById('downloadModal');
         if (modal) modal.remove();
@@ -1717,7 +1703,6 @@
         } : { r: 44, g: 62, b: 80 };
     }
 
-    // ==================== DOWNLOAD FUNCTIONS ====================
     async function downloadPDF() {
         const container = document.getElementById('cvPreviewContainer');
         const { jsPDF } = window.jspdf;
@@ -2322,7 +2307,6 @@
         }
     }
 
-    // ==================== NOTIFICATIONS ====================
     function showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.style.cssText = `
@@ -2347,48 +2331,4 @@
             setTimeout(() => notification.remove(), 300);
         }, 3000);
     }
-
-    const style = document.createElement('style');
-    style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-    .customize-icon-btn {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: white;
-        border: 2px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: all 0.2s ease;
-        z-index: 100;
-        font-size: 1.2rem;
-        color: #2563eb;
-    }
-    .customize-icon-btn:hover {
-        background: #2563eb;
-        color: white;
-        transform: scale(1.1);
-    }
-    .cv-preview-wrapper {
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-`;
-    document.head.appendChild(style);
 </script>
