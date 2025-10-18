@@ -97,13 +97,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">{{ __("words.Email") }}</label>
-                        <input type="email" class="form-control" id="email" placeholder="{{ __("words.john.doe@example.com") }}">
+                        <input type="email" class="form-control" id="email" placeholder="john.doe@example.com">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">{{ __("words.Phone") }}</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="{{ __("words.+1 234 567 890") }}">
+                        <input type="tel" class="form-control" id="phone" placeholder="+1 234 567 890">
                     </div>
                 </div>
             </div>
@@ -431,7 +431,7 @@
                 {{ __("words.Next") }} <i class="fas fa-arrow-right"></i>
             </button>
             <button class="btn btn-success ms-auto" onclick="finishCV()" id="finishBtn" style="display: none;">
-                <i class="fas fa-check"></i> {{ __("words.Finish & Generate CV") }}
+                <i class="fas fa-check"></i> {{ __("words.confirm") }}
             </button>
         </div>
     </div>
@@ -510,8 +510,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-
+    window.authToken = @json(auth()->check() ? auth()->user()->createToken('cv-builder')->plainTextToken : '');
+    window.userId = @json(auth()->id());
+    window.api_uri = '{{ config('app.smart_cv_url') }}';
+    window.locale = '{{ app()->getLocale() }}';
 </script>
-<x-smart.cv_builder.app_script></x-smart.cv_builder.app_script>
+<script src="{{ asset('styles/js/cv_builder/core.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/slidershow.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/form.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/live_preview.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/saving.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/render.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/translation.js') }}"></script>
+{{--<script src="{{ asset('styles/js/cv_builder/other.js') }}"></script>--}}
+{{--<x-smart.cv_builder.app_script></x-smart.cv_builder.app_script>--}}
 </body>
 </html>

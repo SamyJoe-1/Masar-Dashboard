@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\Relations\BelongsToOne\BelongsFile;
 use App\Traits\Relations\BelongsToOne\BelongsTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CV extends Model
 {
-    use SoftDeletes, BelongsTemplate;
+    use SoftDeletes, BelongsFile, BelongsTemplate;
 
     protected $fillable = [
-        'user_id', 'template_id', 'personal_details', 'employment_history', 'education', 'skills', 'summary', 'additional_sections', 'customize', 'slug', 'ready',
+        'user_id', 'file_id', 'template_id', 'personal_details', 'employment_history', 'education',
+        'skills', 'summary', 'additional_sections', 'customize', 'slug', 'ready',
     ];
 
     protected $table = 'cvs';
