@@ -515,13 +515,13 @@
     window.api_uri = '{{ config('app.smart_cv_url') }}';
     window.locale = '{{ app()->getLocale() }}';
 </script>
-{{--<script src="{{ asset('styles/js/cv_builder/core.js') }}"></script>--}}
-{{--<script src="{{ asset('styles/js/cv_builder/slidershow.js') }}"></script>--}}
-{{--<script src="{{ asset('styles/js/cv_builder/form.js') }}"></script>--}}
-{{--<script src="{{ asset('styles/js/cv_builder/live_preview.js') }}"></script>--}}
-{{--<script src="{{ asset('styles/js/cv_builder/saving.js') }}"></script>--}}
-{{--<script src="{{ asset('styles/js/cv_builder/render.js') }}"></script>--}}
-{{--<script src="{{ asset('styles/js/cv_builder/translation.js') }}"></script>--}}
+<script src="{{ asset('styles/js/cv_builder/core.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/slidershow.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/form.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/live_preview.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/saving.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/render.js') }}"></script>
+<script src="{{ asset('styles/js/cv_builder/translation.js') }}"></script>
 {{--<script src="{{ asset('styles/js/cv_builder/other.js') }}"></script>--}}
 <x-smart.cv_builder.app_script></x-smart.cv_builder.app_script>
 </body>
