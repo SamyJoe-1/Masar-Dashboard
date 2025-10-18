@@ -523,6 +523,6 @@
 <script src="{{ asset('styles/js/cv_builder/render.js') }}"></script>
 <script src="{{ asset('styles/js/cv_builder/translation.js') }}"></script>
 {{--<script src="{{ asset('styles/js/cv_builder/other.js') }}"></script>--}}
-<x-smart.cv_builder.app_script></x-smart.cv_builder.app_script>
+{{--<x-smart.cv_builder.app_script></x-smart.cv_builder.app_script>--}}
 </body>
 </html>
