@@ -47,11 +47,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Drafts
     Route::get('/cv/drafts', [CVController::class, 'getDrafts']);
     Route::get('/cv/drafts/template/{templateId}', [CVController::class, 'getDraftByTemplate']);
-//    Route::post('/cv/draft', [CVController::class, 'saveDraft']);
     Route::delete('/cv/draft/{id}', [CVController::class, 'deleteDraft']);
 
     // Finalize CV
-//    Route::post('/cv/finalize', [CVController::class, 'finalize']);
+    Route::post('/cv/finalize', [CVController::class, 'finalize']);
 
     // Completed CVs
     Route::get('/cv/completed', [CVController::class, 'getCompletedCVs']);
@@ -59,4 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cv/draft', [CVController::class, 'saveDraft']);
     Route::post('/cv/finalize', [CVController::class, 'finalize']);
 
+    Route::post('/cv/store-pdf', [CVController::class, 'storePDF']);
+    Route::post('/cv/update-profile', [CVController::class, 'updateProfile']);
 });

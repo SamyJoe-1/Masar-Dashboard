@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\CV;
+use App\Models\File;
+use App\Models\Profile;
 use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CVController extends Controller
@@ -234,5 +237,100 @@ class CVController extends Controller
             ->get();
 
         return response()->json($cvs);
+    }
+
+    public function storePDF(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            // Validate the request
+            $validated = $request->validate([
+                'cv_id' => 'required|exists:cvs,id',
+                'pdf_base64' => 'required|string',
+                'filename' => 'required|string'
+            ]);
+
+            // Find the CV
+            $cv = CV::where('id', $validated['cv_id'])
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+
+            // Decode base64 PDF
+            $pdfData = base64_decode(preg_replace('#^data:application/pdf;base64,#i', '', $validated['pdf_base64']));
+
+            // Create filename
+            $filename = $validated['filename'];
+            $path = 'cvs/' . $user->id . '/' . time() . '_' . $filename;
+
+            // Store the PDF
+            Storage::disk('public')->put($path, $pdfData);
+
+            $fullpath = 'storage/' . $path;
+
+            // Create File record
+            $file = File::create([
+                'name' => $filename,
+                'path' => $path,
+                'fullpath' => $fullpath,
+                'type' => 'application/pdf',
+                'size' => strlen($pdfData)
+            ]);
+
+            // Update CV with file_id
+            $cv->update(['file_id' => $file->id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'PDF stored successfully',
+                'cv' => $cv->fresh(),
+                'file' => $file
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to store PDF: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateProfile(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            $validated = $request->validate([
+                'cv_id' => 'required|exists:cvs,id'
+            ]);
+
+            // Find the CV
+            $cv = CV::where('id', $validated['cv_id'])
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+
+            if (!$cv->file_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'CV PDF not found'
+                ], 400);
+            }
+
+            // Update user profile with the CV file_id
+            $profile = Profile::firstOrCreate(['user_id' => $user->id]);
+            $profile->update(['cv' => $cv->file_id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile updated successfully',
+                'redirect' => '/profile'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update profile: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
