@@ -37,7 +37,7 @@
             <i class="fa-regular fa-id-card"></i>
             {{ __('words.Build your CV') }}
         </a>
-        <a href="{{ route('dashboard.applicant.smart.cv.analyzer', 'status=approved') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.smart.cv.analyzer') && strtolower(request()->query('status')) === 'approved' ? 'active' : '' }}">
+        <a href="{{ route('dashboard.applicant.cv-analyzer.index', 'status=approved') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.cv-analyzer.index') && strtolower(request()->query('status')) === 'approved' ? 'active' : '' }}">
             <i class="fa-solid fa-magnifying-glass-chart"></i>
             {{ __('words.CV Analyzer') }}
         </a>

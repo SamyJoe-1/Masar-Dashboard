@@ -307,11 +307,11 @@
                             <div class="form-group">
                                 <label class="form-label">{{ __("words.Level") }}</label>
                                 <select class="form-select skill-level">
-                                    <option>{{ __("words.Novice") }}</option>
-                                    <option>{{ __("words.Beginner") }}</option>
-                                    <option>{{ __("words.Skillful") }}</option>
-                                    <option selected>{{ __("words.Experienced") }}</option>
-                                    <option>{{ __("words.Expert") }}</option>
+                                    <option value="Novice">{{ __("words.Novice") }}</option>
+                                    <option value="Beginner">{{ __("words.Beginner") }}</option>
+                                    <option value="Skillful">{{ __("words.Skillful") }}</option>
+                                    <option value="Experienced" selected>{{ __("words.Experienced") }}</option>
+                                    <option value="Expert">{{ __("words.Expert") }}</option>
                                 </select>
                             </div>
                         </div>
@@ -383,18 +383,18 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __("words.Level") }}</label>
                                     <select class="form-select lang-level">
-                                        <option>{{ __("words.Select level") }}</option>
-                                        <option selected>{{ __("words.Native speaker") }}</option>
-                                        <option>{{ __("words.Highly proficient") }}</option>
-                                        <option>{{ __("words.Very good command") }}</option>
-                                        <option>{{ __("words.Good working knowledge") }}</option>
-                                        <option>{{ __("words.Working knowledge") }}</option>
-                                        <option>{{ __("words.C2") }}</option>
-                                        <option>{{ __("words.C1") }}</option>
-                                        <option>{{ __("words.B2") }}</option>
-                                        <option>{{ __("words.B1") }}</option>
-                                        <option>{{ __("words.A2") }}</option>
-                                        <option>{{ __("words.A1") }}</option>
+                                        <option value="">{{ __("words.Select level") }}</option>
+                                        <option value="Native speaker" selected>{{ __("words.Native speaker") }}</option>
+                                        <option value="Highly proficient">{{ __("words.Highly proficient") }}</option>
+                                        <option value="Very good command">{{ __("words.Very good command") }}</option>
+                                        <option value="Good working knowledge">{{ __("words.Good working knowledge") }}</option>
+                                        <option value="Working knowledge">{{ __("words.Working knowledge") }}</option>
+                                        <option>C2</option>
+                                        <option>C1</option>
+                                        <option>B2</option>
+                                        <option>B1</option>
+                                        <option>A2</option>
+                                        <option>A1</option>
                                     </select>
                                 </div>
                             </div>

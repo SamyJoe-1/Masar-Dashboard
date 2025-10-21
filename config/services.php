@@ -41,4 +41,26 @@ return [
         ],
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+        'organization' => env('OPENAI_ORGANIZATION'),
+        'model' => env('OPENAI_MODEL', 'gpt-4'),
+    ],
+
+    'grammar' => [
+        'key' => env('GRAMMAR_API_KEY'),
+        'api_url' => env('GRAMMAR_API_URL', 'https://api.languagetool.org/v2'),
+    ],
+
+    'ats_checker' => [
+        'key' => env('ATS_CHECKER_API_KEY'),
+        'api_url' => env('ATS_CHECKER_API_URL'),
+    ],
+
+    // Add more AI service configurations as needed
+    'resume_parser' => [
+        'key' => env('RESUME_PARSER_API_KEY'),
+        'api_url' => env('RESUME_PARSER_API_URL'),
+    ],
+
 ];
