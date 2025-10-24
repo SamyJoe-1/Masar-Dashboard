@@ -3,6 +3,7 @@
 use App\Http\Controllers\Guest\ApplicantFormController;
 use App\Http\Controllers\Guest\SessionController;
 use App\Http\Controllers\API\CVController;
+use App\Http\Controllers\applicant\JobMatcherController;
 
 // routes/api.php
 
@@ -60,4 +61,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/cv/store-pdf', [CVController::class, 'storePDF']);
     Route::post('/cv/update-profile', [CVController::class, 'updateProfile']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('job-matcher')->group(function () {
+
+    // Main matching endpoint - POST /api/job-matcher/match
+    Route::post('/match', [JobMatcherController::class, 'match']);
+
+    // Download feedback for specific job - POST /api/job-matcher/download-feedback/{jobId}
+    Route::post('/download-feedback/{jobId}', [JobMatcherController::class, 'downloadFeedback']);
+
+    // Download full report - POST /api/job-matcher/download-report
+    Route::post('/download-report', [JobMatcherController::class, 'downloadFullReport']);
+
 });
