@@ -1,7 +1,8 @@
 /* CV Improver Specific Styles */
 .improver-container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .section-wrapper {
@@ -450,20 +451,199 @@
     box-shadow: 0 8px 16px rgba(52, 100, 176, 0.3);
 }
 
-/* Results Content */
+/* Results Content - FLEX LAYOUT */
 .results-content {
-    display: grid;
-    grid-template-columns: 350px 1fr;
+    display: flex;
     gap: 2rem;
+    align-items: flex-start;
 }
 
-/* Improvements Summary */
-.improvements-summary {
+/* CV Preview Container (RIGHT SIDE) */
+.cv-preview-container {
     background: white;
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    height: fit-content;
+    flex-shrink: 0;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.preview-header h3 {
+    color: #1e293b;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.preview-header h3 i {
+    color: #3464b0;
+}
+
+.preview-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    padding: 0.5rem 0.75rem;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    color: #1e293b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #3464b0;
+    color: white;
+    border-color: #3464b0;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-indicator {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+    padding: 0.5rem 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+/* A4 Preview Wrapper - ACTUAL MM UNITS */
+.a4-preview-wrapper {
+    width: 210mm;
+    height: 297mm;
+    background: #e5e7eb;
+    border-radius: 12px;
+    overflow: visible;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+    margin: 0 auto;
+}
+
+.a4-swiper {
+    width: 210mm !important;
+    height: 297mm !important;
+}
+
+.a4-swiper .swiper-wrapper {
+    width: 210mm !important;
+    height: 297mm !important;
+}
+
+/* A4 Page - EXACT A4 SIZE IN MM */
+.a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow: visible;
+    position: relative;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.preview-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #64748b;
+}
+
+.preview-loading i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #3464b0;
+}
+
+/* CV Content - EXACT BROWSERSHOT DIMENSIONS IN MM */
+.cv-content {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 20mm !important;
+    box-sizing: border-box !important;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    overflow: visible;
+    font-size: 12pt;
+    color: #000;
+    background: white;
+    margin: 0;
+    position: relative;
+}
+
+.cv-content h1 {
+    font-size: 24pt;
+    color: #1e293b;
+    margin: 0 0 12pt 0;
+    line-height: 1.2;
+}
+
+.cv-content h2 {
+    font-size: 18pt;
+    color: #3464b0;
+    margin: 18pt 0 12pt 0;
+    border-bottom: 2pt solid #3464b0;
+    padding-bottom: 6pt;
+    line-height: 1.2;
+}
+
+.cv-content h3 {
+    font-size: 14pt;
+    color: #1e293b;
+    margin: 12pt 0 8pt 0;
+    line-height: 1.2;
+}
+
+.cv-content p {
+    margin: 0 0 10pt 0;
+    color: #475569;
+    font-size: 12pt;
+    line-height: 1.6;
+}
+
+.cv-content ul {
+    margin: 0 0 10pt 18pt;
+    padding: 0;
+}
+
+.cv-content li {
+    margin: 0 0 6pt 0;
+    color: #475569;
+    font-size: 12pt;
+    line-height: 1.5;
+}
+
+/* Improvements Summary (LEFT SIDE) */
+.improvements-summary {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    min-width: 0;
 }
 
 .improvements-summary h3 {
@@ -505,105 +685,6 @@
     line-height: 1.5;
 }
 
-/* CV Preview Container */
-.cv-preview-container {
-    background: white;
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.preview-header h3 {
-    color: #1e293b;
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.preview-header h3 i {
-    color: #3464b0;
-}
-
-.preview-content {
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    min-height: 600px;
-    background: #f8fafc;
-    overflow: auto;
-    padding: 2rem;
-}
-
-.preview-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 400px;
-    color: #64748b;
-}
-
-.preview-loading i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: #3464b0;
-}
-
-/* CV Preview Content Styles */
-.cv-content {
-    background: white;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 3rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-}
-
-.cv-content h1 {
-    font-size: 2rem;
-    color: #1e293b;
-    margin-bottom: 0.5rem;
-}
-
-.cv-content h2 {
-    font-size: 1.5rem;
-    color: #3464b0;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #3464b0;
-    padding-bottom: 0.5rem;
-}
-
-.cv-content h3 {
-    font-size: 1.25rem;
-    color: #1e293b;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.cv-content p {
-    margin-bottom: 0.75rem;
-    color: #475569;
-}
-
-.cv-content ul {
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.cv-content li {
-    margin-bottom: 0.5rem;
-    color: #475569;
-}
-
 /* Fullscreen Modal */
 .fullscreen-modal {
     position: fixed;
@@ -624,12 +705,36 @@
     align-items: center;
     padding: 1.5rem 2rem;
     background: #1e293b;
+    flex-shrink: 0;
 }
 
 .fullscreen-modal .modal-header h3 {
     color: white;
     font-size: 1.5rem;
     margin: 0;
+}
+
+.modal-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.modal-controls .pagination-btn {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.modal-controls .pagination-btn:hover:not(:disabled) {
+    background: white;
+    color: #1e293b;
+}
+
+.modal-controls .page-indicator {
+    background: transparent;
+    color: white;
 }
 
 .close-modal-btn {
@@ -644,6 +749,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .close-modal-btn:hover {
@@ -652,25 +758,85 @@
     transform: rotate(90deg);
 }
 
-.fullscreen-modal .modal-content {
+.fullscreen-modal .modal-content-wrapper {
     flex: 1;
     overflow: auto;
     padding: 2rem;
-    background: #f8fafc;
+    background: #1e293b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.a4-swiper-modal {
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: none;
+    max-height: none;
+}
+
+.a4-swiper-modal .swiper-wrapper {
+    width: 210mm !important;
+    height: 297mm !important;
+}
+
+.a4-swiper-modal .a4-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    transform: none;
+    transform-origin: center center;
+    margin: 0 auto;
+}
+
+.a4-swiper-modal .cv-content {
+    width: 210mm !important;
+    height: 297mm !important;
+}
+
+/* Pagination Helper - Hidden A4 container for measuring */
+.pagination-helper {
+    position: absolute;
+    top: -999999px;
+    left: -999999px;
+    width: 210mm;
+    height: 297mm;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
     .results-content {
-        grid-template-columns: 1fr;
-    }
-
-    .improvements-summary {
-        order: 2;
+        flex-direction: column;
     }
 
     .cv-preview-container {
+        width: 100%;
         order: 1;
+    }
+
+    .improvements-summary {
+        width: 100%;
+        order: 2;
+    }
+
+    .a4-preview-wrapper {
+        width: 100%;
+        max-width: 210mm;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 860px) {
+    .a4-preview-wrapper {
+        transform: scale(0.9);
+        transform-origin: top center;
+        margin: 0 auto;
+    }
+
+    .a4-swiper {
+        height: calc(297mm * 0.9);
     }
 }
 
@@ -706,8 +872,38 @@
         flex: 1;
     }
 
-    .cv-content {
-        padding: 2rem 1.5rem;
+    .cv-preview-container {
+        padding: 1.5rem;
+    }
+
+    .preview-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .preview-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .a4-preview-wrapper {
+        transform: scale(0.75);
+        transform-origin: top center;
+    }
+
+    .a4-swiper {
+        height: calc(297mm * 0.75);
+    }
+}
+
+@media (max-width: 640px) {
+    .a4-preview-wrapper {
+        transform: scale(0.6);
+        transform-origin: top center;
+    }
+
+    .a4-swiper {
+        height: calc(297mm * 0.6);
     }
 }
 
@@ -724,31 +920,69 @@
         font-size: 1.5rem;
     }
 
-    .cv-content {
-        padding: 1.5rem 1rem;
+    .a4-preview-wrapper {
+        transform: scale(0.5);
+        transform-origin: top center;
     }
 
-    .cv-content h1 {
-        font-size: 1.5rem;
+    .a4-swiper {
+        height: calc(297mm * 0.5);
     }
+}
 
-    .cv-content h2 {
-        font-size: 1.25rem;
-    }
+/* Swiper Overrides */
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Utility Classes */
+.d-none {
+    display: none !important;
+}
+
+.quiet-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 2px solid #e2e8f0;
+    color: #475569;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quiet-btn:hover {
+    border-color: #3464b0;
+    color: #3464b0;
+    background: #f0f4ff;
 }
 
 /* Print Styles for PDF Generation */
 @media print {
-    .cv-content {
-        box-shadow: none;
-        max-width: 100%;
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
         padding: 0;
     }
 
-    .cv-content h2 {
-        page-break-after: avoid;
+    .cv-content {
+        width: 210mm;
+        height: 297mm;
+        padding: 20mm;
+        box-shadow: none;
+        page-break-after: always;
     }
 
+    .cv-content h2,
     .cv-content h3 {
         page-break-after: avoid;
     }

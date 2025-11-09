@@ -2,6 +2,7 @@
 
 @section('header')
     <link href="{{ asset('styles/css/cv_improver.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <meta name="smart-cv-url" content="{{ config('app.smart_cv_url') }}">
     <meta name="locale" content="{{ app()->getLocale() }}">
 @endsection
@@ -145,33 +146,52 @@
             </div>
 
             <div class="results-content">
-                <!-- Improvements Summary -->
-                <div class="improvements-summary">
-                    <h3>
-                        <i class="fas fa-list-check"></i>
-                        {{ __('words.What We Improved') }}
-                    </h3>
-                    <div id="improvementsList"></div>
-                </div>
-
-                <!-- CV Preview -->
+                <!-- CV Preview Container (RIGHT SIDE) -->
                 <div class="cv-preview-container">
                     <div class="preview-header">
                         <h3>
                             <i class="fas fa-eye"></i>
                             {{ __('words.Preview') }}
                         </h3>
-                        <button class="quiet-btn" onclick="togglePreview()">
-                            <i class="fas fa-expand"></i>
-                            {{ __('words.Fullscreen') }}
-                        </button>
-                    </div>
-                    <div class="preview-content" id="cvPreview">
-                        <div class="preview-loading">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <p>{{ __('words.Loading preview...') }}</p>
+                        <div class="preview-controls">
+                            <button class="quiet-btn pagination-btn" id="prevPage" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="page-indicator">
+                                <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                            </span>
+                            <button class="quiet-btn pagination-btn" id="nextPage" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <button class="quiet-btn" onclick="togglePreview()">
+                                <i class="fas fa-expand"></i>
+                            </button>
                         </div>
                     </div>
+
+                    <div class="a4-preview-wrapper">
+                        <div class="swiper a4-swiper">
+                            <div class="swiper-wrapper" id="cvPreview">
+                                <div class="swiper-slide">
+                                    <div class="a4-page">
+                                        <div class="preview-loading">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                            <p>{{ __('words.Loading preview...') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Improvements Summary (LEFT SIDE) -->
+                <div class="improvements-summary">
+                    <h3>
+                        <i class="fas fa-list-check"></i>
+                        {{ __('words.What We Improved') }}
+                    </h3>
+                    <div id="improvementsList"></div>
                 </div>
             </div>
         </div>
@@ -181,15 +201,35 @@
     <div id="fullscreenModal" class="fullscreen-modal d-none">
         <div class="modal-header">
             <h3>{{ __('words.CV Preview') }}</h3>
-            <button class="close-modal-btn" onclick="togglePreview()">
-                <i class="fas fa-times"></i>
-            </button>
+            <div class="modal-controls">
+                <button class="quiet-btn pagination-btn" id="prevPageModal" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="page-indicator">
+                    <span id="currentPageModal">1</span> / <span id="totalPagesModal">1</span>
+                </span>
+                <button class="quiet-btn pagination-btn" id="nextPageModal" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="close-modal-btn" onclick="togglePreview()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
-        <div class="modal-content" id="fullscreenPreview"></div>
+        <div class="modal-content-wrapper">
+            <div class="swiper a4-swiper-modal">
+                <div class="swiper-wrapper" id="fullscreenPreview"></div>
+            </div>
+        </div>
     </div>
+
+    <!-- Hidden container for pagination calculation -->
+    <div id="paginationHelper" class="pagination-helper"></div>
 @endsection
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{{ asset('styles/js/cv_improver/translations.js') }}"></script>
     <script src="{{ asset('styles/js/cv_improver/main.js') }}"></script>
+    <script src="{{ asset('styles/js/cv_improver/pagination.js') }}"></script>
 @endsection

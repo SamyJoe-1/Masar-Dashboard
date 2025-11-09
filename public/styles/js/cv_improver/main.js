@@ -685,7 +685,18 @@ class CVImprover {
 
         html += '</div>';
 
-        this.elements.cvPreview.innerHTML = html;
+        // Store the improved CV data for pagination
+        window.improvedCVData = {
+            html: html,
+            improvements: this.improvedCVData
+        };
+
+        // Use CVPagination to render properly
+        if (window.CVPagination) {
+            CVPagination.renderPaginatedCV(html);
+        } else {
+            this.elements.cvPreview.innerHTML = html;
+        }
     }
 
     resetToUpload() {
@@ -736,6 +747,10 @@ async function downloadImprovedCV() {
 
 // Treat 204 as success
         if (response.status === 204 || response.ok) {
+            // displayImprovedCV({
+            //     html: cvContent, // Your CV HTML
+            //     improvements: [] // Your improvements array
+            // });
             Swal.fire({
                 icon: 'success',
                 title: t('modal.success'),
