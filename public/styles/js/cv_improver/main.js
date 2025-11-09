@@ -300,7 +300,7 @@ class CVImprover {
                 language: 'en'
             };
 
-            console.log('Sending to advice API:', JSON.stringify(requestBody, null, 2));
+            // console.log('Sending to advice API:', JSON.stringify(requestBody, null, 2));
 
             const response = await fetch(window.smartCVUrl + '/v1/advice', {
                 method: 'POST',
@@ -569,7 +569,7 @@ class CVImprover {
 
         const cv = this.cvData.cv;
 
-        let html = '<div class="cv-content">';
+        let html = ''; // NO WRAPPER DIV!
 
         // Contact info
         if (cv.contact) {
@@ -591,13 +591,11 @@ class CVImprover {
             }
 
             if (contact.name || contact.email || contact.phone || contact.title) {
-                html += `
-                    <h1>${contact.name || 'Your Name'}</h1>
-                    ${contact.email ? `<p>Email: ${contact.email}</p>` : ''}
-                    ${contact.phone ? `<p>Phone: ${contact.phone}</p>` : ''}
-                    ${contact.location ? `<p>Location: ${contact.location}</p>` : ''}
-                    ${contact.linkedin || contact.links ? `<p>LinkedIn: ${contact.linkedin || contact.links}</p>` : ''}
-                `;
+                html += `<h1>${contact.name || 'Your Name'}</h1>`;
+                if (contact.email) html += `<p>Email: ${contact.email}</p>`;
+                if (contact.phone) html += `<p>Phone: ${contact.phone}</p>`;
+                if (contact.location) html += `<p>Location: ${contact.location}</p>`;
+                if (contact.linkedin || contact.links) html += `<p>LinkedIn: ${contact.linkedin || contact.links}</p>`;
             }
         }
 
@@ -683,7 +681,7 @@ class CVImprover {
             }
         }
 
-        html += '</div>';
+        // NO CLOSING DIV! Just raw HTML elements
 
         // Store the improved CV data for pagination
         window.improvedCVData = {
@@ -691,11 +689,16 @@ class CVImprover {
             improvements: this.improvedCVData
         };
 
+        console.log('Calling CVPagination with HTML length:', html.length);
+        console.log('HTML content preview:', html.substring(0, 500));
+
         // Use CVPagination to render properly
         if (window.CVPagination) {
-            CVPagination.renderPaginatedCV(html);
+            const pages = CVPagination.renderPaginatedCV(html);
+            console.log('CVPagination returned pages:', pages.length);
         } else {
-            this.elements.cvPreview.innerHTML = html;
+            console.error('CVPagination not available!');
+            this.elements.cvPreview.innerHTML = `<div class="cv-content">${html}</div>`;
         }
     }
 

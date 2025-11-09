@@ -462,9 +462,12 @@
 .cv-preview-container {
     background: white;
     border-radius: 20px;
-    padding: 2rem;
+    padding: 2rem 1rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .preview-header {
@@ -533,9 +536,22 @@
     height: 297mm;
     background: #e5e7eb;
     border-radius: 12px;
-    overflow: visible;
+    overflow: hidden;
     box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.a4-preview-wrapper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 210mm !important;
+    height: 297mm !important;
+    padding: 0;
+    margin: 0;
 }
 
 .a4-swiper {
@@ -578,6 +594,7 @@
 
 /* CV Content - EXACT BROWSERSHOT DIMENSIONS IN MM */
 .cv-content {
+    direction: ltr;
     width: 210mm !important;
     height: 297mm !important;
     min-height: 297mm !important;

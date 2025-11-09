@@ -153,20 +153,37 @@
                             <i class="fas fa-eye"></i>
                             {{ __('words.Preview') }}
                         </h3>
-                        <div class="preview-controls">
-                            <button class="quiet-btn pagination-btn" id="prevPage" disabled>
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <span class="page-indicator">
-                                <span id="currentPage">1</span> / <span id="totalPages">1</span>
-                            </span>
-                            <button class="quiet-btn pagination-btn" id="nextPage" disabled>
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                            <button class="quiet-btn" onclick="togglePreview()">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
+                        @if(app()->getLocale() == 'ar')
+                            <div class="preview-controls">
+                                <button class="quiet-btn pagination-btn" id="nextPage" disabled>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <span class="page-indicator">
+                                    <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                                </span>
+                                <button class="quiet-btn pagination-btn" id="prevPage" disabled>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="quiet-btn" onclick="togglePreview()">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        @else
+                            <div class="preview-controls">
+                                <button class="quiet-btn pagination-btn" id="prevPage" disabled>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span class="page-indicator">
+                                    <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                                </span>
+                                <button class="quiet-btn pagination-btn" id="nextPage" disabled>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <button class="quiet-btn" onclick="togglePreview()">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="a4-preview-wrapper">
@@ -202,15 +219,28 @@
         <div class="modal-header">
             <h3>{{ __('words.CV Preview') }}</h3>
             <div class="modal-controls">
-                <button class="quiet-btn pagination-btn" id="prevPageModal" disabled>
-                    <i class="fas fa-chevron-left"></i>
-                </button>
+                @if(app()->getLocale() == 'ar')
+                    <button class="quiet-btn pagination-btn" id="nextPageModal" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                @else
+                    <button class="quiet-btn pagination-btn" id="prevPageModal" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                @endif
+
                 <span class="page-indicator">
                     <span id="currentPageModal">1</span> / <span id="totalPagesModal">1</span>
                 </span>
-                <button class="quiet-btn pagination-btn" id="nextPageModal" disabled>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+                    @if(app()->getLocale() == 'en')
+                        <button class="quiet-btn pagination-btn" id="nextPageModal" disabled>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    @else
+                        <button class="quiet-btn pagination-btn" id="prevPageModal" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    @endif
                 <button class="close-modal-btn" onclick="togglePreview()">
                     <i class="fas fa-times"></i>
                 </button>

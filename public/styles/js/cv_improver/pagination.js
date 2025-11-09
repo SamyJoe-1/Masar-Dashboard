@@ -45,22 +45,20 @@ const CVPagination = {
         }
 
         // Create a temporary container with exact A4 dimensions
-// Create a temporary container with exact A4 dimensions
         helper.innerHTML = `
-            <div class="cv-content" style="
-                width: ${this.A4_WIDTH_MM}mm !important;
-                height: ${this.A4_HEIGHT_MM}mm !important;
-                min-height: ${this.A4_HEIGHT_MM}mm !important;
-                max-height: ${this.A4_HEIGHT_MM}mm !important;
-                padding: ${this.PAGE_PADDING_MM}mm !important;
-                box-sizing: border-box !important;
-                overflow: visible;
-                position: relative;
-                margin: 0;
-            ">${htmlContent}</div>
-        `;
+        <div class="cv-content-measure" style="
+            width: ${this.A4_WIDTH_MM}mm !important;
+            padding: ${this.PAGE_PADDING_MM}mm !important;
+            box-sizing: border-box !important;
+            position: absolute;
+            top: -99999px;
+            left: -99999px;
+            visibility: hidden;
+            overflow: visible;
+        ">${htmlContent}</div>
+    `;
 
-        const content = helper.querySelector('.cv-content');
+        const content = helper.querySelector('.cv-content-measure');
         const maxContentHeight = this.mmToPx(this.CONTENT_HEIGHT_MM);
 
         console.log(`Max content height: ${maxContentHeight}px (${this.CONTENT_HEIGHT_MM}mm)`);
@@ -72,42 +70,34 @@ const CVPagination = {
         const children = Array.from(content.children);
         console.log(`Total elements to paginate: ${children.length}`);
 
+        // If no children, wrap the whole content
+        if (children.length === 0) {
+            console.log('No child elements found, treating as single block');
+            this.currentPages = [htmlContent];
+            helper.innerHTML = '';
+            return [htmlContent];
+        }
+
         for (let i = 0; i < children.length; i++) {
-            const element = children[i].cloneNode(true);
+            const element = children[i];
 
-            // Measure element height
-// Measure element height
-            const testDiv = document.createElement('div');
-            testDiv.className = 'cv-content';
-            testDiv.style.cssText = `
-                width: ${this.A4_WIDTH_MM}mm !important;
-                height: auto !important;
-                padding: ${this.PAGE_PADDING_MM}mm !important;
-                box-sizing: border-box !important;
-                position: absolute;
-                top: -99999px;
-                left: -99999px;
-                visibility: hidden;
-                overflow: visible;
-            `;
-            testDiv.appendChild(element.cloneNode(true));
-            document.body.appendChild(testDiv);
+            // Get the actual rendered height of the element
+            const elementHeight = element.offsetHeight;
 
-            const elementHeight = testDiv.offsetHeight;
-            document.body.removeChild(testDiv);
+            console.log(`Element ${i}: ${element.tagName}, height: ${elementHeight}px`);
 
             // Check if adding this element exceeds page height
             if (currentHeight + elementHeight > maxContentHeight && currentPage.length > 0) {
                 // Save current page
                 const pageHtml = currentPage.map(el => el.outerHTML).join('');
                 pages.push(pageHtml);
-                console.log(`Page ${pages.length} created with ${currentPage.length} elements`);
+                console.log(`Page ${pages.length} created with ${currentPage.length} elements, height: ${currentHeight}px`);
 
                 // Start new page
-                currentPage = [element];
+                currentPage = [element.cloneNode(true)];
                 currentHeight = elementHeight;
             } else {
-                currentPage.push(element);
+                currentPage.push(element.cloneNode(true));
                 currentHeight += elementHeight;
             }
         }
@@ -116,7 +106,7 @@ const CVPagination = {
         if (currentPage.length > 0) {
             const pageHtml = currentPage.map(el => el.outerHTML).join('');
             pages.push(pageHtml);
-            console.log(`Page ${pages.length} created with ${currentPage.length} elements (final page)`);
+            console.log(`Page ${pages.length} created with ${currentPage.length} elements (final page), height: ${currentHeight}px`);
         }
 
         // Clean up
@@ -175,13 +165,15 @@ const CVPagination = {
 
             const page = document.createElement('div');
             page.className = 'a4-page';
-            page.style.cssText = 'width: 210mm !important; height: 297mm !important;';
+            page.style.cssText = 'width: 210mm !important; height: 297mm !important; margin: 0; padding: 0;';
+
             const content = document.createElement('div');
             content.className = 'cv-content';
-            content.style.cssText = 'width: 210mm !important; height: 297mm !important; padding: 20mm !important;';
+            content.style.cssText = 'width: 210mm !important; height: 297mm !important; padding: 20mm !important; box-sizing: border-box !important; overflow: hidden;';
             content.innerHTML = pageContent;
-            page.appendChild(content);
 
+            page.appendChild(content);
+            slide.style.cssText = 'width: 210mm !important; height: 297mm !important; margin: 0; padding: 0;';
             slide.appendChild(page);
             container.appendChild(slide);
         });
