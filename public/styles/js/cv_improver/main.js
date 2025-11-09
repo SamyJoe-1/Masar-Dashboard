@@ -714,8 +714,6 @@ async function downloadImprovedCV() {
             throw new Error('CV content not found');
         }
 
-        const cvContent = cvContentElement.innerHTML;
-
         // Show loading
         Swal.fire({
             title: 'Generating PDF...',
@@ -726,58 +724,159 @@ async function downloadImprovedCV() {
             }
         });
 
-        const response = await fetch('/api/cv/generate-pdf', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/pdf',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ html: cvContent })
-        });
+        // Use browser's print to PDF functionality
+        // Clone the content for clean printing
+        const printWindow = window.open('', '_blank');
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('PDF generation error:', errorText);
-            throw new Error('PDF generation failed: ' + response.status);
+        const cvContent = cvContentElement.innerHTML;
+        const printDocument = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved CV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        // Get the blob
-        const blob = await response.blob();
-
-        // Check if blob is valid
-        if (blob.size === 0) {
-            throw new Error('Generated PDF is empty');
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            padding: 40px;
         }
 
-        // Create download link
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'improved_cv_' + new Date().getTime() + '.pdf';
-        document.body.appendChild(a);
-        a.click();
+        .cv-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-        // Cleanup
+        h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #3464b0;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3464b0;
+            font-weight: 600;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #1e293b;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 20px;
+            }
+
+            h2 {
+                page-break-after: avoid;
+            }
+
+            h3 {
+                page-break-after: avoid;
+            }
+
+            ul, ol {
+                page-break-inside: avoid;
+            }
+
+            p {
+                orphans: 3;
+                widows: 3;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-content">
+        ${cvContent}
+    </div>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+                setTimeout(function() {
+                    window.close();
+                }, 100);
+            }, 500);
+        };
+    </script>
+</body>
+</html>
+        `;
+
+        printWindow.document.write(printDocument);
+        printWindow.document.close();
+
+        // Close the loading dialog after a short delay
         setTimeout(() => {
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        }, 100);
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Your improved CV has been downloaded',
-            timer: 2000,
-            showConfirmButton: false
-        });
+            Swal.fire({
+                icon: 'info',
+                title: 'Print Dialog Opened',
+                html: 'Please use the print dialog to save as PDF.<br><small>Select "Save as PDF" as your printer.</small>',
+                confirmButtonColor: '#3464b0',
+                confirmButtonText: 'Got it!'
+            });
+        }, 1000);
 
     } catch (error) {
         console.error('Download error:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to download CV: ' + error.message,
+            text: 'Failed to generate PDF: ' + error.message,
             confirmButtonColor: '#3464b0'
         });
     }
