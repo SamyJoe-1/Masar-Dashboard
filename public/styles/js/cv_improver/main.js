@@ -708,30 +708,61 @@ function removeFile() {
 
 async function downloadImprovedCV() {
     try {
-        const cvContent = document.querySelector('.cv-content').innerHTML;
+        const cvContentElement = document.querySelector('.cv-content');
+
+        if (!cvContentElement) {
+            throw new Error('CV content not found');
+        }
+
+        const cvContent = cvContentElement.innerHTML;
+
+        // Show loading
+        Swal.fire({
+            title: 'Generating PDF...',
+            html: 'Please wait while we create your PDF',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         const response = await fetch('/api/cv/generate-pdf', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/pdf',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify({ html: cvContent })
         });
 
         if (!response.ok) {
-            throw new Error('PDF generation failed');
+            const errorText = await response.text();
+            console.error('PDF generation error:', errorText);
+            throw new Error('PDF generation failed: ' + response.status);
         }
 
+        // Get the blob
         const blob = await response.blob();
+
+        // Check if blob is valid
+        if (blob.size === 0) {
+            throw new Error('Generated PDF is empty');
+        }
+
+        // Create download link
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'improved_cv.pdf';
+        a.download = 'improved_cv_' + new Date().getTime() + '.pdf';
         document.body.appendChild(a);
         a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
+
+        // Cleanup
+        setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }, 100);
 
         Swal.fire({
             icon: 'success',
@@ -746,7 +777,7 @@ async function downloadImprovedCV() {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to download CV. Please try again.',
+            text: 'Failed to download CV: ' + error.message,
             confirmButtonColor: '#3464b0'
         });
     }
