@@ -163,7 +163,7 @@ class CVImprover {
 
         const cv = {
             contact: result.contact || {},
-            summary: result.summary || "",
+            summary: "",
             experience: [],
             education: [],
             skills: [],
@@ -172,6 +172,17 @@ class CVImprover {
             languages: [],
             achievements: []
         };
+
+        // Handle summary - can be string or object with summary property
+        if (result.summary) {
+            if (typeof result.summary === 'string') {
+                cv.summary = result.summary;
+            } else if (result.summary.summary) {
+                cv.summary = result.summary.summary;
+            } else if (result.summary.bullets && Array.isArray(result.summary.bullets)) {
+                cv.summary = result.summary.bullets.join(' ');
+            }
+        }
 
         // Extract bullets from each section if they exist
         if (result.experience && result.experience.bullets) {
