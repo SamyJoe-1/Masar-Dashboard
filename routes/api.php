@@ -4,6 +4,7 @@ use App\Http\Controllers\Guest\ApplicantFormController;
 use App\Http\Controllers\Guest\SessionController;
 use App\Http\Controllers\API\CVController;
 use App\Http\Controllers\applicant\JobMatcherController;
+use App\Http\Controllers\applicant\CVImproverController;
 
 // routes/api.php
 
@@ -61,6 +62,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/cv/store-pdf', [CVController::class, 'storePDF']);
     Route::post('/cv/update-profile', [CVController::class, 'updateProfile']);
+
+    Route::post('/cv/generate-pdf', [CVImproverController::class, 'generatePDF']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('job-matcher')->group(function () {

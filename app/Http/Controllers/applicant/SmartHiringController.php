@@ -20,4 +20,9 @@ class SmartHiringController extends Controller
     {
         return view('dashboard.applicant.smart.cv_matcher');
     }
+
+    public function improve()
+    {
+        return view('dashboard.applicant.smart.cv_improver');
+    }
 }

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Util\PHP\Job;
+use Spatie\Browsershot\Browsershot;
 use Symfony\Component\Process\Process;
 
 class TestController extends Controller
@@ -242,6 +243,23 @@ class TestController extends Controller
             ]);
         }
     }
+
+    public function test_10()
+    {
+        $html = view('test.invoice', [
+            'user' => 'SamyJoe',
+            'amount' => 1200
+        ])->render();
+
+        $path = storage_path('app/public/invoice.pdf');
+
+        Browsershot::html($html)
+            ->format('A4')
+            ->save($path);
+
+        return response()->download($path);
+    }
+
     private $allowedCommands = [
         'ls', 'pwd', 'whoami', 'date', 'php', 'composer', 'npm', 'git',
         'cat', 'tail', 'head', 'grep', 'find', 'which', 'echo'

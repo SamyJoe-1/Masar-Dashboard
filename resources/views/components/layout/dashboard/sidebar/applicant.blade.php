@@ -37,6 +37,10 @@
             <i class="fa-regular fa-id-card"></i>
             {{ __('words.Build your CV') }}
         </a>
+        <a href="{{ route('dashboard.applicant.smart.cv.improve') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.smart.cv.builder') && !request()->has('status') ? 'active' : '' }}">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            {{ __('words.CV Improver') }}
+        </a>
         <a href="{{ route('dashboard.applicant.cv-analyzer.index', 'status=approved') }}" class="sidebar-item {{ request()->routeIs('dashboard.applicant.cv-analyzer.index') && strtolower(request()->query('status')) === 'approved' ? 'active' : '' }}">
             <i class="fa-solid fa-magnifying-glass-chart"></i>
             {{ __('words.CV Analyzer') }}

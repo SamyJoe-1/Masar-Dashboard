@@ -9,8 +9,8 @@
         <!-- Upload Section -->
         <div id="uploadSection" class="section-wrapper">
             <div class="page-header">
-                <h1 class="page-title">{{ __('Smart Job Matcher') }}</h1>
-                <p class="page-subtitle">{{ __('Upload your CV and discover matching jobs with ATS scores and personalized feedback') }}</p>
+                <h1 class="page-title">{{ __('words.Smart Job Matcher') }}</h1>
+                <p class="page-subtitle">{{ __('words.Upload your CV and discover matching jobs with ATS scores and personalized feedback') }}</p>
             </div>
 
             <div class="upload-card">
@@ -18,14 +18,14 @@
                 <div class="cv-source-selector">
                     <label class="source-option">
                         <input type="radio" name="cv_source" value="upload" class="form-check-input" checked>
-                        <span>{{ __('Upload New CV') }}</span>
+                        <span>{{ __('words.Upload New CV') }}</span>
                     </label>
                     <label class="source-option">
                         <input type="radio" name="cv_source" value="existing" class="form-check-input"
                             {{ auth()->user()->profile && auth()->user()->profile->cv ? '' : 'disabled' }}>
-                        <span>{{ __('Use Existing CV') }}</span>
+                        <span>{{ __('words.Use Existing CV') }}</span>
                         @if(!auth()->user()->profile || !auth()->user()->profile->cv)
-                            <small class="text-secondary">{{ __('No CV uploaded to profile') }}</small>
+                            <small class="text-secondary">{{ __('words.No CV uploaded to profile') }}</small>
                         @endif
                     </label>
                 </div>
@@ -34,9 +34,9 @@
                 <div id="uploadArea" class="upload-area">
                     <div class="upload-zone" id="dropZone">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                        <h3>{{ __('Drag & Drop your CV here') }}</h3>
-                        <p>{{ __('or click to browse') }}</p>
-                        <span class="file-types">{{ __('Supported: PDF, DOC, DOCX (Max 5MB)') }}</span>
+                        <h3>{{ __('words.Drag & Drop your CV here') }}</h3>
+                        <p>{{ __('words.or click to browse') }}</p>
+                        <span class="file-types">{{ __('words.Supported: PDF, DOC, DOCX (Max 5MB)') }}</span>
                         <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" hidden>
                     </div>
                     <div id="filePreview" class="file-preview d-none">
@@ -55,15 +55,15 @@
                 <div class="job-preferences-section">
                     <label for="jobPreferences" class="section-label">
                         <i class="fas fa-sliders-h"></i>
-                        {{ __('Job Preferences / Target Role') }}
-                        <span class="optional-badge">{{ __('Optional') }}</span>
+                        {{ __('words.Job Preferences / Target Role') }}
+                        <span class="optional-badge">{{ __('words.Optional') }}</span>
                     </label>
                     <div class="quiet-textarea-wrapper">
                         <textarea
                             id="jobPreferences"
                             class="quiet-textarea"
                             rows="6"
-                            placeholder="{{ __('Describe your ideal role, preferred industry, or specific requirements (e.g., Remote work, Senior level, Fintech industry...)') }}"
+                            placeholder="{{ __('words.Describe your ideal role, preferred industry, or specific requirements (e.g., Remote work, Senior level, Fintech industry...)') }}"
                         ></textarea>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 <!-- Match Button -->
                 <button type="button" id="matchBtn" class="match-btn" disabled>
                     <i class="fas fa-magic"></i>
-                    {{ __('Find Matching Jobs') }}
+                    {{ __('words.Find Matching Jobs') }}
                 </button>
             </div>
         </div>
@@ -80,8 +80,8 @@
         <div id="processingSection" class="section-wrapper d-none">
             <div class="processing-card">
                 <div class="processing-header">
-                    <h2>{{ __('Analyzing Your CV') }}</h2>
-                    <p>{{ __('Please wait while we match you with the best opportunities...') }}</p>
+                    <h2>{{ __('words.Analyzing Your CV') }}</h2>
+                    <p>{{ __('words.Please wait while we match you with the best opportunities...') }}</p>
                 </div>
 
                 <div class="processing-steps">
@@ -91,8 +91,8 @@
                             <div class="step-loader"></div>
                         </div>
                         <div class="step-content">
-                            <h4>{{ __('Rendering PDF to Text') }}</h4>
-                            <p>{{ __('Extracting content from your CV...') }}</p>
+                            <h4>{{ __('words.Rendering PDF to Text') }}</h4>
+                            <p>{{ __('words.Extracting content from your CV...') }}</p>
                         </div>
                         <div class="step-status">
                             <i class="fas fa-check status-icon"></i>
@@ -105,8 +105,8 @@
                             <div class="step-loader"></div>
                         </div>
                         <div class="step-content">
-                            <h4>{{ __('Analyzing & Matching Jobs') }}</h4>
-                            <p>{{ __('Finding the best job matches for your profile...') }}</p>
+                            <h4>{{ __('words.Analyzing & Matching Jobs') }}</h4>
+                            <p>{{ __('words.Finding the best job matches for your profile...') }}</p>
                         </div>
                         <div class="step-status">
                             <i class="fas fa-check status-icon"></i>
@@ -126,15 +126,15 @@
         <!-- Results Section -->
         <div id="resultsSection" class="section-wrapper d-none">
             <div class="results-header">
-                <h1>{{ __('Your Job Matches') }}</h1>
+                <h1>{{ __('words.Your Job Matches') }}</h1>
                 <div class="results-actions">
                     <button class="quiet-btn" onclick="downloadFullReport()">
                         <i class="fas fa-download"></i>
-                        {{ __('Download Full Report') }}
+                        {{ __('words.Download Full Report') }}
                     </button>
                     <button class="quiet-btn" onclick="matchAgain()">
                         <i class="fas fa-redo"></i>
-                        {{ __('Try Again') }}
+                        {{ __('words.Try Again') }}
                     </button>
                 </div>
             </div>

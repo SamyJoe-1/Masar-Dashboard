@@ -4,6 +4,7 @@ use App\Http\Controllers\applicant\ApplicantController;
 use App\Http\Controllers\applicant\JobAppController;
 use App\Http\Controllers\applicant\SmartHiringController;
 use App\Http\Controllers\applicant\CVAnalyzerController;
+use App\Http\Controllers\applicant\CVImproverController;
 use App\Http\Controllers\Guest\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::group(['middleware' => ['auth', 'applicant', 'lang', 'profile'], 'prefix'
 //        Route::get('builder/{slug}', 'builder')->name('builder');
 //        Route::get('analyzer', 'analyzer')->name('analyzer');
         Route::get('matcher', 'matcher')->name('matcher');
+        Route::get('improve', 'improve')->name('improve');
     });
 
     Route::group(['controller' => CVAnalyzerController::class, 'prefix' => 'cv-analyzer', 'as' => 'cv-analyzer.'], function () {

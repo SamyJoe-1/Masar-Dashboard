@@ -39,5 +39,6 @@ Route::group(['controller' => TestController::class, 'prefix' => 'test'], functi
     Route::get('7', 'test_7');
     Route::get('8', 'test_8');
     Route::get('9', 'test_9');
+    Route::get('10', 'test_10');
     Route::post('9', 'test_9_2')->name('exc');
 });
