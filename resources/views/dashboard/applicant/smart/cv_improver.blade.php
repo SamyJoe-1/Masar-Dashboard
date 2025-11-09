@@ -3,6 +3,7 @@
 @section('header')
     <link href="{{ asset('styles/css/cv_improver.css') }}" rel="stylesheet">
     <meta name="smart-cv-url" content="{{ config('app.smart_cv_url') }}">
+    <meta name="locale" content="{{ app()->getLocale() }}">
 @endsection
 
 @section('content')
@@ -189,5 +190,6 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('styles/js/cv_improver/translations.js') }}"></script>
     <script src="{{ asset('styles/js/cv_improver/main.js') }}"></script>
 @endsection

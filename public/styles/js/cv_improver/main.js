@@ -85,13 +85,13 @@ class CVImprover {
 
         // Validate file
         if (file.type !== 'application/pdf') {
-            this.showError('Invalid file type. Please upload PDF only.');
+            this.showError(t('error.invalid_file_type'));
             return;
         }
 
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            this.showError('File size exceeds 5MB limit.');
+            this.showError(t('error.file_size_limit'));
             return;
         }
 
@@ -153,7 +153,7 @@ class CVImprover {
 
         } catch (error) {
             console.error('Improvement error:', error);
-            this.showError('An error occurred during improvement. Please try again.');
+            this.showError(t('error.improvement_failed'));
             this.resetToUpload();
         }
     }
@@ -245,7 +245,7 @@ class CVImprover {
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('PDF API Error:', errorText);
-                throw new Error('PDF rendering failed: ' + response.status);
+                throw new Error(t('error.pdf_rendering_failed') + response.status);
             }
 
             const data = await response.json();
@@ -254,7 +254,7 @@ class CVImprover {
             // Check if we have the CV data - handle both response structures
             if (!data || (!data.cv && !data.result)) {
                 console.error('Invalid response structure:', data);
-                throw new Error('Invalid response from PDF API - no CV data found');
+                throw new Error(t('error.invalid_response'));
             }
 
             // The API returns data.result, not data.cv when using improve_all_from_pdf
@@ -275,7 +275,7 @@ class CVImprover {
 
         } catch (error) {
             console.error('Render PDF Error:', error);
-            throw new Error('Failed to render PDF: ' + error.message);
+            throw new Error(t('error.failed_to_render') + error.message);
         }
     }
 
@@ -287,7 +287,7 @@ class CVImprover {
         try {
             // Check if we have CV data
             if (!this.cvData || !this.cvData.cv) {
-                throw new Error('No CV data available from previous step');
+                throw new Error(t('error.no_cv_data'));
             }
 
             // Map the CV data to the correct format for the advice API
@@ -313,7 +313,7 @@ class CVImprover {
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
                 console.error('Advice API Error:', errorData);
-                throw new Error('CV improvement failed: ' + JSON.stringify(errorData));
+                throw new Error(t('error.cv_improvement_failed') + JSON.stringify(errorData));
             }
 
             this.improvedCVData = await response.json();
@@ -327,7 +327,7 @@ class CVImprover {
 
         } catch (error) {
             console.error('Improve CV Error:', error);
-            throw new Error('Failed to improve CV: ' + error.message);
+            throw new Error(t('error.failed_to_improve') + error.message);
         }
     }
 
@@ -336,7 +336,7 @@ class CVImprover {
 
         // Handle the case where cvData might be undefined or null
         if (!cvData) {
-            throw new Error('CV data is empty or invalid');
+            throw new Error(t('error.cv_data_empty'));
         }
 
         // Ensure the CV data matches the expected format
@@ -438,7 +438,7 @@ class CVImprover {
 
         // Check if we have data to display
         if (!this.improvedCVData) {
-            this.showError('No improvement data received from the API');
+            this.showError(t('error.no_improvement_data'));
             this.resetToUpload();
             return;
         }
@@ -454,7 +454,7 @@ class CVImprover {
         console.log('Rendering improvements list');
 
         if (!this.improvedCVData || !this.improvedCVData.result) {
-            this.elements.improvementsList.innerHTML = '<p>No improvements data available</p>';
+            this.elements.improvementsList.innerHTML = `<p>${t('improvement.no_data_available')}</p>`;
             return;
         }
 
@@ -471,7 +471,7 @@ class CVImprover {
                     const item = document.createElement('div');
                     item.className = 'improvement-item';
                     item.innerHTML = `
-                        <div class="improvement-title">${section}</div>
+                        <div class="improvement-title">${t('section_key.' + section.toLowerCase()) || section}</div>
                         <div class="improvement-desc">${feedback}</div>
                     `;
                     this.elements.improvementsList.appendChild(item);
@@ -485,8 +485,8 @@ class CVImprover {
             const item = document.createElement('div');
             item.className = 'improvement-item';
             item.innerHTML = `
-                <div class="improvement-title">Missing Skills</div>
-                <div class="improvement-desc">Consider adding: ${result.missing_skills.join(', ')}</div>
+                <div class="improvement-title">${t('improvement.missing_skills')}</div>
+                <div class="improvement-desc">${t('improvement.consider_adding')}${result.missing_skills.join(', ')}</div>
             `;
             this.elements.improvementsList.appendChild(item);
             hasImprovements = true;
@@ -497,7 +497,7 @@ class CVImprover {
             const item = document.createElement('div');
             item.className = 'improvement-item';
             item.innerHTML = `
-                <div class="improvement-title">Recommended Certifications</div>
+                <div class="improvement-title">${t('improvement.recommended_certifications')}</div>
                 <div class="improvement-desc">${result.recommended_certifications.join(', ')}</div>
             `;
             this.elements.improvementsList.appendChild(item);
@@ -509,7 +509,7 @@ class CVImprover {
             const item = document.createElement('div');
             item.className = 'improvement-item';
             item.innerHTML = `
-                <div class="improvement-title">Recommended Projects</div>
+                <div class="improvement-title">${t('improvement.recommended_projects')}</div>
                 <div class="improvement-desc">${result.recommended_projects.join(', ')}</div>
             `;
             this.elements.improvementsList.appendChild(item);
@@ -521,7 +521,7 @@ class CVImprover {
             const item = document.createElement('div');
             item.className = 'improvement-item';
             item.innerHTML = `
-                <div class="improvement-title">Experience Highlights</div>
+                <div class="improvement-title">${t('improvement.experience_highlights')}</div>
                 <div class="improvement-desc">${result.highlight_experience.join(', ')}</div>
             `;
             this.elements.improvementsList.appendChild(item);
@@ -533,7 +533,7 @@ class CVImprover {
             const item = document.createElement('div');
             item.className = 'improvement-item';
             item.innerHTML = `
-                <div class="improvement-title">ATS Optimization Tips</div>
+                <div class="improvement-title">${t('improvement.ats_tips')}</div>
                 <div class="improvement-desc"><ul>${result.ats_tips.map(tip => `<li>${tip}</li>`).join('')}</ul></div>
             `;
             this.elements.improvementsList.appendChild(item);
@@ -545,7 +545,7 @@ class CVImprover {
             const item = document.createElement('div');
             item.className = 'improvement-item';
             item.innerHTML = `
-                <div class="improvement-title">Career Advice</div>
+                <div class="improvement-title">${t('improvement.career_advice')}</div>
                 <div class="improvement-desc">${result.career_advice}</div>
             `;
             this.elements.improvementsList.appendChild(item);
@@ -553,7 +553,7 @@ class CVImprover {
         }
 
         if (!hasImprovements) {
-            this.elements.improvementsList.innerHTML = '<p>No specific improvements suggested</p>';
+            this.elements.improvementsList.innerHTML = `<p>${t('improvement.no_improvements')}</p>`;
         }
     }
 
@@ -563,7 +563,7 @@ class CVImprover {
 
         // The advice API doesn't return the CV, we need to use the original CV data
         if (!this.cvData || !this.cvData.cv) {
-            this.elements.cvPreview.innerHTML = '<div class="preview-loading"><p>Error: No CV data to display</p></div>';
+            this.elements.cvPreview.innerHTML = `<div class="preview-loading"><p>${t('preview.error_no_data')}</p></div>`;
             return;
         }
 
@@ -593,7 +593,6 @@ class CVImprover {
             if (contact.name || contact.email || contact.phone || contact.title) {
                 html += `
                     <h1>${contact.name || 'Your Name'}</h1>
-                    ${contact.title ? `<p class="subtitle">${contact.title}</p>` : ''}
                     ${contact.email ? `<p>Email: ${contact.email}</p>` : ''}
                     ${contact.phone ? `<p>Phone: ${contact.phone}</p>` : ''}
                     ${contact.location ? `<p>Location: ${contact.location}</p>` : ''}
@@ -711,172 +710,51 @@ async function downloadImprovedCV() {
         const cvContentElement = document.querySelector('.cv-content');
 
         if (!cvContentElement) {
-            throw new Error('CV content not found');
+            throw new Error(t('error.cv_content_not_found'));
         }
+
+        const cvContent = cvContentElement.innerHTML;
 
         // Show loading
         Swal.fire({
-            title: 'Generating PDF...',
-            html: 'Please wait while we create your PDF',
+            title: t('progress.generating_pdf'),
+            html: t('progress.please_wait'),
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
             }
         });
 
-        // Use browser's print to PDF functionality
-        // Clone the content for clean printing
-        const printWindow = window.open('', '_blank');
+        const response = await fetch('/api/cv/generate-pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ html: cvContent })
+        });
 
-        const cvContent = cvContentElement.innerHTML;
-        const printDocument = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Improved CV</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: white;
-            padding: 40px;
-        }
-
-        .cv-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            font-size: 28px;
-            color: #1e293b;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        h2 {
-            font-size: 20px;
-            color: #3464b0;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #3464b0;
-            font-weight: 600;
-            page-break-after: avoid;
-        }
-
-        h3 {
-            font-size: 16px;
-            color: #1e293b;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            page-break-after: avoid;
-        }
-
-        p {
-            margin-bottom: 12px;
-            color: #475569;
-            font-size: 14px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: #64748b;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-
-        ul {
-            margin-left: 25px;
-            margin-bottom: 15px;
-            page-break-inside: avoid;
-        }
-
-        li {
-            margin-bottom: 8px;
-            color: #475569;
-            font-size: 14px;
-        }
-
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                padding: 20px;
-            }
-
-            h2 {
-                page-break-after: avoid;
-            }
-
-            h3 {
-                page-break-after: avoid;
-            }
-
-            ul, ol {
-                page-break-inside: avoid;
-            }
-
-            p {
-                orphans: 3;
-                widows: 3;
-            }
-        }
-
-        @page {
-            size: A4;
-            margin: 15mm;
-        }
-    </style>
-</head>
-<body>
-    <div class="cv-content">
-        ${cvContent}
-    </div>
-    <script>
-        window.onload = function() {
-            setTimeout(function() {
-                window.print();
-                setTimeout(function() {
-                    window.close();
-                }, 100);
-            }, 500);
-        };
-    </script>
-</body>
-</html>
-        `;
-
-        printWindow.document.write(printDocument);
-        printWindow.document.close();
-
-        // Close the loading dialog after a short delay
-        setTimeout(() => {
+// Treat 204 as success
+        if (response.status === 204 || response.ok) {
             Swal.fire({
-                icon: 'info',
-                title: 'Print Dialog Opened',
-                html: 'Please use the print dialog to save as PDF.<br><small>Select "Save as PDF" as your printer.</small>',
-                confirmButtonColor: '#3464b0',
-                confirmButtonText: 'Got it!'
+                icon: 'success',
+                title: t('modal.success'),
+                text: t('success.cv_downloaded'),
+                timer: 2000,
+                showConfirmButton: false
             });
-        }, 1000);
+            return; // skip rest — file already downloaded
+        }
 
+        const errorText = await response.text();
+        console.error('PDF generation error:', errorText);
+        throw new Error(t('error.pdf_generation_failed') + response.status);
     } catch (error) {
         console.error('Download error:', error);
         Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'Failed to generate PDF: ' + error.message,
+            title: t('modal.error'),
+            text: t('error.download_failed') + error.message,
             confirmButtonColor: '#3464b0'
         });
     }

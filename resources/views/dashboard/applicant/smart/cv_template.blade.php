@@ -1,68 +1,3 @@
-<?php
-
-namespace App\Http\Controllers\applicant;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Spatie\Browsershot\Browsershot;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-
-class CVImproverController extends Controller
-{
-    /**
-     * Generate PDF from HTML content
-     */
-    public function generatePDF(Request $request)
-    {
-        $request->validate([
-            'html' => 'required|string'
-        ]);
-
-        Log::info('Received HTML for PDF generation: ' . $request->input('html'));
-
-        try {
-            $html = $request->input('html'); // gives only content html
-
-            // Render the blade view with the CV content
-            $fullHtml = view('dashboard.applicant.smart.cv_template', [
-                'cvContent' => $html
-            ])->render();
-//            Log::info($fullHtml); // gives fully template  of HTML
-
-            // Generate unique filename
-            $filename = 'improved_cv_' . Str::random(10) . '.pdf';
-            $path = storage_path('app/public/' . $filename);
-
-            // Generate PDF using Browsershot
-            Browsershot::html($fullHtml)
-                ->noSandbox()
-                ->showBackground()
-                ->timeout(120)
-                ->format('A4')
-                ->save($path);
-//            Log::info('PDF generated successfully: ' . $path); // Correct
-
-            // Return the PDF file for download and delete after send
-            return response()->download($path, 'improved_cv.pdf')->deleteFileAfterSend(true);
-
-        } catch (\Exception $e) {
-            \Log::error('PDF Generation Error: ' . $e->getMessage());
-
-            return response()->json([
-                'error' => 'Failed to generate PDF',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Wrap HTML content in a complete document with styling for PDF
-     */
-    private function wrapHTMLForPDF($content)
-    {
-        return <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,6 +57,13 @@ class CVImproverController extends Controller
             font-size: 14px;
         }
 
+        .subtitle {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
         ul {
             margin-left: 25px;
             margin-bottom: 15px;
@@ -135,7 +77,7 @@ class CVImproverController extends Controller
         }
 
         /* Contact info styling */
-        .cv-content > p:nth-of-type(-n+4) {
+        .cv-content > p:nth-of-type(-n+5) {
             margin-bottom: 5px;
             font-size: 13px;
         }
@@ -170,12 +112,16 @@ class CVImproverController extends Controller
                 widows: 3;
             }
         }
+
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
     </style>
 </head>
 <body>
-    {$content}
+<div class="cv-content">
+    {!! $cvContent !!}
+</div>
 </body>
 </html>
-HTML;
-    }
-}

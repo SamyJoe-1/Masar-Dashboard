@@ -63,8 +63,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cv/store-pdf', [CVController::class, 'storePDF']);
     Route::post('/cv/update-profile', [CVController::class, 'updateProfile']);
 
-    Route::post('/cv/generate-pdf', [CVImproverController::class, 'generatePDF']);
+//    Route::post('/cv/generate-pdf', [CVImproverController::class, 'generatePDF']);
 });
+
+Route::post('/cv/generate-pdf', [CVImproverController::class, 'generatePDF']);
+
 
 Route::middleware(['auth:sanctum'])->prefix('job-matcher')->group(function () {
 
