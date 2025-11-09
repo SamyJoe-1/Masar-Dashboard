@@ -453,14 +453,19 @@ class CVImprover {
     renderImprovementsList() {
         console.log('Rendering improvements list');
 
+        const mainContainer = document.getElementById('improvementsMain');
+        if (!mainContainer) {
+            console.error('improvementsMain container not found!');
+            return;
+        }
+
         if (!this.improvedCVData || !this.improvedCVData.result) {
-            this.elements.improvementsList.innerHTML = `<p>${t('improvement.no_data_available')}</p>`;
+            mainContainer.innerHTML = `<p class="improvement-text">No improvements data available</p>`;
             return;
         }
 
         const result = this.improvedCVData.result;
-        this.elements.improvementsList.innerHTML = '';
-
+        let html = '';
         let hasImprovements = false;
 
         // Section feedback
@@ -468,13 +473,14 @@ class CVImprover {
             Object.keys(result.section_feedback).forEach(section => {
                 const feedback = result.section_feedback[section];
                 if (feedback && typeof feedback === 'string' && feedback.trim()) {
-                    const item = document.createElement('div');
-                    item.className = 'improvement-item';
-                    item.innerHTML = `
-                        <div class="improvement-title">${t('section_key.' + section.toLowerCase()) || section}</div>
-                        <div class="improvement-desc">${feedback}</div>
-                    `;
-                    this.elements.improvementsList.appendChild(item);
+                    html += `
+                    <div class="improvement-section">
+                        <h2 class="improvement-section-title">
+                            <i class="fas fa-lightbulb"></i> ${t('section_key.' + section.toLowerCase()) || section}
+                        </h2>
+                        <div class="improvement-text">${feedback}</div>
+                    </div>
+                `;
                     hasImprovements = true;
                 }
             });
@@ -482,79 +488,170 @@ class CVImprover {
 
         // Missing skills
         if (result.missing_skills && Array.isArray(result.missing_skills) && result.missing_skills.length > 0) {
-            const item = document.createElement('div');
-            item.className = 'improvement-item';
-            item.innerHTML = `
-                <div class="improvement-title">${t('improvement.missing_skills')}</div>
-                <div class="improvement-desc">${t('improvement.consider_adding')}${result.missing_skills.join(', ')}</div>
-            `;
-            this.elements.improvementsList.appendChild(item);
+            html += `
+            <div class="improvement-section">
+                <h2 class="improvement-section-title">
+                    <i class="fas fa-code"></i> ${t('improvement.missing_skills')}
+                </h2>
+                <div class="improvement-bullets">
+                    ${result.missing_skills.map(skill => `
+                        <span class="improvement-bullet">
+                            <i class="fas fa-plus-circle"></i>
+                            ${skill}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
             hasImprovements = true;
         }
 
         // Recommended certifications
         if (result.recommended_certifications && Array.isArray(result.recommended_certifications) && result.recommended_certifications.length > 0) {
-            const item = document.createElement('div');
-            item.className = 'improvement-item';
-            item.innerHTML = `
-                <div class="improvement-title">${t('improvement.recommended_certifications')}</div>
-                <div class="improvement-desc">${result.recommended_certifications.join(', ')}</div>
-            `;
-            this.elements.improvementsList.appendChild(item);
+            html += `
+            <div class="improvement-section">
+                <h2 class="improvement-section-title">
+                    <i class="fas fa-certificate"></i> ${t('improvement.recommended_certifications')}
+                </h2>
+                <div class="improvement-bullets">
+                    ${result.recommended_certifications.map(cert => `
+                        <span class="improvement-bullet">
+                            <i class="fas fa-award"></i>
+                            ${cert}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
             hasImprovements = true;
         }
 
         // Recommended projects
         if (result.recommended_projects && Array.isArray(result.recommended_projects) && result.recommended_projects.length > 0) {
-            const item = document.createElement('div');
-            item.className = 'improvement-item';
-            item.innerHTML = `
-                <div class="improvement-title">${t('improvement.recommended_projects')}</div>
-                <div class="improvement-desc">${result.recommended_projects.join(', ')}</div>
-            `;
-            this.elements.improvementsList.appendChild(item);
+            html += `
+            <div class="improvement-section">
+                <h2 class="improvement-section-title">
+                    <i class="fas fa-project-diagram"></i> ${t('improvement.recommended_projects')}
+                </h2>
+                <div class="improvement-bullets">
+                    ${result.recommended_projects.map(project => `
+                        <span class="improvement-bullet">
+                            <i class="fas fa-rocket"></i>
+                            ${project}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
             hasImprovements = true;
         }
 
         // Highlight experience
         if (result.highlight_experience && Array.isArray(result.highlight_experience) && result.highlight_experience.length > 0) {
-            const item = document.createElement('div');
-            item.className = 'improvement-item';
-            item.innerHTML = `
-                <div class="improvement-title">${t('improvement.experience_highlights')}</div>
-                <div class="improvement-desc">${result.highlight_experience.join(', ')}</div>
-            `;
-            this.elements.improvementsList.appendChild(item);
+            html += `
+            <div class="improvement-section">
+                <h2 class="improvement-section-title">
+                    <i class="fas fa-star"></i> ${t('improvement.experience_highlights')}
+                </h2>
+                <div class="improvement-bullets">
+                    ${result.highlight_experience.map(exp => `
+                        <span class="improvement-bullet">
+                            <i class="fas fa-check-circle"></i>
+                            ${exp}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
             hasImprovements = true;
         }
 
         // ATS tips
         if (result.ats_tips && Array.isArray(result.ats_tips) && result.ats_tips.length > 0) {
-            const item = document.createElement('div');
-            item.className = 'improvement-item';
-            item.innerHTML = `
-                <div class="improvement-title">${t('improvement.ats_tips')}</div>
-                <div class="improvement-desc"><ul>${result.ats_tips.map(tip => `<li>${tip}</li>`).join('')}</ul></div>
-            `;
-            this.elements.improvementsList.appendChild(item);
+            html += `
+            <div class="improvement-section">
+                <h2 class="improvement-section-title">
+                    <i class="fas fa-robot"></i> ${t('improvement.ats_tips')}
+                </h2>
+                <div class="improvement-bullets">
+                    ${result.ats_tips.map(tip => `
+                        <span class="improvement-bullet">
+                            <i class="fas fa-magic"></i>
+                            ${tip}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
             hasImprovements = true;
         }
 
         // Career advice
         if (result.career_advice && typeof result.career_advice === 'string' && result.career_advice.trim()) {
-            const item = document.createElement('div');
-            item.className = 'improvement-item';
-            item.innerHTML = `
-                <div class="improvement-title">${t('improvement.career_advice')}</div>
-                <div class="improvement-desc">${result.career_advice}</div>
-            `;
-            this.elements.improvementsList.appendChild(item);
+            html += `
+            <div class="improvement-section">
+                <h2 class="improvement-section-title">
+                    <i class="fas fa-compass"></i> ${t('improvement.career_advice')}
+                </h2>
+                <div class="improvement-text">${result.career_advice}</div>
+            </div>
+        `;
             hasImprovements = true;
         }
 
         if (!hasImprovements) {
-            this.elements.improvementsList.innerHTML = `<p>${t('improvement.no_improvements')}</p>`;
+            html = `<p class="improvement-text">${t('improvement.no_improvements')}</p>`;
         }
+
+        mainContainer.innerHTML = html;
+
+        // Wait for render then split content
+        setTimeout(() => {
+            this.splitImprovementsContent();
+        }, 100);
+    }
+
+    splitImprovementsContent() {
+        const mainContainer = document.getElementById('improvementsMain');
+        const overflowContainer = document.getElementById('improvementsOverflow');
+        const previewContainer = document.querySelector('.cv-preview-container');
+
+        if (!mainContainer || !overflowContainer || !previewContainer) {
+            console.error('Containers not found for splitting content');
+            return;
+        }
+
+        // Get preview height
+        const previewHeight = previewContainer.offsetHeight;
+
+        // Get all sections
+        const allSections = Array.from(mainContainer.children);
+
+        let currentHeight = 0;
+        let overflowSections = [];
+
+        allSections.forEach((section, index) => {
+            const sectionHeight = section.offsetHeight - 50;
+            const marginBottom = 40; // gap between sections
+
+            // Allow 95% usage of preview height to maximize space
+            const maxAllowedHeight = previewHeight * 0.95;
+
+            if (currentHeight + sectionHeight > maxAllowedHeight && index > 0) {
+                overflowSections.push(section);
+            } else {
+                currentHeight += sectionHeight + marginBottom;
+            }
+        });
+
+        console.log(`Preview height: ${previewHeight}px, Used: ${currentHeight}px (${Math.round(currentHeight/previewHeight*100)}%)`);
+
+        // Move overflow sections
+        overflowSections.forEach(section => {
+            overflowContainer.appendChild(section);
+        });
+
+        console.log(`Split improvements: ${allSections.length - overflowSections.length} main, ${overflowSections.length} overflow`);
     }
 
     renderCVPreview() {

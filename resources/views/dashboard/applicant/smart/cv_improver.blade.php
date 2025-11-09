@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="improver-container">
+    <div class="improver-container" dir="rtl">
         <!-- Upload Section -->
         <div id="uploadSection" class="section-wrapper">
             <div class="page-header">
@@ -146,6 +146,11 @@
             </div>
 
             <div class="results-content">
+                <!-- Improvements Summary (LEFT SIDE) -->
+                <div class="improvements-summary">
+                    <div id="improvementsMain" class="improvements-main"></div>
+                </div>
+
                 <!-- CV Preview Container (RIGHT SIDE) -->
                 <div class="cv-preview-container">
                     <div class="preview-header">
@@ -159,8 +164,8 @@
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                                 <span class="page-indicator">
-                                    <span id="currentPage">1</span> / <span id="totalPages">1</span>
-                                </span>
+                        <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                    </span>
                                 <button class="quiet-btn pagination-btn" id="prevPage" disabled>
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
@@ -174,8 +179,8 @@
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
                                 <span class="page-indicator">
-                                    <span id="currentPage">1</span> / <span id="totalPages">1</span>
-                                </span>
+                        <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                    </span>
                                 <button class="quiet-btn pagination-btn" id="nextPage" disabled>
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
@@ -202,14 +207,8 @@
                     </div>
                 </div>
 
-                <!-- Improvements Summary (LEFT SIDE) -->
-                <div class="improvements-summary">
-                    <h3>
-                        <i class="fas fa-list-check"></i>
-                        {{ __('words.What We Improved') }}
-                    </h3>
-                    <div id="improvementsList"></div>
-                </div>
+                <!-- Overflow content (below both) -->
+                <div id="improvementsOverflow" class="improvements-overflow"></div>
             </div>
         </div>
     </div>
