@@ -548,13 +548,15 @@ class CVImprover {
 
     renderCVPreview() {
         console.log('Rendering CV preview with data:', this.improvedCVData);
+        console.log('Original CV data:', this.cvData);
 
-        if (!this.improvedCVData || !this.improvedCVData.cv) {
+        // The advice API doesn't return the CV, we need to use the original CV data
+        if (!this.cvData || !this.cvData.cv) {
             this.elements.cvPreview.innerHTML = '<div class="preview-loading"><p>Error: No CV data to display</p></div>';
             return;
         }
 
-        const cv = this.improvedCVData.cv;
+        const cv = this.cvData.cv;
 
         let html = '<div class="cv-content">';
 
